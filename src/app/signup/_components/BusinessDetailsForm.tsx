@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { UseFormRegister, FieldErrors, Control, Controller } from 'react-hook-form';
 import { SignupFormData } from '@/lib/validation/signupSchema';
-import { FileInput } from '@/app/signup/_components/FileInput';
+
 
 type Props = {
   register: UseFormRegister<SignupFormData>;
