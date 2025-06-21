@@ -3,7 +3,7 @@
 import TextField from '@mui/material/TextField';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 import { SignupFormData } from '@/lib/validation/signupSchema';
-import { FileInput } from '@/app/signup/_components/FileInput'; // A reusable component
+
 
 type Props = {
   register: UseFormRegister<SignupFormData>;
