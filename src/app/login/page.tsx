@@ -45,66 +45,57 @@ export default function LoginPage() {
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setErrorMsg('');
-  openModal("loading");
+    e.preventDefault();
+    setErrorMsg('');
+    openModal("loading");
 
-  try {
-    const response = await axios.post(
-      `${API}/auth/login`,
-      { username: loginForm.username, password: loginForm.password },
-      {
-        withCredentials: true,
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      }
-    );
+    try {
+      const response = await axios.post(
+        `${API}/auth/login`,
+        { username: loginForm.username, password: loginForm.password },
+        {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
 
-    if (response.status === 200) {
-      if (loginForm.rememberMe) {
-        rememberLoginInstance.setRememberLogin({
-          remember: 'true',
-          username: loginForm.username,
-          password: loginForm.password,
-        });
-      } else {
-        rememberLoginInstance.clearRememberLogin();
-      }
-      
-      // Verify the cookie exists before redirecting
-      const hasCookie = document.cookie.includes('token=');
-      if (hasCookie) {
-        router.push('/');
-      } else {
-        throw new Error('Authentication cookie not set');
-      }
-    }
-  } catch (error: any) {
-    console.error('Login error:', error);
-    rememberLoginInstance.clearRememberLogin();
-    
-    if (axios.isAxiosError(error)) {
-      if (error.response) {
-        const status = error.response.status;
-        const message = error.response.data?.message || 'Login failed';
-        
-        if (status === 401) {
-          setErrorMsg('Invalid username or password');
+      if (response.status === 200) {
+        if (loginForm.rememberMe) {
+          rememberLoginInstance.setRememberLogin({
+            remember: 'true',
+            username: loginForm.username,
+            password: loginForm.password,
+          });
         } else {
-          setErrorMsg(message);
+          rememberLoginInstance.clearRememberLogin();
+        }
+        router.push('/');
+      }
+    } catch (error: any) {
+      console.error('Login error:', error);
+
+      rememberLoginInstance.clearRememberLogin();
+      setLoginForm(prevForm => ({ ...prevForm, rememberMe: false })); // Uncheck the box
+
+      if (axios.isAxiosError(error) && error.response) {
+        const status = error.response.status;
+        const message = error.response.data?.message;
+
+        if (status === 401 || status === 400) {
+          setErrorMsg(message || 'Invalid username or password');
+        } else if (status === 500) {
+          setErrorMsg('Please try again later.');
+        } else {
+          setErrorMsg(message || 'Login failed. Please try again.');
         }
       } else {
         setErrorMsg('Network error. Check your connection.');
       }
-    } else {
-      setErrorMsg('Authentication failed. Please try again.');
+    } finally {
+      closeModal();
     }
-  } finally {
-    closeModal();
-  }
-};
+  };
+
   return (
     <div className="flex items-center justify-center bg-gray-100 p-4 w-full min-h-screen">
       <div className="bg-white shadow-lg rounded-sm max-w-md w-full p-8">
