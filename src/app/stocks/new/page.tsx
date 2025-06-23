@@ -12,6 +12,7 @@ import imgDataURLtoFile from "@/components/utils/imgDataURLtoFile";
 import ImageUploadComponent from "@/components/common/ImageUploadComponent"; // Import the reusable component
 import { XMarkIcon } from '@heroicons/react/24/outline'; // For remove item button
 import { useRouter } from "next/navigation";
+import { useModalStore } from "@/store/modalStore"; 
 
 // --- Type Definitions ---
 type NewStockItem = {
@@ -56,6 +57,31 @@ export default function StockEntryForm() {
   const { business, isLoading: isBusinessInfoLoading, error: businessInfoError } = useInfo();
   const router = useRouter();
   // --- Effects ---
+
+
+   const { openModal, closeModal } = useModalStore(); 
+  
+    // This useEffect controls the modal's open/close state
+    useEffect(() => {
+      let timer: NodeJS.Timeout | null = null;
+      if(isBusinessInfoLoading || !business) {
+        // Open the loading modal immediately when loading starts
+        openModal("loading");
+      } else {
+        // Close the modal after a short delay when loading finishes
+        // This prevents flickering if the load is very fast
+        timer = setTimeout(() => {
+          closeModal();
+        }, 100); // FETCH_MODAL_DELAY = 100ms
+      }
+  
+      // Cleanup function to clear the timer if the component unmounts
+      return () => {
+        if (timer) {
+          clearTimeout(timer);
+        }
+      };
+    }, [isBusinessInfoLoading, openModal, closeModal]); // Dependencies
 
   // Effect to manage alert visibility
   useEffect(() => {
@@ -282,14 +308,7 @@ export default function StockEntryForm() {
     }
   }, [API_BASE_URL, business?.businessId, businessInfoError, isBusinessInfoLoading, form, resetForm, selectedGroupFile, groupImageError]);
 
-  // --- Conditional Rendering for Initial Loading/Error States ---
-  if (isBusinessInfoLoading) {
-    return (
-      <div className="flex-1 flex items-center justify-center h-full">
-        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
+  
 
   if (businessInfoError) {
     return (
@@ -302,16 +321,7 @@ export default function StockEntryForm() {
     );
   }
 
-  if (!business?.businessId) {
-    return (
-      <div className="flex-1 flex items-center justify-center h-full text-red-600">
-        <Alert severity="error">
-          <AlertTitle>Missing Business ID</AlertTitle>
-          Cannot proceed: A valid Business ID is not available. Please ensure your business profile is set up.
-        </Alert>
-      </div>
-    );
-  }
+  
 
   // --- Main Form Render ---
   return (
@@ -324,8 +334,7 @@ export default function StockEntryForm() {
         {/* Submission Loading Overlay */}
         {submitting && (
           <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center z-20 rounded-sm">
-            <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-gray-700 text-lg">Saving Stock Entry...</p>
+            <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
           </div>
         )}
 
@@ -358,7 +367,9 @@ export default function StockEntryForm() {
         <div className="flex items-center justify-between">
           <button
             onClick={() => router.back()}
-            className="flex items-center text-sm border-1 rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200"
+            className="flex items-center text-sm border-[0.5px]
+                       rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100 
+                      hover:bg-blue-200 cursor-pointer transition duration-150"
           >
             <svg
               className="w-4 h-4 text-blue-600"
@@ -379,7 +390,7 @@ export default function StockEntryForm() {
             </svg>
             Back
           </button>
-          <h2 className="text-xl font-semibold text-gray-600">Create Stock Entry</h2>
+          <h2 className="text-xl font-semibold text-gray-600 mr-3">Create Stock Entry</h2>
         </div>
 
         {/* Group Image Upload with ImageUploadComponent */}

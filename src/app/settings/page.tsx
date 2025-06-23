@@ -308,8 +308,9 @@ export default function Settings() {
   }
 
   return (
-    <section className="w-full mx-auto bg-white overflow-hidden h-full p-1">
-      <div className='overflow-auto custom-scrollbar h-full p-3'>
+    <section className="w-full mx-auto rounded-sm bg-white overflow-hidden h-full p-1">
+      <div className='overflow-auto custom-scrollbar h-[calc(100vh-118px)] 
+                      custom-scrollbar p-3'>
         <form onSubmit={handleSubmit}>
           {/* General Settings */}
           <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-sm shadow-sm">
