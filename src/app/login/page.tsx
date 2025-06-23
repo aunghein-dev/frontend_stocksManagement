@@ -59,7 +59,6 @@ export default function LoginPage() {
         }
       );
 
-
       if (response.status === 200) {
         if (loginForm.rememberMe) {
           rememberLoginInstance.setRememberLogin({
