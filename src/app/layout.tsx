@@ -26,6 +26,7 @@ export const viewport = {
   userScalable: false,
 };
 
+
 export default function RootLayout({
   children,
 }: {
