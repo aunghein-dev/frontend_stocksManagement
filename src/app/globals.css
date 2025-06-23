@@ -24,6 +24,7 @@ html,
 body {
   margin: 0;
   overflow: hidden;
+  height: 100dvh;
 }
 
 /* styles/globals.css or tailwind.config.css */

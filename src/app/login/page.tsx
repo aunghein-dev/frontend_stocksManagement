@@ -97,7 +97,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 p-4 w-full h-screen">
+    <div className="flex items-center justify-center bg-gray-100 p-4 w-full min-h-screen sm:min-h-[100dvh]">
       <div className="bg-white shadow-lg rounded-sm max-w-md w-full p-8">
         <h1 className="text-3xl font-extrabold text-gray-900 mb-5 text-center">
           Sign in to Your Account
@@ -108,8 +108,9 @@ export default function LoginPage() {
           : <p className="text-center opacity-0 mb-4">InvisibleHolder</p>
         }
 
-        <form className="space-y-6 text-sm" onSubmit={handleLogin}>
+        <form className="space-y-6 text-sm text-sm sm:text-base" onSubmit={handleLogin}>
           <TextField
+            
             id="outlined-email-input"
             label="Email address"
             type="email"
@@ -121,7 +122,7 @@ export default function LoginPage() {
             sx={{ width: '100%', mb: 3 }}
           />
 
-          <div className="relative">
+          <div className="relative text-sm sm:text-base">
             <TextField
               id="outlined-password-input"
               label="Password"
@@ -135,7 +136,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between text-sm sm:text-base">
             <label className="flex items-center space-x-2 text-gray-700">
               <input
                 type="checkbox"
@@ -157,13 +158,13 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-semibold rounded-sm py-3 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            className="w-full bg-blue-500 text-white font-semibold rounded-sm py-3 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm sm:text-base"
           >
             Sign In
           </button>
         </form>
 
-        <p className="mt-6 text-center text-gray-500 text-sm">
+        <p className="mt-6 text-center text-gray-500 text-sm sm:text-base">
           Don't have an account?{' '}
           <button onClick={() => router.push('/signup')} className="text-blue-600 hover:text-blue-800 font-medium">
             Sign up
