@@ -22,11 +22,11 @@ export default function Container({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-full">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <div className="flex flex-col flex-1">
         <Navbar handleToggle={() => setIsOpen((prev) => !prev)} handleSidebarOpen={handleSidebarOpen} sidebarOpen={sidebarOpen}/>
-        <main className="flex-1 overflow-auto custom-scrollbar 
+        <main className="flex-1 min-h-0 overflow-auto custom-scrollbar
                          pt-[1.5px] px-3 ml-[0px] sm:ml-[200px] mt-[98px] mb-[10px]">
           {children}
         </main>

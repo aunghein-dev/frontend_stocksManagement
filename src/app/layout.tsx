@@ -26,15 +26,14 @@ export const viewport = {
   userScalable: false,
 };
 
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-[100dvh]">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased h-[100dvh]`}>
+    <html lang="en" className="min-h-screen">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
         <Container>
           {children}
         </Container>

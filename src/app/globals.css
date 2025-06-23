@@ -24,9 +24,11 @@ html,
 body {
   margin: 0;
   overflow: hidden;
-  height: 100dvh;
+  height: 100%;
 }
-
+#__next {
+  height: 100%;
+}
 /* styles/globals.css or tailwind.config.css */
 
 .MuiDataGrid-panelWrapper,
