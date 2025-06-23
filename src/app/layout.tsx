@@ -15,16 +15,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MoMo Clothing System",
+  title: "Openware Myanmar",
   description: "POS & Inventory Management",
 };
 
 export const viewport = {
-  width: "1280",
+  width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
 };
+
 
 export default function RootLayout({
   children,

@@ -35,10 +35,6 @@ body {
 
 /* styles/globals.css or tailwind.config.css */
 
-.login {
-  background-image: url("/Bg.png");
-}
-
 .MuiDataGrid-panelWrapper,
 .MuiDataGrid-panelWrapper .MuiTypography-root,
 .MuiDataGrid-panelWrapper .MuiButtonBase-root,
