@@ -97,7 +97,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 p-4 w-full min-h-screen">
+    <div className="flex items-center justify-center bg-gray-100 p-4 w-full h-screen">
       <div className="bg-white shadow-lg rounded-sm max-w-md w-full p-8">
         <h1 className="text-3xl font-extrabold text-gray-900 mb-5 text-center">
           Sign in to Your Account
