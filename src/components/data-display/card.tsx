@@ -117,10 +117,12 @@ const [loaded, setLoaded] = useState(false);
                    maxHeight: "350px"
           }}
         >
-        {dayjs().diff(dayjs(props.releasedDate), 'day') > 7 &&
-        <div className="absolute top-2 left-2 bg-green-600
-                        text-white px-3 py-1 text-sm rounded-sm">New</div>
-        }
+       {dayjs().diff(dayjs(props.releasedDate), 'day') <= 7 && (
+        <div className="absolute top-2 left-2 bg-green-600 text-white px-3 py-1 text-sm rounded-sm">
+          New
+        </div>
+      )}
+
 
         <div className="flex flex-col justify-between gap-2.5 h-full -mt-6">
             <div className="w-full max-w-xs">
