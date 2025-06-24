@@ -1,8 +1,8 @@
-# Privacy Policy, Terms of Use & Legal Notice (ကိုယ်ရေးအချက်အလက်မူဝါဒ၊ အသုံးပြုမှုစည်းမျဥ်းနှင့် ဥပဒေရေးရာအသိပေးချက်)
+## Privacy Policy, Terms of Use & Legal Notice (ကိုယ်ရေးအချက်အလက်မူဝါဒ၊ အသုံးပြုမှုစည်းမျဥ်းနှင့် ဥပဒေရေးရာအသိပေးချက်)
 
 <p style="text-align: left; color: #6b7280; font-size: 0.85rem;">Last Updated: June 24, 2025 (နောက်ဆုံးပြင်ဆင်သည့်ရက်စွဲ- ၂၀၂၅ ခုနှစ်၊ ဇွန်လ ၂၄ ရက်)</p>
 
-## Table of Contents (မာတိကာ)
+### Table of Contents (မာတိကာ)
 
 1.  [Overview and Acceptance of Terms (ခြုံငုံသုံးသပ်ချက်နှင့် စည်းမျဥ်းများကို လက်ခံခြင်း)](#overview)
 2.  [Data Privacy, Storage, and User Responsibility (ဒေတာကိုယ်ရေးအချက်အလက်၊ သိုလှောင်မှုနှင့် သုံးစွဲသူတာဝန်ယူမှု)](#data-privacy)
@@ -18,7 +18,7 @@
 
 <a name="overview"></a>
 
-## 1. Overview and Acceptance of Terms (ခြုံငုံသုံးသပ်ချက်နှင့် စည်းမျဥ်းများကို လက်ခံခြင်း)
+### 1. Overview and Acceptance of Terms (ခြုံငုံသုံးသပ်ချက်နှင့် စည်းမျဥ်းများကို လက်ခံခြင်း)
 
 This document delineates the **Privacy Policy, Terms of Use, and Legal Notice** collectively governing the access, installation, deployment, and utilization of the software provided by **Openware Myanmar**. This robust application is engineered as an **open-source Point of Sale (POS) and eCommerce platform**, meticulously crafted for developers, businesses, and technically proficient users seeking self-hosted retail management solutions.
 
@@ -34,7 +34,7 @@ By engaging with this software through any means—including but not limited to 
 
 <a name="data-privacy"></a>
 
-## 2. Data Privacy, Storage, and User Responsibility (ဒေတာကိုယ်ရေးအချက်အလက်၊ သိုလှောင်မှုနှင့် သုံးစွဲသူတာဝန်ယူမှု)
+### 2. Data Privacy, Storage, and User Responsibility (ဒေတာကိုယ်ရေးအချက်အလက်၊ သိုလှောင်မှုနှင့် သုံးစွဲသူတာဝန်ယူမှု)
 
 In its default configuration, this software is meticulously engineered to ensure **zero inherent data collection, transmission, or external storage** of any personal or sensitive financial information. All operational data, encompassing sales records, customer profiles, and comprehensive inventory details, is exclusively managed and retained **within your self-hosted instance** of the application.
 
@@ -54,7 +54,7 @@ Any integration with **third-party services** (e.g., external analytics platform
 
 <a name="cookies"></a>
 
-## 3. Use of Cookies and Similar Technologies (ကွတ်ကီးများနှင့် အလားတူနည်းပညာများအသုံးပြုခြင်း)
+### 3. Use of Cookies and Similar Technologies (ကွတ်ကီးများနှင့် အလားတူနည်းပညာများအသုံးပြုခြင်း)
 
 To facilitate indispensable functionalities, optimize user experience, and reinforce security protocols, this software may deploy **cookies** and analogous local storage technologies. Such technologies may encompass, but are not confined to, cookies essential for sustaining user sessions, securely storing authentication tokens, and enhancing overall application performance. These deployed cookies are predominantly **functional and strictly necessary** for the seamless operation of the platform.
 
@@ -74,7 +74,7 @@ By its inherent design, this software **does not utilize tracking cookies, third
 
 <a name="intellectual-property"></a>
 
-## 4. Intellectual Property, Licensing, and Usage Rights (ဉာဏမူပိုင်ခွင့်၊ လိုင်စင်နှင့် အသုံးပြုခွင့်များ)
+### 4. Intellectual Property, Licensing, and Usage Rights (ဉာဏမူပိုင်ခွင့်၊ လိုင်စင်နှင့် အသုံးပြုခွင့်များ)
 
 This software, including all its constituent code, features, and documentation, is distributed under an **open-source license**. The precise and exhaustive terms of this license are fully articulated and available for review in the accompanying `LICENSE` file within the software's distribution (e.g., MIT License, GNU General Public License, Apache License). In accordance with the stipulations of this license, you are generally accorded broad permissions to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software.
 
@@ -118,7 +118,7 @@ Rigorous adherence to these licensing stipulations is paramount for the continue
 
 <a name="acceptable-use"></a>
 
-## 5. Acceptable Use Policy and Prohibited Conduct (လက်ခံနိုင်သောအသုံးပြုမှုမူဝါဒနှင့် တားမြစ်ထားသောအပြုအမူများ)
+### 5. Acceptable Use Policy and Prohibited Conduct (လက်ခံနိုင်သောအသုံးပြုမှုမူဝါဒနှင့် တားမြစ်ထားသောအပြုအမူများ)
 
 By utilizing this software, you unequivocally agree to adhere to an acceptable use policy and explicitly covenant that you will not engage in, enable, or condone any of the following strictly prohibited activities:
 
@@ -153,7 +153,7 @@ Any violation of this acceptable use policy shall be deemed a material breach an
 
 <a name="warranty-disclaimer"></a>
 
-## 6. Warranty Disclaimer and Limitation of Liability (အာမခံချက်သက်ဆိုင်မှုမရှိကြောင်းနှင့် တာဝန်ယူမှုကန့်သတ်ချက်)
+### 6. Warranty Disclaimer and Limitation of Liability (အာမခံချက်သက်ဆိုင်မှုမရှိကြောင်းနှင့် တာဝန်ယူမှုကန့်သတ်ချက်)
 
 THIS SOFTWARE IS PROVIDED **"AS IS,"** WITHOUT ANY WARRANTY, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE RESIDES SOLELY WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU SHALL ASSUME THE ENTIRE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.
 
@@ -173,7 +173,7 @@ You explicitly acknowledge and agree that **you assume all inherent risks** asso
 
 <a name="termination"></a>
 
-## 7. Termination, Suspension, and Enforcement (အဆုံးသတ်ခြင်း၊ ဆိုင်းငံ့ခြင်းနှင့် အတည်ပြုဆောင်ရွက်ခြင်း)
+### 7. Termination, Suspension, and Enforcement (အဆုံးသတ်ခြင်း၊ ဆိုင်းငံ့ခြင်းနှင့် အတည်ပြုဆောင်ရွက်ခြင်း)
 
 **Openware Myanmar** explicitly **reserves the absolute right to prohibit, suspend, or terminate** your usage rights, and to formally demand the immediate takedown of any instance of the software that is found to be in egregious violation of these terms. This inherent right will be invoked with particular emphasis in documented instances of unauthorized commercial reselling, severe abuse of the software's intended functionality, material misrepresentation of its origin or licensing status, or any other substantial breach of these articulated policies. Non-compliance with such formal requests may inexorably lead to further legal action and remedies available to **Openware Myanmar**.
 
@@ -185,7 +185,7 @@ You explicitly acknowledge and agree that **you assume all inherent risks** asso
 
 <a name="updates"></a>
 
-## 8. Amendments and Updates to This Policy (ဤမူဝါဒကို ပြင်ဆင်ခြင်းနှင့် မွမ်းမံခြင်း)
+### 8. Amendments and Updates to This Policy (ဤမူဝါဒကို ပြင်ဆင်ခြင်းနှင့် မွမ်းမံခြင်း)
 
 This comprehensive policy may be **periodically and unilaterally amended, revised, or updated** by **Openware Myanmar** to accurately reflect evolving legal requirements, enhancements in software functionalities, or prevailing industry best practices. While **Openware Myanmar** may endeavor to provide notifications of significant modifications, it remains your **sole and non-delegable responsibility to regularly review** this document for any and all amendments.
 
@@ -201,7 +201,7 @@ Your **continued utilization of the software** subsequent to the official public
 
 <a name="contact"></a>
 
-## 9. Contact, Support, and Licensing Inquiries (ဆက်သွယ်ရန်၊ ပံ့ပိုးမှုနှင့် လိုင်စင်ဆိုင်ရာစုံစမ်းမေးမြန်းမှုများ)
+### 9. Contact, Support, and Licensing Inquiries (ဆက်သွယ်ရန်၊ ပံ့ပိုးမှုနှင့် လိုင်စင်ဆိုင်ရာစုံစမ်းမေးမြန်းမှုများ)
 
 For any specific inquiries pertaining to the interpretation or application of these terms, for reporting documented instances of abuse or non-compliance, or for discussing potential specialized commercial licensing agreements that fall outside the parameters of the standard open-source distribution, please direct all formal correspondence to the designated official contact channels for **Openware Myanmar**.
 
