@@ -1,4 +1,4 @@
-## Privacy Policy, Terms of Use & Legal Notice (ကိုယ်ရေးအချက်အလက်မူဝါဒ၊ အသုံးပြုမှုစည်းမျဥ်းနှင့် ဥပဒေရေးရာအသိပေးချက်)
+## Privacy Policy, Terms of Use & Legal Notice<span style="font-size: 0.6em; opacity: 0.7; margin-left: 3px">(ကိုယ်ရေးအချက်အလက်မူဝါဒ၊ အသုံးပြုမှုစည်းမျဥ်းနှင့် ဥပဒေရေးရာအသိပေးချက်)</span>
 
 <p style="text-align: left; color: #6b7280; font-size: 0.85rem;">Last Updated: June 24, 2025 (နောက်ဆုံးပြင်ဆင်သည့်ရက်စွဲ- ၂၀၂၅ ခုနှစ်၊ ဇွန်လ ၂၄ ရက်)</p>
 
