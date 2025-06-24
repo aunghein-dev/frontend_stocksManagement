@@ -104,16 +104,14 @@ export default function LoginPage() {
     <div className="flex items-center justify-center p-4 w-full">
       
       <div className="bg-white shadow-lg rounded-sm max-w-md w-full p-8">
-        <h1 className="text-2xl font-extrabold mb-5 text-center flex flex-row items-center
-                      justify-self-center">
-           <div className='w-10 h-10 mx-auto mr-1'>
+       <h1 className="text-2xl font-extrabold mb-5 text-center flex flex-row items-center justify-center"> {/* Changed justify-self-center to justify-center */}
+          <div className='w-10 h-10 mr-1'> {/* Removed mx-auto */}
             <Image  
-                  src="https://svmeynesalueoxzhtdqp.supabase.co/storage/v1/object/public/images/global/onlylogo.png" alt="Logo" 
-                  width={40} height={40} />
+              src="https://svmeynesalueoxzhtdqp.supabase.co/storage/v1/object/public/images/global/onlylogo.png" alt="Logo" 
+              width={40} height={40} />
           </div>
           <span className='text-blue-600 mr-1'>Welcome</span> 
           <span className='text-gray-800'>back!</span>
-          
         </h1>
 
         {errorMsg
