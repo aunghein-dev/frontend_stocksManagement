@@ -2,7 +2,7 @@
   <img src="https://svmeynesalueoxzhtdqp.supabase.co/storage/v1/object/public/images/global/onlylogo.png" alt="Openware Logo" width="50" height="50" style="margin-right: 2px;">
   <h2 style="margin: 0; font-size: 1.5em;">
     Terms and Conditions <br>
-     <span style="font-size: 0.6em; opacity: 0.7; margin-left: 3px">(စည်းမျဥ်းများ)</span>
+     <span style="font-size: 0.8em; opacity: 0.7; margin-left: 3px">(စည်းမျဥ်းများ)</span>
   </h2>
  
 </div>
