@@ -201,6 +201,8 @@ export function SignupForm() {
               <Link
                 href="/terms-and-conditions"
                 className="text-blue-600 hover:text-blue-800 underline font-medium"
+                target="_blank"            
+                rel="noopener noreferrer"  
               >
                 Terms and Conditions
               </Link>

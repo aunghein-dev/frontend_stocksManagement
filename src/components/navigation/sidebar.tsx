@@ -105,7 +105,7 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
             }`}
             style={{ willChange: "opacity" }}
           >
-            {business?.businessId === 1 ? business?.businessName : "Openware"}
+            {business?.businessId === 1 ? business?.businessShortName : "Openware"}
           </h1>
         </div>
       )}
