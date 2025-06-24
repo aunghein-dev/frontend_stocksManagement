@@ -76,8 +76,8 @@ const TermsAndConditions: React.FC = () => {
   }
 
  return (
-  <div className="py-4 px-4 sm:px:8 text-gray-800 leading-relaxed bg-white max-w-6xl mx-auto my-4 overflow-hidden rounded-sm">
-    <div className="h-full max-h-[calc(100vh-65px)] overflow-y-auto custom-scrollbar px-4 py-6 sm:px-10">
+  <div className="py-4 px-2 sm:px:8 text-gray-800 leading-relaxed bg-white max-w-6xl mx-auto my-4 overflow-hidden rounded-sm">
+    <div className="h-full max-h-[calc(100vh-65px)] overflow-y-auto custom-scrollbar px-2 py-6 sm:px-10">
       {/* IMPORTANT: Remove prose classes and add your custom class */}
       <div className="markdown-content"> {/* <-- Added your class here */}
         <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
