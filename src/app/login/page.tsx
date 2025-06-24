@@ -131,19 +131,24 @@ export default function LoginPage() {
             onChange={handleInputChange}
             required
             sx={{ width: '100%', mb: 3 }}
-            // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
-              slotProps={{
-                input: {
-                  style: {
-                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
-                  },
-                },
-                inputLabel: {
-                  style: {
-                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
-                  },
-                },
-              }}
+            // --- Use InputProps and InputLabelProps with sx prop to control font size ---
+      InputProps={{
+        sx: {
+          fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+        },
+      }}
+      InputLabelProps={{
+        sx: {
+          fontSize: '0.875rem', // For the label (e.g., "text-sm")
+          // Important: When the label floats, its transform scale might be applied.
+          // You might need to adjust based on the default scale if it's too small/big when floating.
+          // For a more robust solution, especially if you have a custom theme,
+          // you'd define typography variants.
+          "&.MuiInputLabel-shrink": { // When the label is "shrunk" (floated)
+            fontSize: '0.875rem', // Often labels are slightly smaller when floated. Adjust as needed.
+          },
+        },
+      }}
           />
 
           <div className="relative text-sm sm:text-base">
@@ -158,19 +163,24 @@ export default function LoginPage() {
               onChange={handleInputChange}
               required
               sx={{ width: '100%' }}
-              // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
-              slotProps={{
-                input: {
-                  style: {
-                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
-                  },
-                },
-                inputLabel: {
-                  style: {
-                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
-                  },
-                },
-              }}
+              // --- Use InputProps and InputLabelProps with sx prop to control font size ---
+      InputProps={{
+        sx: {
+          fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+        },
+      }}
+      InputLabelProps={{
+        sx: {
+          fontSize: '0.875rem', // For the label (e.g., "text-sm")
+          // Important: When the label floats, its transform scale might be applied.
+          // You might need to adjust based on the default scale if it's too small/big when floating.
+          // For a more robust solution, especially if you have a custom theme,
+          // you'd define typography variants.
+          "&.MuiInputLabel-shrink": { // When the label is "shrunk" (floated)
+            fontSize: '0.875rem', // Often labels are slightly smaller when floated. Adjust as needed.
+          },
+        },
+      }}
             />
           </div>
 
