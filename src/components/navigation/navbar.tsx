@@ -157,10 +157,10 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
           {isOpen && (
             <div
               ref={dropdownRef}
-              className="z-50 my-4 text-sm text-gray-900 absolute -right-3 top-11 list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm"
+              className="z-50 my-4 text-sm text-gray-900 absolute -right-3 top-11 list-none bg-white divide-y divide-gray-100 rounded-sm shadow-xl"
             >
               <button onClick={() => router.push("/settings/profile")}>
-                <div className="px-4 py-3 cursor-pointer text-left">
+                <div className="px-4 py-3 cursor-pointer text-left hover:bg-blue-200">
                   <span className="block text-sm text-gray-900">{data?.fullName}</span>
                   <span className="block text-sm text-gray-500 truncate">{data?.username}</span>
                 </div>

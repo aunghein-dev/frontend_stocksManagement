@@ -13,7 +13,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'; // For remove item butt
 import { useModalStore } from "@/store/modalStore";
 // --- Type Definitions ---
 type StockItem = {
-  itemId: number | 'new'; // 'new' for newly added items without server ID
+  itemId: number | null; //  for newly added items without server ID
   itemImage: string | null; // Data URL or external URL for preview
   itemColorHex: string;
   itemQuantity: number;
@@ -146,7 +146,7 @@ export default function StockEditForm() {
       items: [
         ...prev.items,
         {
-          itemId: 'new', // Mark as new for distinct handling
+          itemId: null, // Mark as new for distinct handling
           itemImage: null,
           itemColorHex: "#000000",
           itemQuantity: 0,
@@ -369,7 +369,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 200  || response.status === 201) {
         setShowSuccessAlert(true);
         // Optionally refetch data to reflect server changes or navigate
         // router.push("/stocks");
@@ -395,24 +395,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
     }
   }, [isBusinessInfoLoading, form.groupName, fetchError]);
 
-  // Display specific fetch errors or business info errors
-  if (fetchError || businessInfoError) {
-    return (
-      <div className="flex-1 flex items-center justify-center h-full text-red-600">
-        <Alert severity="error">
-          <AlertTitle>Error Loading Data</AlertTitle>
-          {fetchError || businessInfoError?.message || "An unknown error occurred while fetching data."}
-          { (fetchError || businessInfoError) && (
-            <div className="mt-2 text-sm text-center">
-              Please check your connection or refresh the page.
-            </div>
-          )}
-        </Alert>
-      </div>
-    );
-  }
-
- 
+  
 
   
   // --- Main Form Render ---
@@ -427,7 +410,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
 
         {/* Success Alert */}
         {showSuccessAlert && (
-          <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-30">
+          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-60">
             <Alert
               severity="success"
               sx={{ fontSize: "0.75rem", border: "1px solid #e5e7eb", borderRadius: '4px' }}
@@ -439,7 +422,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
 
         {/* Submission Error Alert */}
         {submissionError && (
-          <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-30">
+          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-60">
             <Alert
               severity="error"
               sx={{ fontSize: "0.75rem", border: "1px solid #e5e7eb", borderRadius: '4px' }}
@@ -487,6 +470,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
           isLoading={false}
           error={form._groupImageError}
           className="p-2 rounded-sm border-[0.5px] border-gray-300"
+          priority={true}
         />
 
         {/* Group Info */}
@@ -555,28 +539,29 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
             {form.items.length > 0 ? (
               form.items.map((item, index) => (
                 <div
-                  key={item.itemId === 'new' ? `new-${index}` : item.itemId} // Use robust key for new items
+                  key={item.itemId === null ? `new-${index}` : item.itemId} // Use robust key for new items
                   className="flex flex-col md:flex-row justify-between border-[0.5px] border-gray-300 p-2 rounded-sm shadow-xs text-sm items-center gap-2"
                 >
                   <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
                     {/* Item Image Upload with ImageUploadComponent */}
                     <div className="flex-grow">
                         <ImageUploadComponent
-                            id={`itemImage-${item.itemId === 'new' ? `new-${index}` : item.itemId}`}
+                            id={`itemImage-${item.itemId === null ? `new-${index}` : item.itemId}`}
                             label="Variant Image"
                             currentImageUrl={item.itemImage}
                             onImageSelected={(file) => handleItemImageSelected(index, file)}
                             error={item._imageError}
                             className="p-1"
+                            priority={true}
                         />
                     </div>
 
                     {/* Color and Quantity */}
                     <div className="flex gap-4 mt-2 sm:mt-0">
                       <div>
-                        <label htmlFor={`itemColor-${item.itemId === 'new' ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">Color</label>
+                        <label htmlFor={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">Color</label>
                         <input
-                          id={`itemColor-${item.itemId === 'new' ? `new-${index}` : item.itemId}`}
+                          id={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`}
                           type="color"
                           value={item.itemColorHex}
                           onChange={(e) => updateItem(index, "itemColorHex", e.target.value)}
@@ -584,9 +569,9 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
                         />
                       </div>
                       <div>
-                        <label htmlFor={`itemQuantity-${item.itemId === 'new' ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">Quantity</label>
+                        <label htmlFor={`itemQuantity-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">Quantity</label>
                         <input
-                          id={`itemQuantity-${item.itemId === 'new' ? `new-${index}` : item.itemId}`}
+                          id={`itemQuantity-${item.itemId === null ? `new-${index}` : item.itemId}`}
                           required
                           type="text"
                           inputMode="numeric"

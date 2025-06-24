@@ -1,3 +1,4 @@
+// src/components/common/ImageAvatar.tsx
 'use client';
 
 import Image from 'next/image';
@@ -7,14 +8,13 @@ interface ImageAvatarProps {
   src?: string;
   alt?: string;
   size?: number;
-  priority?: boolean; // <--- ADD THIS LINE
+  priority?: boolean; // This prop receives the conditional value (e.g., from DataGrid)
 }
 
-const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', size = 65, priority }) => { // <--- ADD 'priority' HERE
-
+const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', size = 65, priority }) => { // Receives 'priority' prop
   // Fallback placeholder and error images. Make sure these exist in your `public` folder.
-  const placeholderSrc = '/Box.png'; // e.g., a generic grey box
-  const errorSrc = '/Box.png'; // e.g., a broken image icon
+  const placeholderSrc = '/Box.png';
+  const errorSrc = '/Box.png';
 
   // State to handle image loading errors
   const [imgError, setImgError] = React.useState(false);
@@ -30,7 +30,6 @@ const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', s
   };
 
   // Determine the actual image source to use
-  // If src is undefined or null, it will fallback to placeholderSrc
   const isValidSrc = typeof src === 'string' && src.trim() !== '' && src.trim().toUpperCase() !== 'NULL';
   const isDataUrl = isValidSrc && src.startsWith('data:');
   const currentImageSrc = imgError || !isValidSrc ? errorSrc : src!;
@@ -39,39 +38,37 @@ const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', s
   return (
     <div
       style={{
-        position: 'relative', // Essential for next/image with 'fill'
+        position: 'relative',
         width: `${size}px`,
         height: `${size}px`,
-        borderRadius: '5px', // For avatar shape
+        borderRadius: '5px',
         overflow: 'hidden',
         border: '1px solid #ddd',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        flexShrink: 0, // Prevent shrinking in flex layouts
+        flexShrink: 0,
       }}
     >
       {isDataUrl ? (
-     <img
-        src={currentImageSrc}
-        alt={alt}
-        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-        onError={handleError}
-        fetchPriority="high"
-      />
-
+        <img
+          src={currentImageSrc}
+          alt={alt}
+          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          onError={handleError}
+          fetchPriority="high" // This is for <img> tag, not next/image. Good to keep if needed.
+        />
       ) : (
-       <Image
+        <Image
           src={currentImageSrc}
           alt={alt}
           fill
           sizes={`${size}px`}
           className="object-cover"
           onError={handleError}
-          priority={priority} 
-          style={{ objectFit: 'cover' }} // Add this to ensure proper LCP-friendly rendering
+          priority={priority} // <--- CORRECTED: PASS THE PROP HERE!
+          style={{ objectFit: 'cover' }}
         />
-
       )}
     </div>
   );

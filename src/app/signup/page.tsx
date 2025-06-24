@@ -7,7 +7,7 @@ export default function SignupPage() {
       {/* Toaster is for showing success/error pop-up notifications */}
       <Toaster position="top-center" reverseOrder={false} />
       <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4 text-sm sm:text-base">
-        <div className="shadow-lg rounded-sm max-w-2xl w-full p-2 sm:p-6 bg-white h-full">
+        <div className="shadow-lg rounded-sm max-w-2xl w-full px-2 sm:px-6 py-6 bg-white h-full">
           <h1 className="text-xl font-extrabold text-gray-900 mb-6 text-center flex flex-row
                       items-center justify-center sm:text-2xl"> {/* Changed justify-self-center to justify-center */}
             <div className='w-10 h-10 mr-1'> {/* Removed mx-auto */}

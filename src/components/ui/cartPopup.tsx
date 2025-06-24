@@ -10,7 +10,7 @@ import axios from "axios";
 import { useStocks } from "@/hooks/useStocks";
 import { useInfo } from "@/hooks/useInfo";
 import PopupVouncher from "./voucherPopup";
-import { randomUUID } from "crypto";
+import formatMoney from "@/components/utils/formatMoney";
 
 type SalesProps = {
   tranDate: string;
@@ -28,8 +28,9 @@ type SalesProps = {
 export default function CartPopup(props: { handleToggle: () => void }) {
 
   const API = process.env.NEXT_PUBLIC_API_URL;
-  const { cart, addItem, removeItem, deleteItem, deleteAll, total } = useCartStore();
+  const { cart, addItem, removeItem, deleteItem, deleteAll, total, totalQty } = useCartStore();
   const grandTotal = total;
+  const grandTotalQty = totalQty;
   const [error, setError] = useState<string | null>(null);
   const [outOfStockItemId, setOutOfStockItemId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -145,20 +146,23 @@ export default function CartPopup(props: { handleToggle: () => void }) {
     });
   };
 
-  const itemElements = cart.map((group) => (
+  const itemElements = cart.map((group, index) => (
     <section
       key={group.groupId}
-      className="relative p-1 border border-gray-200 rounded-2xl shadow-xs "
+      className="relative p-1  border border-gray-200 rounded-2xl shadow-xs "
     >
-      <h3 className="text-md font-semibold text-gray-700 mb-3">
-        {group.groupName}
+      <h3 className="text-md font-semibold text-gray-700 mb-3 mx-3 mt-1 
+                     flex flex-row justify-between items-center">
+        <span>#{index + 1}. {" "}{group.groupName}</span>
+        <span className="text-gray-400
+                        text-xs
+                        ">Qty {grandTotalQty}</span>
       </h3>
-      <ul className="space-y-1.5 border-[0.5px] border-gray-200
-                     rounded-xl p-1">
+      <ul className="space-y-1.5">
         {group.item.map((item) => (
           <li
             key={item.itemId}
-            className="relative flex items-center justify-between gap-2 px-2.5 py-5 rounded-lg border-[0.5px] border-gray-200"
+            className="relative flex items-center justify-between gap-2 px-1 py-5 rounded-xl border-[0.5px] border-gray-200"
             style={{
               background: `linear-gradient(to right, ${hexToRgba(item.colorHex, 0.2)}, rgba(0, 0, 0, 0.08))`,
             }}
@@ -261,7 +265,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}>
 
-      <div className="relative h-[90vh] w-full sm:w-[600px] rounded-sm shadow-2xl flex flex-col border border-gray-200 animate-slide-up bg-white p-0.5">
+      <div className="relative h-[90vh] w-full sm:w-[600px] rounded-sm shadow-2xl flex flex-col border border-gray-200 animate-slide-up bg-white">
         {/* Close Button */}
         <button
           onClick={props.handleToggle}
@@ -286,7 +290,8 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         {/* Cart Items */}
         <div className="flex-1 overflow-auto p-1 space-y-4 custom-scrollbar mt-3">
           {itemElements.length ? itemElements : 
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+                          transition duration-200 ease-in-out">
             <Image
               src="/noitemsincart.svg"
               alt="Empty Cart"
@@ -294,7 +299,6 @@ export default function CartPopup(props: { handleToggle: () => void }) {
               width={250}
               height={250}
               className="mx-auto"
-              style={{ height: "auto" }} 
             />
 
             <span className="block text-center text-gray-300 font-bold text-lg">
@@ -310,7 +314,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
           <div className="flex justify-between mb-4">
             <span className="text-sm text-gray-600">Subtotal</span>
             <span className="text-lg font-bold text-gray-900">
-              {grandTotal} MMK
+              {formatMoney(grandTotal)} MMK
             </span>
           </div>
           <button

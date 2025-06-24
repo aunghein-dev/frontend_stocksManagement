@@ -11,6 +11,7 @@ interface ImageUploadProps {
   isLoading?: boolean;
   error?: string | null;
   className?: string; // Optional for external styling
+  priority?: boolean; 
 }
 
 const ImageUploadComponent: React.FC<ImageUploadProps> = ({
@@ -21,6 +22,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   isLoading = false,
   error = null,
   className = "",
+  priority = false
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -91,6 +93,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
             <Image
               src={currentImageUrl}
               alt="Preview"
+              priority={priority}
               fill // Makes the image fill the parent div
               sizes="(max-width: 768px) 100vw, 96px" // Example sizes, adjust if necessary
               className="object-cover"

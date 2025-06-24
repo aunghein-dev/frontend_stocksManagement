@@ -13,18 +13,21 @@ interface CartState {
   deleteAll: () => void;
   reload: () => void;
   total: number;
+  totalQty: number;
 
 }
 
 export const useCartStore = create<CartState>((set) => ({
   cart: [...cartInstance.getCart()],
   total: cartInstance.getTotal(),
+  totalQty: cartInstance.getTotalQty(),
 
   clearCart: () => {
     cartInstance.clearCart();
     set({
       cart: [...cartInstance.getCart()],
       total: cartInstance.getTotal(),
+      totalQty: cartInstance.getTotalQty(),
     });
   },
 
@@ -33,6 +36,7 @@ export const useCartStore = create<CartState>((set) => ({
     set({
       cart: [...cartInstance.getCart()],
       total: cartInstance.getTotal(),
+      totalQty: cartInstance.getTotalQty(),
     });
   },
 
@@ -41,6 +45,7 @@ export const useCartStore = create<CartState>((set) => ({
     set({
       cart: [...cartInstance.getCart()],
       total: cartInstance.getTotal(),
+      totalQty: cartInstance.getTotalQty(),
     });
   },
 
@@ -49,6 +54,7 @@ export const useCartStore = create<CartState>((set) => ({
     set({
       cart: [...cartInstance.getCart()],
       total: cartInstance.getTotal(),
+      totalQty: cartInstance.getTotalQty(),
     });
   },
 
@@ -57,6 +63,7 @@ export const useCartStore = create<CartState>((set) => ({
     set({
       cart: [],
       total: 0,
+      totalQty: 0,
     });
   },
 
@@ -65,6 +72,7 @@ export const useCartStore = create<CartState>((set) => ({
     set({
       cart: [...cartInstance.getCart()],
       total: cartInstance.getTotal(),
+      totalQty: cartInstance.getTotalQty(),
     });
   },
 }));

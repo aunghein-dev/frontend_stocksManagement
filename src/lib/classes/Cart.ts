@@ -101,6 +101,10 @@ class Cart {
     );
   }
 
+  getTotalQty() {
+    return this.cart.reduce((total, group) => total + group.item.reduce((sub, item) => sub + item.boughtQty, 0), 0);
+  }
+
   clearCart(){
     this.cart = [];
     this.saveCart();
