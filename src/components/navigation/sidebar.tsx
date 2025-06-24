@@ -47,7 +47,6 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
   }, [pathname]);
 
 
-
   return (
     <aside
         className={`
@@ -80,9 +79,9 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
           >
             <div className="relative w-12 h-12">
                 <Image
-                  // Check for null or empty string, then fallback to /Box.png
-                  src={(business?.businessLogo && business.businessLogo !== "") ? business.businessLogo : "/Box.png"}
-                  alt={`${business?.businessNameShortForm || "Business"} Logo` || "Business Logo"} // Improved alt text fallback
+                  src={business?.businessId===1 ? 
+                       business?.businessLogo || "/Box.png": "/applogo.png" }
+                  alt="Openware Logo" 
                   fill
                   sizes="(max-width: 640px) 50px, 50px"
                   className="object-contain"
@@ -106,7 +105,7 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
             }`}
             style={{ willChange: "opacity" }}
           >
-            {business?.businessNameShortForm === "" ? "Openware" : business?.businessNameShortForm || "Openware"}
+            {business?.businessId === 1 ? business?.businessName : "Openware"}
           </h1>
         </div>
       )}
