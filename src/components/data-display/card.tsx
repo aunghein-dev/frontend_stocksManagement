@@ -8,6 +8,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Image from "next/image";
 import formatMoney from "@/components/utils/formatMoney";
+import dayjs from "dayjs";
 
 export default function Product(props: Stock) {
   const { cart, addItem } = useCartStore();
@@ -82,12 +83,13 @@ const [loaded, setLoaded] = useState(false);
 
   return (
     <Card
-      className="max-w-xs text-gray-900 hover:shadow-sm
-                 cursor-pointer transition duration-200 ease-in-out "
+      className="max-w-3xs text-gray-900 relative sm:max-w-2xs
+                 cursor-pointer transition duration-200 ease-in-out
+                 shadow-xs hover:shadow-md"
 
         renderImage={() => {
               return (
-                <div className="w-full max-h-[200px] min-h-[200px] relative">
+                <div className="w-full max-h-[180px] min-h-[180px] relative">
                   {!loaded && (
                     <div className="w-full h-full bg-gray-200 rounded-t-sm animate-pulse" />
                   )}
@@ -97,24 +99,31 @@ const [loaded, setLoaded] = useState(false);
                     src={selectedImage}
                     alt={props.groupName}
                     onLoad={() => setLoaded(true)}
-                    className={`w-full max-h-[200px] 
-                                min-h-[200px] object-cover 
-                                rounded-t-sm absolute top-0 
+                    className={`w-full max-h-[180px]
+                                min-h-[180px] object-cover 
+                                rounded-t-[14px] absolute top-0 
                                 left-0 transition-opacity duration-300 ${
                       loaded ? 'opacity-100' : 'opacity-0'
                     }`}
                   />
+                  
                 </div>
               );
             }
           }
-          style={{ backgroundColor: "white", borderRadius: "4px" , 
-                  border: "0.5px solid #e5e7ed",
-                  maxHeight: "390px" }}
+          style={{ backgroundColor: "white",
+                   border: "0.5px solid oklch(90.9% 0.005 56.366)",
+                   borderRadius: '14px',
+                   maxHeight: "350px"
+          }}
         >
+        {dayjs().diff(dayjs(props.releasedDate), 'day') > 7 &&
+        <div className="absolute top-2 left-2 bg-green-600
+                        text-white px-3 py-1 text-sm rounded-sm">New</div>
+        }
 
-        <div className="flex flex-col justify-between gap-2 h-full -mt-5">
-            <div className="w-full max-w-xs ">
+        <div className="flex flex-col justify-between gap-2.5 h-full -mt-6">
+            <div className="w-full max-w-xs">
               <p className="text-sm font-bold text-gray-600 truncate">{props.groupName}</p>
             </div>
 
