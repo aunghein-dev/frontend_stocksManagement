@@ -475,7 +475,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
             </svg>
             Back
           </button>
-          <h2 className="text-xl font-semibold text-gray-600">Edit Stock Entry</h2>
+          <h2 className="text-xl font-semibold text-gray-600 mr-3">Edit Stock Entry</h2>
         </div>
 
         {/* Group Image Upload with ImageUploadComponent */}
@@ -588,12 +588,17 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
                         <input
                           id={`itemQuantity-${item.itemId === 'new' ? `new-${index}` : item.itemId}`}
                           required
-                          type="number"
-                          min={0}
-                          value={item.itemQuantity === 0 ? 0 : item.itemQuantity}
-                          onChange={(e) => updateItem(index, "itemQuantity", parseInt(e.target.value) || 0)}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          value={item.itemQuantity}
+                          onChange={(e) => {
+                            const onlyDigits = e.target.value.replace(/\D/g, ""); // remove non-digits
+                            updateItem(index, "itemQuantity", onlyDigits === "" ? 0 : parseInt(onlyDigits));
+                          }}
                           className="w-20 rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
                         />
+
                       </div>
                     </div>
                   </div>

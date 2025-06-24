@@ -201,6 +201,8 @@ export default function StockEntryForm() {
       return;
     }
 
+
+
     if (businessInfoError || !business?.businessId) {
       setSubmitting(false);
       setSubmissionError("Business information is missing or failed to load. Cannot submit.");
@@ -325,7 +327,7 @@ export default function StockEntryForm() {
 
   // --- Main Form Render ---
   return (
-    <div className="bg-red-800 p-1 overflow-hidden rounded-sm">
+    <div className="bg-white p-1 overflow-hidden rounded-sm">
       <form
         onSubmit={handleSubmit}
         className="w-full mx-auto p-2.5 overflow-auto space-y-3 relative custom-scrollbar"
@@ -505,12 +507,17 @@ export default function StockEntryForm() {
                         <input
                           id={`itemQuantity-${item.tempId}`}
                           required
-                          type="number"
-                          min={1}
-                          value={item.itemQuantity === 0 ? 1 : item.itemQuantity}
-                          onChange={(e) => updateItem(index, "itemQuantity", parseInt(e.target.value) || 0)}
+                          type="text"
+                          inputMode="numeric"         // 📱 shows number keyboard on mobile
+                          pattern="[0-9]*"            // 🚫 blocks non-numeric input on mobile
+                          value={item.itemQuantity}
+                          onChange={(e) => {
+                            const onlyDigits = e.target.value.replace(/\D/g, ""); // remove non-digits
+                            updateItem(index, "itemQuantity", onlyDigits === "" ? 0 : parseInt(onlyDigits));
+                          }}
                           className="w-20 rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
                         />
+
                       </div>
                     </div>
                   </div>
