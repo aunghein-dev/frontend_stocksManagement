@@ -25,6 +25,19 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
         helperText={errors.businessName?.message}
         required
         fullWidth
+        // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
       />
      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -52,6 +65,19 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
                   event.preventDefault();
                 }
               }}
+              // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
             />
           )}
         />
@@ -78,6 +104,19 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
                 event.preventDefault();
               }
             }}
+            // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
             // 'required' prop is intentionally omitted as this field is optional
           />
         )}
@@ -90,6 +129,19 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
         helperText={errors.streets?.message}
         required
         fullWidth
+        // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
       />
        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TextField
@@ -98,6 +150,19 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
             error={!!errors.township}
             helperText={errors.township?.message}
             required
+            // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
           />
           <TextField
             label="City"
@@ -105,6 +170,19 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
             error={!!errors.city}
             helperText={errors.city?.message}
             required
+            // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
           />
        </div>
        <TextField
@@ -115,28 +193,53 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
         multiline
         rows={2}
         fullWidth
+        // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
       />
-      <div>
-        <FormControlLabel
-          control={
-            <Controller
-              name="showLogoOnInvoice"
-              control={control}
-              render={({ field }) => <Checkbox {...field} checked={field.value} />}
-            />
-          }
-          label="Show Logo on Invoice"
-        />
+      <div className='flex flex-row flex-wrap'>
          <FormControlLabel
-          control={
-            <Controller
-              name="autoPrintAfterCheckout"
-              control={control}
-              render={({ field }) => <Checkbox {...field} checked={field.value} />}
-            />
-          }
-          label="Auto-print after Checkout"
-        />
+        control={
+          <Controller
+            name="showLogoOnInvoice"
+            control={control}
+            render={({ field }) => <Checkbox {...field} checked={field.value} />}
+          />
+        }
+        label="Show Logo on Invoice"
+        // Apply font size directly to the label's Typography component
+        sx={{
+          '& .MuiFormControlLabel-label': { // Target the label's specific class
+            fontSize: '0.875rem', // text-sm equivalent
+          },
+        }}
+      />
+      <br/> {/* For spacing in example */}
+      <FormControlLabel
+        control={
+          <Controller
+            name="autoPrintAfterCheckout"
+            control={control}
+            render={({ field }) => <Checkbox {...field} checked={field.value} />}
+          />
+        }
+        label="Auto-print after Checkout"
+        sx={{
+          '& .MuiFormControlLabel-label': { // Target the label's specific class
+            fontSize: '0.875rem', // text-sm equivalent
+          },
+        }}
+      />
       </div>
       <TextField
         label="Secret Code"
@@ -144,6 +247,19 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
         error={!!errors.secretCode}
         helperText={errors.secretCode?.message}
         required
+        // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
       />
     </div>
   );

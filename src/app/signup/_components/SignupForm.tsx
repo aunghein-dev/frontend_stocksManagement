@@ -176,7 +176,7 @@ export function SignupForm() {
 
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-sm" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-sm " noValidate>
       <UserDetailsForm register={register} errors={errors} />
       <BusinessDetailsForm register={register} errors={errors} control={control} />
 
@@ -227,13 +227,16 @@ export function SignupForm() {
         </Typography>
       )}
 
-      <button
+     <div className="text-center"> {/* Option B: Use text-align on the parent (if button is inline-block) */}
+  <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-blue-500 text-white font-semibold rounded-md py-3 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+        className="w-[400px] bg-blue-500 text-white font-semibold rounded-4xl py-2.5 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
         {isSubmitting ? 'Creating Account...' : 'Sign Up'}
       </button>
+    </div>
+
 
       <Typography variant="body2" className="mt-6 text-center text-gray-500">
         Already have an account?{' '}

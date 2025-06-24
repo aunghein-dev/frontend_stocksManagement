@@ -325,7 +325,7 @@ export default function StockEntryForm() {
 
   // --- Main Form Render ---
   return (
-    <div className="bg-white p-1 overflow-hidden rounded-sm">
+    <div className="bg-red-800 p-1 overflow-hidden rounded-sm">
       <form
         onSubmit={handleSubmit}
         className="w-full mx-auto p-2.5 overflow-auto space-y-3 relative custom-scrollbar"

@@ -49,7 +49,7 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
 
 
   return (
-    <aside className={`w-[200px] sm:w-[200px] fixed top-0 left-0 bg-white shadow-lg border-r border-gray-200 flex flex-col justify-between ${props.sidebarOpen ? "opacity-100" : "opacity-0" } transition-opacity duration-100 ease-in-out sm:opacity-100 h-screen sm:z-55 ${props.sidebarOpen ? "z-55" : "z-0"}`}>
+    <aside className={`w-[200px] sm:w-[200px] fixed top-0 left-0 bg-white shadow-lg border-r border-gray-200 flex flex-col justify-between ${props.sidebarOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"} transition-opacity duration-100 ease-in-out sm:opacity-100 h-screen sm:z-55 ${props.sidebarOpen ? "z-55" : "z-0"}`}>
      <button className="absolute top-2 right-2  text-gray-300 hover:text-gray-400 text-md   
                         cursor-pointer p-1.5 transition-colors duration-200 ease-in-out
                         sm:hidden" 

@@ -22,6 +22,19 @@ export function UserDetailsForm({ register, errors }: Props) {
         helperText={errors.fullName?.message}
         required
         fullWidth
+        // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
       />
       <TextField
         label="Email Address (Username)"
@@ -31,6 +44,19 @@ export function UserDetailsForm({ register, errors }: Props) {
         helperText={errors.username?.message}
         required
         fullWidth
+        // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
       />
       <TextField
         label="Password"
@@ -39,7 +65,19 @@ export function UserDetailsForm({ register, errors }: Props) {
         error={!!errors.password}
         helperText={errors.password?.message}
         required
-        fullWidth
+        fullWidth// --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
       />
       
     </div>

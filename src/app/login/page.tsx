@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { useModalStore } from "@/store/modalStore";
 import RememberLogin from '@/lib/classes/RememberLogin';
+import Image from 'next/image';
 
 // Instantiate RememberLogin outside the component to avoid re-creation on every render
 const rememberLoginInstance = new RememberLogin();
@@ -97,11 +98,22 @@ export default function LoginPage() {
   };
 
   return (
-    <div className='absolute top-0 left-0 w-screen h-screen flex items-center justify-center'>
+    <div className='absolute top-0 left-0 w-screen h-screen flex items-center justify-center flex-col'> 
+    
+          
     <div className="flex items-center justify-center p-4 w-full">
+      
       <div className="bg-white shadow-lg rounded-sm max-w-md w-full p-8">
-        <h1 className="text-2xl font-extrabold text-gray-900 mb-5 text-center">
-          Sign in to Your Account
+        <h1 className="text-2xl font-extrabold mb-5 text-center flex flex-row items-center
+                      justify-self-center">
+           <div className='w-10 h-10 mx-auto mr-1'>
+            <Image  
+                  src="https://svmeynesalueoxzhtdqp.supabase.co/storage/v1/object/public/images/global/onlylogo.png" alt="Logo" 
+                  width={40} height={40} />
+          </div>
+          <span className='text-blue-600 mr-1'>Welcome</span> 
+          <span className='text-gray-800'>back!</span>
+          
         </h1>
 
         {errorMsg
@@ -109,9 +121,9 @@ export default function LoginPage() {
           : <p className="text-center opacity-0 mb-4">InvisibleHolder</p>
         }
 
-        <form className="space-y-6 text-sm text-sm sm:text-base" onSubmit={handleLogin}>
+        <form className="space-y-6 text-sm sm:text-base" onSubmit={handleLogin}>
           <TextField
-            
+
             id="outlined-email-input"
             label="Email address"
             type="email"
@@ -121,10 +133,24 @@ export default function LoginPage() {
             onChange={handleInputChange}
             required
             sx={{ width: '100%', mb: 3 }}
+            // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
           />
 
           <div className="relative text-sm sm:text-base">
             <TextField
+
               id="outlined-password-input"
               label="Password"
               type="password"
@@ -134,6 +160,19 @@ export default function LoginPage() {
               onChange={handleInputChange}
               required
               sx={{ width: '100%' }}
+              // --- USE slotProps INSTEAD OF inputProps and InputLabelProps ---
+              slotProps={{
+                input: {
+                  style: {
+                    fontSize: '0.875rem', // For the actual input text (e.g., "text-sm")
+                  },
+                },
+                inputLabel: {
+                  style: {
+                    fontSize: '0.875rem', // For the label (e.g., "text-sm")
+                  },
+                },
+              }}
             />
           </div>
 
@@ -146,7 +185,7 @@ export default function LoginPage() {
                 onChange={handleInputChange}
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
-              <span className="select-none">Remember me</span>
+              <span className="select-none text-sm">Remember me</span>
             </label>
 
             <a
@@ -159,13 +198,13 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-semibold rounded-sm py-3 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm sm:text-base"
+            className="w-full bg-blue-500 text-white font-semibold rounded-4xl py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm sm:text-base"
           >
             Sign In
           </button>
         </form>
 
-        <p className="mt-6 text-center text-gray-500 text-sm sm:text-base">
+        <p className="mt-6 text-center text-gray-500 text-sm">
           Don't have an account?{' '}
           <button onClick={() => router.push('/signup')} className="text-blue-600 hover:text-blue-800 font-medium">
             Sign up
