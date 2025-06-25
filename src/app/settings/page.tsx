@@ -277,7 +277,7 @@ export default function Settings() {
 
   if (businessInfoError) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh - 169px)] text-red-600 h-full p-4">
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100dvh - 169px)] text-red-600 h-full p-4">
         <p className="text-lg font-semibold text-center">Error Loading Business Information</p>
         <p className="text-sm text-center mt-2">{businessInfoError.message}</p>
         <button
@@ -292,7 +292,7 @@ export default function Settings() {
 
   if (!business && !isLoadingBusinessInfo) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh - 169px)] text-gray-600 p-4">
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100dvh - 169px)] text-gray-600 p-4">
         <p className="text-lg font-semibold text-center">No Business Information Found</p>
         <p className="text-sm text-center mt-2">
           Could not retrieve business details for the current user. Please ensure you are logged in and business data exists.
@@ -308,8 +308,8 @@ export default function Settings() {
   }
 
   return (
-    <section className="w-full mx-auto rounded-sm bg-white overflow-hidden h-full p-1">
-      <div className='overflow-auto custom-scrollbar h-[calc(100vh-118px)] 
+    <section className="w-full rounded-sm bg-white overflow-hidden p-1">
+      <div className='overflow-auto custom-scrollbar h-[calc(100dvh-118px)] 
                       custom-scrollbar p-3'>
         <form onSubmit={handleSubmit}>
           {/* General Settings */}

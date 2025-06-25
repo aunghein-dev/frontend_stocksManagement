@@ -91,7 +91,7 @@ function DataTable<V, R extends { id: GridRowId }>({
   return (
     <div className='relative'>
       <Paper elevation={0} sx={{
-        height: "calc(100vh - 110px)",
+        height: "calc(100dvh - 110px)",
         width: '100%', // Adjust width as needed based on parent
         display: 'flex',
         flexDirection: 'column',
@@ -104,7 +104,7 @@ function DataTable<V, R extends { id: GridRowId }>({
           // The DataGrid `loading` prop from MUI should ideally only reflect `isLoading` from your hook.
           // If you want a specific "No results found" overlay, you'd use `slots` and `slotProps`.
           style={{ 
-          height: "calc(100vh - 110px)",
+          height: "calc(100dvh - 110px)",
          }}
           className='p-1 sm:w-[calc(100vw-225px)] w-[calc(100vw-25px)]'
           loading={isLoading} // Only show MUI's built-in spinner if data is being fetched

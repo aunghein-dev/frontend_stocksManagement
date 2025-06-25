@@ -91,7 +91,7 @@ export default function PopupVoucher({
 
       <div
         ref={componentRef}
-        className="relative h-[90vh] w-full sm:w-[600px] shadow-2xl flex flex-col animate-slide-up p-0.5 overflow-hidden bg-white rounded-sm"
+        className="relative h-[90dvh] w-full sm:w-[600px] shadow-2xl flex flex-col animate-slide-up p-0.5 overflow-hidden bg-white rounded-sm"
       >
 
         {/* Close Button */}

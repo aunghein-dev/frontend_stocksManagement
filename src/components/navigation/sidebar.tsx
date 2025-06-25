@@ -50,11 +50,11 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
   return (
     <aside
         className={`
-          fixed top-0 left-0 w-[200px] sm:w-[200px] h-screen bg-white shadow-lg border-r border-gray-200
-          flex flex-col justify-between
+          fixed top-0 left-0 w-[200px] sm:w-[200px] bg-white shadow-lg border-r-[0.5px] border-gray-200
+          flex flex-col justify-between rounded-r-sm
           transition-opacity duration-100 ease-in-out
           ${props.sidebarOpen ? "opacity-100 pointer-events-auto z-55" : "opacity-0 pointer-events-none z-0"}
-          sm:opacity-100 sm:pointer-events-auto sm:z-55
+          sm:opacity-100 sm:pointer-events-auto sm:z-55 h-full
         `}
       >
      <button className="absolute top-2 right-2  text-gray-300 hover:text-gray-400 text-md   

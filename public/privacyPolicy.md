@@ -1,4 +1,9 @@
-## Privacy Policy, Terms of Use & Legal Notice<span style="font-size: 0.8em; opacity: 0.7; margin-left: 3px">(ကိုယ်ရေးအချက်အလက်မူဝါဒ၊ အသုံးပြုမှုစည်းမျဥ်းနှင့် ဥပဒေရေးရာအသိပေးချက်)</span>
+<div style="display: flex; flex-direction: row; align-items: center; justify-content: center; margin-bottom: 20px;">
+  <img src="/onlylogo.png" alt="Openware" width="50" height="50" style="margin-right: 2px;">
+  <h2 style="margin: 0; font-size: 1.5em;">
+    Privacy Policy & Notices
+  </h2>
+</div>
 
 <p style="text-align: left; color: #6b7280; font-size: 0.85rem;">Last Updated: June 24, 2025 (နောက်ဆုံးပြင်ဆင်သည့်ရက်စွဲ- ၂၀၂၅ ခုနှစ်၊ ဇွန်လ ၂၄ ရက်)</p>
 

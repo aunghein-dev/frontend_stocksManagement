@@ -70,7 +70,7 @@ export default function Home() {
       {isLoading && (
         <div
           className="flex-1 flex items-center justify-center"
-          style={{ height: "calc(100vh - 170px)" }}
+          style={{ height: "calc(100dvh - 170px)" }}
         >
           <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
         </div>
@@ -80,7 +80,7 @@ export default function Home() {
       {!isLoading && currentItems.length === 0 && (
         <div
           className="w-full flex flex-col items-center justify-center"
-          style={{ height: "calc(100vh - 170px)" }}
+          style={{ height: "calc(100dvh - 170px)" }}
         >
           <div className="relative w-[300px] h-[300px] flex flex-col justify-end items-center">
             <Image
@@ -102,7 +102,7 @@ export default function Home() {
         <div className="px-1 py-1 rounded-sm bg-white">
           <div
             className="flex-1 overflow-y-auto custom-scrollbar"
-            style={{ height: "calc(100vh - 170px)" }}
+            style={{ height: "calc(100dvh - 170px)" }}
           >
             <div className="grid 
                             grid-cols-1 

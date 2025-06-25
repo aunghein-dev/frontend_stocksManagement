@@ -91,7 +91,7 @@ const [loaded, setLoaded] = useState(false);
               return (
                 <div className="w-full max-h-[180px] min-h-[180px] relative">
                   {!loaded && (
-                    <div className="w-full h-full bg-gray-200 rounded-t-sm animate-pulse" />
+                    <div className="w-full h-full bg-gray-200 rounded-t-[14px] animate-pulse" />
                   )}
                   <Image
                     fill

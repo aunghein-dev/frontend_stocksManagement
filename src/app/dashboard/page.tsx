@@ -237,7 +237,7 @@ export default function Dashboard() {
 
   if (businessInfoError) {
     return (
-      <div className='flex justify-center items-center min-h-[calc(100vh-169px)] p-4'>
+      <div className='flex justify-center items-center min-h-[calc(100dvh-169px)] p-4'>
         <p className="text-red-600 text-lg font-medium text-center p-6 rounded-lg bg-red-50 shadow-xs">
           Error loading business information: {businessInfoError.message || "An unknown error occurred."}
           <button onClick={useInfo().refresh} className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">
@@ -250,7 +250,7 @@ export default function Dashboard() {
 
   if (!business?.businessId && !isBusinessInfoLoading) {
     return (
-      <div className='flex justify-center items-center min-h-[calc(100vh-169px)] p-4'>
+      <div className='flex justify-center items-center min-h-[calc(100dvh-169px)] p-4'>
         <p className="text-gray-600 text-lg font-medium text-center p-6 rounded-lg bg-gray-50 shadow-xs">
           No business selected or available for dashboard.
           <br />Please select a business from the navigation or add a new one.
@@ -261,7 +261,7 @@ export default function Dashboard() {
 
   if (dashboardDataError) {
     return (
-      <div className='flex justify-center items-center min-h-[calc(100vh-169px)] p-4'>
+      <div className='flex justify-center items-center min-h-[calc(100dvh-169px)] p-4'>
         <p className="text-red-600 text-lg font-medium text-center p-6 rounded-lg bg-red-50 shadow-xs">
           {dashboardDataError.message}
           <button onClick={loadAllDashboardData} className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">
@@ -281,7 +281,7 @@ export default function Dashboard() {
       <div className="bg-white rounded-sm p-2 md:p-1 shadow-xs">
         <div
           className="overflow-y-auto overflow-x-hidden custom-scrollbar pt-2 px-1"
-          style={{ height: "calc(100vh - 117.5px)" }}
+          style={{ height: "calc(100dvh - 117.5px)" }}
         >
           {/* Mini cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 justify-between pb-4 md:pb-6 border-b border-gray-200 pl-3 pr-2">

@@ -46,7 +46,7 @@ export default function Stocks() {
  
   if (error) {
     return (
-      <div className='flex justify-center items-center min-h-[calc(100vh-169px)] p-4'>
+      <div className='flex justify-center items-center min-h-[calc(100dvh-169px)] p-4'>
         <p className="text-red-600 text-lg font-medium text-center p-6 rounded-lg bg-red-50 shadow-md">
           Error loading sales data: {error.message || "An unknown error occurred."}
           <button onClick={refresh} className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">

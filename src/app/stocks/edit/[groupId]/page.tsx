@@ -404,7 +404,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
       <form
         onSubmit={handleSubmit}
         className="w-full mx-auto p-2.5 overflow-auto space-y-3 relative custom-scrollbar"
-        style={{ height: "calc(100vh - 118px)" }}
+        style={{ height: "calc(100dvh - 118px)" }}
       >
         
 

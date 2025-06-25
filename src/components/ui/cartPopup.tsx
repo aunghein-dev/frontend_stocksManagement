@@ -265,7 +265,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}>
 
-      <div className="relative h-[90vh] w-full sm:w-[600px] rounded-sm shadow-2xl flex flex-col border border-gray-200 animate-slide-up bg-white">
+      <div className="relative h-[90dvh] w-full sm:w-[600px] rounded-sm shadow-2xl flex flex-col border border-gray-200 animate-slide-up bg-white">
         {/* Close Button */}
         <button
           onClick={props.handleToggle}

@@ -291,7 +291,7 @@ const AccountProfileSettingsPage: React.FC = () => {
 
   return (
 
-    <div className="p-1 w-full bg-white rounded-sm h-[calc(100vh-110px)] overflow-auto custom-scrollbar">
+    <div className="p-1 w-full bg-white rounded-sm h-[calc(100dvh-110px)] overflow-auto custom-scrollbar">
       <div className='overflow-auto h-full custom-scrollbar px-4 py-4'>
       <h1 className="text-xl font-bold text-gray-800 text-center mb-8">Your Profile Settings</h1>
 
