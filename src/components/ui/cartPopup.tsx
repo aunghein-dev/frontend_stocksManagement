@@ -58,7 +58,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
   const [voucherData, setVoucherData] = useState<any[]>([]);
   const [voucherUUID, setVoucherUUID] = useState<string>("");
-
+  const [imageLoaded, setImageLoaded] = useState(false);
   const vouncherGrand = voucherData.reduce((acc, item) => acc + item.subTotal, 0);
 
   const handleCheckout = async () => {
@@ -78,7 +78,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
           checkoutQty: item.boughtQty,
           itemUnitPrice: item.unitPrice,
           subCheckout: item.unitPrice * item.boughtQty,
-          tranUserEmail: "a@b.com",
+          tranUserEmail: business.registeredBy,
           bizId: business.id || 0,
         });
       });
@@ -91,6 +91,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
     if (response.status === 200) {
       const voucher = tempJson.map((group) => ({
+        groupId: group.stkGroupId,
         name: group.stkGroupName,
         price: group.itemUnitPrice,
         quantity: group.checkoutQty,
@@ -151,12 +152,8 @@ export default function CartPopup(props: { handleToggle: () => void }) {
       key={group.groupId}
       className="relative p-1  border border-gray-200 rounded-2xl shadow-xs "
     >
-      <h3 className="text-md font-semibold text-gray-700 mb-3 mx-3 mt-1 
-                     flex flex-row justify-between items-center">
+      <h3 className="text-md font-semibold text-gray-700 mb-3 mx-3 mt-1">
         <span>#{index + 1}. {" "}{group.groupName}</span>
-        <span className="text-gray-400
-                        text-xs
-                        ">Qty {grandTotalQty}</span>
       </h3>
       <ul className="space-y-1.5">
         {group.item.map((item) => (
@@ -192,13 +189,16 @@ export default function CartPopup(props: { handleToggle: () => void }) {
               />
               <Image
                 loader={({ src }) => src}
-                src={item.itemImage==="" || item.itemImage === null ? "/Box.png" : item.itemImage}  
-                alt="..."
+                src={item.itemImage === "" || item.itemImage === null ? "/Box.png" : item.itemImage}
+                alt={item.itemId + " product image"}
                 width={100}
                 height={100}
                 unoptimized
-                className="rounded-sm border-[1px] border-gray-300
-                           w-14 h-14 sm:w-20 sm:h-20"
+                className={`rounded-md border border-gray-200 shadow-sm
+                            w-14 h-14 sm:w-20 sm:h-20
+                            object-cover transition-all duration-300 ease-in-out
+                            ${imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                onLoadingComplete={() => setImageLoaded(true)}
               />
               <span className="text-xs text-gray-600 font-medium sm:text-sm">
                 #{item.itemId}
@@ -277,14 +277,16 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
         {loading && (
               <div className="absolute top-4 right-12">
-                <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
               </div>
          )}
 
 
         {/* Header */}
-        <div className="p-5 border-b border-gray-200 bg-gray-100 text-lg font-semibold text-gray-800 flex">
-          Shopping Cart
+        <div className="p-5 border-b border-gray-200 
+                      bg-gray-100 text-lg font-semibold 
+                      text-gray-800 flex">
+           Shopping Cart
         </div>
 
         {/* Cart Items */}
@@ -311,10 +313,11 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
         {/* Footer */}
         <div className="p-5 border-t border-gray-200 bg-gray-100">
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 items-center">
             <span className="text-sm text-gray-600">Subtotal</span>
             <span className="text-lg font-bold text-gray-900">
-              {formatMoney(grandTotal)} MMK
+               <span className="text-gray-400 text-sm mr-3">(Qty. {grandTotalQty})</span>
+               {formatMoney(grandTotal)} MMK
             </span>
           </div>
           <button

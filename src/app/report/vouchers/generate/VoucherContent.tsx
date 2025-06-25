@@ -96,7 +96,7 @@ export default function VoucherContent() {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="mt-4 text-gray-600">
+        <p className="mt-4 text-gray-600 text-sm">
           {isBusinessInfoLoading ? "Loading business info..." : "Loading voucher data..."}
         </p>
       </div>
@@ -154,7 +154,8 @@ export default function VoucherContent() {
   return (
     <div
       ref={componentRef}
-      className="relative h-[90vh] w-full flex flex-col animate-slide-up p-0.5 overflow-hidden bg-white rounded-sm"
+      className="relative w-full flex flex-col animate-slide-up 
+                p-1 overflow-hidden rounded-sm bg-white h-[calc(100vh-108px)]"
     >
       {/* ... (Your existing JSX content for the voucher) ... */}
       <div className="min-h-[40px] w-[40px] absolute top-2 left-2 print:hidden">
@@ -167,16 +168,16 @@ export default function VoucherContent() {
         </button>
       </div>
 
-      <div className="overflow-auto custom-scrollbar px-4">
-        <div className="flex flex-col items-center mt-10">
-           <Image
-              className="h-20"
-              width={75}
-              height={75}
-              src={business?.businessLogo}
-              alt="Mo Mo Clothing Logo"
-              draggable={false}
-            />
+      <div className="overflow-auto custom-scrollbar px-1">
+        <div className="flex flex-col items-center mt-4">
+          <Image
+            className="w-20 h-20 rounded-md object-cover flex-shrink-0" // New size: 80px x 80px
+            width={80} // Match intrinsic width to the Tailwind size
+            height={80} // Match intrinsic height to the Tailwind size
+            src={business?.businessLogo}
+            alt={business?.businessName ? `${business.businessName} Logo` : "Business Logo"}
+            draggable={false}
+          />
           <h1 className="text-2xl font-bold mb-6 text-gray-700">{business?.businessName}</h1>
           <p className="text-xs -mt-5 mb-2 text-gray-700">{business?.streets}</p>
           <p className="text-xs mb-2 text-gray-700">

@@ -12,7 +12,7 @@ export default function SignupPage() {
                       items-center justify-center sm:text-2xl"> {/* Changed justify-self-center to justify-center */}
             <div className='w-10 h-10 mr-1'> {/* Removed mx-auto */}
               <Image  
-                src="https://svmeynesalueoxzhtdqp.supabase.co/storage/v1/object/public/images/global/onlylogo.png" alt="Logo" 
+                src="/onlylogo.png" alt="Openware Logo" 
                 width={40} height={40} />
             </div>
             <span className='text-blue-600 mr-1'>Register</span>

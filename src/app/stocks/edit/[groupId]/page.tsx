@@ -436,28 +436,29 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
         {/* Back Link and Title */}
         <div className="flex items-center justify-between">
           <button
-            onClick={() => router.back()}
-            className="flex items-center text-sm border-1 rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200"
-          >
-            <svg
-              className="w-4 h-4 text-blue-600"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
+              onClick={() => router.back()}
+              type="button" // 
+              className="flex items-center text-sm border-[0.5px] rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 12h14M5 12l4-4m-4 4 4 4"
-              />
-            </svg>
-            Back
-          </button>
+              <svg
+                className="w-4 h-4 text-blue-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 12h14M5 12l4-4m-4 4 4 4"
+                />
+              </svg>
+              Back
+            </button>
           <h2 className="text-xl font-semibold text-gray-600 mr-3">Edit Stock Entry</h2>
         </div>
 
@@ -540,14 +541,15 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
               form.items.map((item, index) => (
                 <div
                   key={item.itemId === null ? `new-${index}` : item.itemId} // Use robust key for new items
-                  className="flex flex-col md:flex-row justify-between border-[0.5px] border-gray-300 p-2 rounded-sm shadow-xs text-sm items-center gap-2"
+                  className="flex flex-col md:flex-row justify-between border-[0.5px]
+                           border-gray-300 p-2 rounded-sm shadow-xs text-sm items-center gap-2"
                 >
                   <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
                     {/* Item Image Upload with ImageUploadComponent */}
                     <div className="flex-grow">
                         <ImageUploadComponent
                             id={`itemImage-${item.itemId === null ? `new-${index}` : item.itemId}`}
-                            label="Variant Image"
+                            label={`Varient #${index + 1}`}
                             currentImageUrl={item.itemImage}
                             onImageSelected={(file) => handleItemImageSelected(index, file)}
                             error={item._imageError}

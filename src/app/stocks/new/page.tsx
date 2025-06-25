@@ -368,6 +368,7 @@ export default function StockEntryForm() {
         {/* Back Link and Title */}
         <div className="flex items-center justify-between">
           <button
+            type="button"
             onClick={() => router.back()}
             className="flex items-center text-sm border-[0.5px]
                        rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100 
@@ -482,7 +483,7 @@ export default function StockEntryForm() {
                     <div className="flex-grow">
                         <ImageUploadComponent
                             id={`itemImage-${item.tempId}`}
-                            label="Variant Image"
+                            label={`Varient #${index + 1}`}
                             currentImageUrl={item.itemImage}
                             onImageSelected={(file) => handleItemImageSelected(index, file)}
                             error={item._imageError}

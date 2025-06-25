@@ -1,10 +1,8 @@
 <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; margin-bottom: 20px;">
-  <img src="https://svmeynesalueoxzhtdqp.supabase.co/storage/v1/object/public/images/global/onlylogo.png" alt="Openware Logo" width="50" height="50" style="margin-right: 2px;">
+  <img src="/onlylogo.png" alt="Openware" width="50" height="50" style="margin-right: 2px;">
   <h2 style="margin: 0; font-size: 1.5em;">
-    Terms and Conditions <br>
-     <span style="font-size: 0.8em; opacity: 0.7; margin-left: 3px">(စည်းမျဥ်းများ)</span>
+    Terms and Conditions 
   </h2>
- 
 </div>
 
 **Last Updated: June 24, 2025** (နောက်ဆုံးပြင်ဆင်သည့်ရက်စွဲ- ၂၀၂၅ ခုနှစ်၊ ဇွန်လ ၂၄ ရက်)
