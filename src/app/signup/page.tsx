@@ -6,7 +6,7 @@ export default function SignupPage() {
   return (
      <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center flex-col min-h-[100dvh]'> 
       
-       <div className="flex items-center justify-center p-1 shadow-lg rounded-sm max-w-2xl w-full bg-white h-full sm:h-auto">
+       <div className="flex items-center justify-center p-1 shadow-lg rounded-sm max-w-2xl w-full bg-white min-h-[100dvh]">
         <Toaster position="top-center" reverseOrder={false} />
         <div className="w-full px-2 sm:px-6 py-6  
                          overflow-auto custom-scrollbar sm:h-[calc(100dvh-50px)] h-full">
