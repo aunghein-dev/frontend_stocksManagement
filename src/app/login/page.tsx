@@ -98,7 +98,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className='absolute top-0 left-0 w-screen h-screen flex items-center justify-center flex-col'> 
+    <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center flex-col'> 
     
           
     <div className="flex items-center justify-center p-4 w-full">
