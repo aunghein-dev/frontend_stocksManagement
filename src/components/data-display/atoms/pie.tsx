@@ -31,10 +31,10 @@ export default function PieActiveArc(props: { data: PieChartData[] })  {
       <Link
         href="/"
         className="bg-blue-100 hover:bg-blue-200 text-blue-600 border-[0.5px]
-                   border-blue-500 absolute -top-4 right-4
+                   border-blue-500 absolute -top-3 right-3
                    px-3 py-1.5 rounded-sm text-xs cursor-pointer"
       >
-        View Report
+        View Report 
       </Link>
     </div>
   );

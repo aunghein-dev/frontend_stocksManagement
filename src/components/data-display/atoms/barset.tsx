@@ -110,7 +110,7 @@ export default function BarsDataset({ series, dataset }: BarsDatasetProps) {
       <Link
         href="/"
         className="bg-blue-100 hover:bg-blue-200 text-blue-600 border-[0.5px]
-                   border-blue-500 absolute -top-8 right-0
+                   border-blue-500 absolute -top-5 right-2
                    px-3 py-1.5 rounded-sm text-xs cursor-pointer"
       >
         View Report
