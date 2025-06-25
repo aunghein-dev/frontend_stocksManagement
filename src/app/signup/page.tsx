@@ -6,11 +6,11 @@ export default function SignupPage() {
   return (
      <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center flex-col min-h-[100dvh]'> 
       
-       <div className="flex items-center justify-center p-1 shadow-lg rounded-sm max-w-3xl w-full bg-white h-full">
+       <div className="flex items-center justify-center p-1 shadow-lg rounded-sm max-w-2xl w-full bg-white h-full sm:h-auto">
         <Toaster position="top-center" reverseOrder={false} />
         <div className="w-full px-2 sm:px-6 py-6  
-                         overflow-auto custom-scrollbar h-[calc(100dvh-20px)]">
-            <h1 className="text-xl font-extrabold text-gray-900 mb-6 text-center flex items-center justify-center sm:text-2xl">
+                         overflow-auto custom-scrollbar sm:h-[calc(100dvh-50px)] h-full">
+            <h1 className="text-xl font-extrabold text-gray-900 mb-6 text-center flex items-center justify-center">
               <div className="w-10 h-10 mr-1">
                 <Image
                   src="/onlylogo.png"
