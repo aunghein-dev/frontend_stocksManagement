@@ -32,6 +32,7 @@ export default function VoucherContent() {
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
   });
+  
 
   // Fetch business info using the custom hook
   const { business, isLoading: isBusinessInfoLoading, error: businessInfoError } = useInfo();
@@ -94,7 +95,7 @@ export default function VoucherContent() {
   // Conditional Rendering for Loading and Error States
   if (isBusinessInfoLoading || isLoadingVoucher) {
     return (
-      <div className="flex flex-col items-center justify-center h-full">
+      <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)]">
         <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         <p className="mt-4 text-gray-600 text-sm">
           {isBusinessInfoLoading ? "Loading business info..." : "Loading voucher data..."}
@@ -105,7 +106,7 @@ export default function VoucherContent() {
 
   if (businessInfoError) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-red-600">
+      <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)] text-red-600">
         <p className="text-lg font-semibold">Error Loading Business Information</p>
         <p className="text-sm text-center px-4">{businessInfoError.message}</p>
         <button
@@ -120,7 +121,7 @@ export default function VoucherContent() {
 
   if (voucherFetchError) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-red-600">
+      <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)] text-red-600">
         <p className="text-lg font-semibold">Voucher Generation Error</p>
         <p className="text-sm text-center px-4">{voucherFetchError}</p>
         <button
@@ -135,7 +136,7 @@ export default function VoucherContent() {
 
   if (!voucherData || voucherData.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-gray-600">
+      <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)] text-gray-600">
         <p className="text-lg font-semibold">No Voucher Data Found</p>
         <p className="text-sm text-center px-4">
           The voucher with Batch ID &quot;{batchId}&quot; could not be found or contains no items.
@@ -167,7 +168,7 @@ export default function VoucherContent() {
         </button>
       </div>
 
-      <div className="overflow-auto custom-scrollbar px-1"
+      <div className="overflow-auto custom-scrollbar px-1 md:px-10 lg:px-20 xl:px-30"
            ref={componentRef}>
         <div className="flex flex-col items-center mt-4">
           <Image
