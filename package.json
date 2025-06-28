@@ -20,6 +20,7 @@
     "@mui/x-data-grid": "^8.5.0",
     "axios": "^1.10.0",
     "clsx": "^2.1.1",
+    "colorthief": "^2.6.0",
     "dayjs": "^1.11.13",
     "flowbite-react": "^0.11.7",
     "framer-motion": "^12.16.0",

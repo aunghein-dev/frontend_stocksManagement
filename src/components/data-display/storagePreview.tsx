@@ -44,10 +44,7 @@ const getStorageMessage = (kbUsed: number) => { // Renamed parameter to kbUsed f
               </p>
             </div>
           </div>
-            <Link href='/'
-               className='bg-green-100 hover:bg-green-200 text-green-600 border-[0.5px]
-                           border-green-500 absolute top-4 right-4
-                           px-3 py-1.5 rounded-sm text-xs cursor-pointer'>Upgrade</Link>
+           
     </div>
   )
 }

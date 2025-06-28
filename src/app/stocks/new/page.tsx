@@ -8,11 +8,13 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useInfo } from "@/hooks/useInfo";
 import dayjs from "dayjs";
+// imgDataURLtoFile is not directly used in this version of handleItemImageSelected, keeping for completeness if other parts of project use it
 import imgDataURLtoFile from "@/components/utils/imgDataURLtoFile";
 import ImageUploadComponent from "@/components/common/ImageUploadComponent"; // Import the reusable component
 import { XMarkIcon } from '@heroicons/react/24/outline'; // For remove item button
 import { useRouter } from "next/navigation";
-import { useModalStore } from "@/store/modalStore"; 
+import { useModalStore } from "@/store/modalStore";
+import ColorThief from 'colorthief';
 
 // --- Type Definitions ---
 type NewStockItem = {
@@ -22,6 +24,7 @@ type NewStockItem = {
   itemQuantity: number;
   _tempFile?: File | null; // Holds the actual File object if selected
   _imageError?: string | null; // Client-side image specific error
+  _detectedPalette?: string[] | null; // New: To store HEX colors of the detected palette
 };
 
 type NewStockGroup = {
@@ -56,11 +59,10 @@ export default function StockEntryForm() {
   // Use the useInfo hook to get business details
   const { business, isLoading: isBusinessInfoLoading, error: businessInfoError } = useInfo();
   const router = useRouter();
+
   // --- Effects ---
+  const { openModal, closeModal } = useModalStore();
 
-
-   const { openModal, closeModal } = useModalStore(); 
-  
     // This useEffect controls the modal's open/close state
     useEffect(() => {
       let timer: NodeJS.Timeout | null = null;
@@ -74,7 +76,7 @@ export default function StockEntryForm() {
           closeModal();
         }, 100); // FETCH_MODAL_DELAY = 100ms
       }
-  
+
       // Cleanup function to clear the timer if the component unmounts
       return () => {
         if (timer) {
@@ -106,17 +108,29 @@ export default function StockEntryForm() {
         {
           tempId: Date.now(), // Unique client-side key
           itemImage: null, // Start with no image
-          itemColorHex: "#000000",
+          itemColorHex: "#000000", // Default to black
           itemQuantity: 1,
           _tempFile: null,
           _imageError: null,
+          _detectedPalette: null, // Initialize palette as null
         },
       ],
     }));
   }, []);
 
+  // Helper function to convert RGB to Hex
+  const rgbToHex = (r: number, g: number, b: number): string => {
+    // Ensure numbers are within 0-255 range and are integers
+    const toHex = (c: number) => {
+      const hex = Math.round(c).toString(16);
+      return hex.length === 1 ? "0" + hex : hex;
+    };
+    return "#" + toHex(r) + toHex(g) + toHex(b).toUpperCase();
+  };
+
+
   // Handles updating a specific field of an item variant
-  const updateItem = useCallback((index: number, key: keyof NewStockItem, value: string | number) => {
+  const updateItem = useCallback((index: number, key: keyof NewStockItem, value: string | number | string[] | null) => {
     setForm((prev) => {
       const updatedItems = [...prev.items];
       // Type assertion for dynamically setting properties that might include internal ones
@@ -159,23 +173,81 @@ export default function StockEntryForm() {
           itemToUpdate._imageError = `Image too large (max 1MB).`;
           itemToUpdate._tempFile = null;
           itemToUpdate.itemImage = null;
+          itemToUpdate.itemColorHex = "#000000"; // Reset color if error
+          itemToUpdate._detectedPalette = null; // Clear palette if error
         } else {
           itemToUpdate._tempFile = file;
           const reader = new FileReader();
           reader.onloadend = () => {
-            setForm(current => {
-              const nextItems = [...current.items];
-              nextItems[index] = { ...nextItems[index], itemImage: reader.result as string };
-              return { ...current, items: nextItems };
-            });
+            const imageDataUrl = reader.result as string;
+            itemToUpdate.itemImage = imageDataUrl; // Set image preview
+
+            // --- ColorThief Integration ---
+            const img = new Image();
+            img.crossOrigin = 'Anonymous'; // Needed for cross-origin images, though local files usually don't need it
+            img.src = imageDataUrl;
+            img.onload = () => {
+              try {
+                const colorThief = new ColorThief();
+                const dominantColor = colorThief.getColor(img);
+                const hexColor = rgbToHex(dominantColor[0], dominantColor[1], dominantColor[2]);
+
+                // Get a palette of dominant colors (e.g., top 5)
+                const palette = colorThief.getPalette(img, 5); // Get 5 colors
+                const hexPalette = palette.map((rgb: number[]) => rgbToHex(rgb[0], rgb[1], rgb[2]));
+
+                setForm(current => {
+                  const nextItems = [...current.items];
+                  // Update image, detected dominant color, and the palette
+                  nextItems[index] = {
+                    ...nextItems[index],
+                    itemImage: imageDataUrl,
+                    itemColorHex: hexColor,
+                    _detectedPalette: hexPalette,
+                  };
+                  return { ...current, items: nextItems };
+                });
+              } catch (error) {
+                console.error("Error detecting color or palette:", error);
+                setForm(current => {
+                  const nextItems = [...current.items];
+                  nextItems[index] = {
+                    ...nextItems[index],
+                    itemImage: imageDataUrl,
+                    itemColorHex: "#000000", // Default to black on error
+                    _detectedPalette: null, // Clear palette on error
+                  };
+                  return { ...current, items: nextItems };
+                });
+              }
+            };
+            img.onerror = (err) => {
+              console.error("Image loading error for color detection:", err);
+              setForm(current => {
+                const nextItems = [...current.items];
+                nextItems[index] = {
+                  ...nextItems[index],
+                  itemImage: imageDataUrl,
+                  itemColorHex: "#000000", // Default to black on error
+                  _detectedPalette: null, // Clear palette on error
+                };
+                return { ...current, items: nextItems };
+              });
+            };
           };
           reader.readAsDataURL(file);
         }
       } else {
         itemToUpdate._tempFile = null;
         itemToUpdate.itemImage = null; // Clear preview
+        itemToUpdate.itemColorHex = "#000000"; // Reset color
+        itemToUpdate._detectedPalette = null; // Clear palette
       }
       updatedItems[index] = itemToUpdate;
+
+      // Note: The main setForm call here will be overridden by the one inside reader.onloadend
+      // to ensure the color is updated AFTER the image is loaded.
+      // So, this initial setForm is mainly for the _tempFile and _imageError updates.
       return { ...prev, items: updatedItems };
     });
   }, []);
@@ -200,8 +272,6 @@ export default function StockEntryForm() {
       setSubmissionError("Business information is still loading. Please wait.");
       return;
     }
-
-
 
     if (businessInfoError || !business?.businessId) {
       setSubmitting(false);
@@ -310,7 +380,6 @@ export default function StockEntryForm() {
     }
   }, [API_BASE_URL, business?.businessId, businessInfoError, isBusinessInfoLoading, form, resetForm, selectedGroupFile, groupImageError]);
 
-  
 
   if (businessInfoError) {
     return (
@@ -322,8 +391,6 @@ export default function StockEntryForm() {
       </div>
     );
   }
-
-  
 
   // --- Main Form Render ---
   return (
@@ -371,7 +438,7 @@ export default function StockEntryForm() {
             type="button"
             onClick={() => router.back()}
             className="flex items-center text-sm border-[0.5px]
-                       rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100 
+                       rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100
                       hover:bg-blue-200 cursor-pointer transition duration-150"
           >
             <svg
@@ -483,7 +550,7 @@ export default function StockEntryForm() {
                     <div className="flex-grow">
                         <ImageUploadComponent
                             id={`itemImage-${item.tempId}`}
-                            label={`Varient #${index + 1}`}
+                            label={`Variant #${index + 1}`}
                             currentImageUrl={item.itemImage}
                             onImageSelected={(file) => handleItemImageSelected(index, file)}
                             error={item._imageError}
@@ -492,16 +559,35 @@ export default function StockEntryForm() {
                     </div>
 
                     {/* Color and Quantity */}
-                    <div className="flex gap-4 mt-2 sm:mt-0">
+                    <div className="flex flex-col gap-2 mt-2 sm:mt-0">
                       <div>
-                        <label htmlFor={`itemColor-${item.tempId}`} className="block font-medium text-gray-700 mb-1">Color</label>
+                        <label htmlFor={`itemColor-${item.tempId}`} className="block font-medium text-gray-700 mb-1">Color (Detected)</label>
                         <input
                           id={`itemColor-${item.tempId}`}
                           type="color"
                           value={item.itemColorHex}
                           onChange={(e) => updateItem(index, "itemColorHex", e.target.value)}
-                          className="w-10 h-10 border-[0.5px] border-gray-200 rounded-sm"
+                          className="w-full h-10 border-[0.5px] border-gray-200 rounded-sm cursor-pointer"
+                          title="Click to manually choose color"
                         />
+                        {/* Display Detected Palette */}
+                        {item._detectedPalette && item._detectedPalette.length > 0 && (
+                          <div className="mt-2 text-xs">
+                            <p className="font-medium text-gray-700 mb-1">Palette:</p>
+                            <div className="flex gap-1.5">
+                              {item._detectedPalette.map((color, pIdx) => (
+                                <button
+                                  key={pIdx}
+                                  type="button"
+                                  className="w-6 h-6 border-[0.5px] border-gray-300 rounded-full cursor-pointer"
+                                  style={{ backgroundColor: color }}
+                                  onClick={() => updateItem(index, "itemColorHex", color)}
+                                  title={`Select ${color}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div>
                         <label htmlFor={`itemQuantity-${item.tempId}`} className="block font-medium text-gray-700 mb-1">Quantity</label>
@@ -518,7 +604,6 @@ export default function StockEntryForm() {
                           }}
                           className="w-20 rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
                         />
-
                       </div>
                     </div>
                   </div>
