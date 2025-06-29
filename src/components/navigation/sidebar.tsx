@@ -98,7 +98,7 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
           </div>
           {/* Always render the h1, use fallback for empty string */}
           <h1
-            className={`text-2xl font-bold 
+            className={`text-xl font-bold 
                         bg-gradient-to-r from-blue-500 to-red-500 bg-clip-text text-transparent
                         transition-opacity duration-300 ease-in-out ${
               imgLoaded ? "opacity-100" : "opacity-0"

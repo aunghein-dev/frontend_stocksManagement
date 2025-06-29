@@ -1,5 +1,4 @@
 import GuageArch from "@/components/data-display/atoms/guage";
-import Link from "next/link";
 export default function StoragePreview(props: { number: number, storage: number }) {
 
 
@@ -34,7 +33,7 @@ const getStorageMessage = (kbUsed: number) => { // Renamed parameter to kbUsed f
             <div className="w-full max-w-sm p-4 bg-white rounded-xl shadow-sm">
               <div className="flex flex-wrap items-center mb-2">
                 <p className="text-[0.7rem] font-semibold text-gray-600 mr-1.5">Storage</p>
-                <p className="text-sm font-medium text-gray-800">{props.storage} MB / {MAX_STORAGE_GB} GB</p>
+                <p className="text-sm font-medium text-gray-800">{Math.floor(props.storage)} MB / {MAX_STORAGE_GB} GB</p>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3">
                 <div className="bg-blue-600 h-3 rounded-full" style={{ width: '20%' }}></div>

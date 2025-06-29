@@ -13,7 +13,7 @@ type SalesChartProps = {
 import * as React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { chartXAxis, chartYAxis } from '@/data/sales.data';
-import Link from 'next/link';
+
 
 export default function SalesChart({ series }: SalesChartProps) {
   return (
@@ -23,7 +23,7 @@ export default function SalesChart({ series }: SalesChartProps) {
         yAxis={chartYAxis}
         series={series}
         height={170}
-        margin={{ top: 5, bottom: 5, left: 5, right: 5 }}
+        margin={{ top: 5, bottom: 5, left: 8, right: 8 }}
         grid={{ vertical: true, horizontal: true }}
         slotProps={{
           line: {

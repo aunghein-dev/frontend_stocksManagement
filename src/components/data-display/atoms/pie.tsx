@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { valueFormatter } from '@/data/pie.data';
-import Link from 'next/link';
+
 
 type PieChartData = {
   label: string;

@@ -302,13 +302,13 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:[grid-template-columns:60%_40%] gap-2 pt-4 md:pt-6 pb-4 md:pb-6 border-b border-gray-200 w-full md:pr-4 px-3">
             <div className="flex items-center min-h-[250px] md:min-h-[300px] justify-center bg-gray-50 rounded-lg p-2 pt-10 border-[0.5px] border-gray-100 shadow-xs relative">
               {dashboardData.barset?.data.length && dashboardData.barset?.series.length ? (
-                  <div>
+                  <div className='w-full'>
                      <BarsDataset
                       series={dashboardData.barset.series}
                       dataset={dashboardData.barset.data}
                       />
                      <Link href='/'
-                           className='text-blue-600 absolute right-1 top-2
+                           className='text-blue-600 absolute right-2.5 top-2
                                       text-xs cursor-pointer hover:underline decoration-2
                                       transition-all duration-200'>View Report</Link>
                   </div>
@@ -319,8 +319,8 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center justify-center min-h-[250px] md:min-h-[300px]
                             p-2 rounded-lg bg-gray-50 pt-10 border-[0.5px] border-gray-100 shadow-xs relative">
-              {dashboardData.radar===null ? (
-                <div>
+              {dashboardData.radar!==null ? (
+                <div className='w-full'>
                      <Radar
                       metrics={reshapedRadar.metrics}
                       summerData={reshapedRadar.summer}
@@ -328,7 +328,7 @@ export default function Dashboard() {
                       winterData={reshapedRadar.winter}
                     />
                     <Link href='/'
-                          className='text-blue-600 absolute right-1 top-2
+                          className='text-blue-600 absolute right-2.5 top-2
                                     text-xs cursor-pointer hover:underline decoration-2
                                     transition-all duration-200'>View Report</Link>
                 </div>
@@ -345,14 +345,14 @@ export default function Dashboard() {
               <div className="min-h-[200px] flex justify-center items-center bg-gray-50 
                               rounded-lg border-[0.5px] border-gray-100 shadow-xs relative">
                 {dashboardData.storage ? (
-                  <div>
+                  <div className='w-full'>
                     <StoragePreview
                       number={Math.ceil(dashboardData.storage.usagePercentage ?? 0)}
                       storage={parseFloat((((dashboardData.storage.usagePercentage ?? 0) / 100) * 1024).toFixed(2))}
                     />
                   
                     <Link href='/'
-                        className='text-blue-600 absolute right-1 top-2
+                        className='text-blue-600 absolute right-2.5 top-2
                                   text-xs cursor-pointer hover:underline decoration-2
                                   transition-all duration-200'>View Report</Link>
                   </div>
@@ -363,10 +363,10 @@ export default function Dashboard() {
               <div className="flex items-center justify-center min-h-[250px] bg-gray-50 
                               rounded-lg border-[0.5px] border-gray-100 shadow-xs relative">
                 {chartData.length > 0 ? (
-                  <div>
+                  <div className='w-full'>
                     <PieChart data={chartData} />
                     <Link href='/'
-                          className='text-blue-600 absolute right-1 top-2
+                          className='text-blue-600 absolute right-2.5 top-2
                                     text-xs cursor-pointer hover:underline decoration-2
                                     transition-all duration-200'>View Report</Link>
                   </div>
@@ -376,12 +376,12 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex items-center justify-center min-h-[300px] 
-                            px-3.5 bg-gray-50 rounded-lg
+                            rounded-lg w-full bg-gray-50
                             border-[0.5px] border-gray-100 shadow-xs relative">
 
             {/* Add a null check for dashboardData.line */}
             {dashboardData.line && dashboardData.line.reduce((a, b) => a + b, 0) > 0 ? (
-              <div>
+              <div className='w-full'>
                 <LineChart
                   series={[
                     {
@@ -393,7 +393,7 @@ export default function Dashboard() {
                   ]}
                 />
                 <Link href='/'
-                            className='text-blue-600 absolute right-1 top-2
+                            className='text-blue-600 absolute right-2.5 top-2
                                       text-xs cursor-pointer hover:underline decoration-2
                                       transition-all duration-200'>View Report</Link>
               </div>
