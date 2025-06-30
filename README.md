@@ -2,7 +2,7 @@
 
 # Openware Stock Manager
 
-![App Logo](public/applogo.png)
+![Openware Stock Manager Logo](public/applogo.png)
 
 Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) inspired web application designed to streamline inventory management for businesses. Built with a powerful **Next.js** frontend and a secure **Spring Boot** backend, it leverages **PostgreSQL** and **Supabase** for efficient and scalable data management, featuring a multi-tenant architecture with single-database tenancy.
 
@@ -97,21 +97,21 @@ Before you begin, make sure you have the following installed:
 1.  **Clone the repositories:**
 
     ```bash
-    git clone [https://github.com/aunghein-dev/openware-stock-manager-frontend.git](https://github.com/aunghein-dev/openware-stock-manager-frontend.git)
-    git clone [https://github.com/aunghein-dev/openware-stock-manager-backend.git](https://github.com/aunghein-dev/openware-stock-manager-backend.git)
+    git clone [https://github.com/aunghein-dev/frontend_stocksManagement.git](https://github.com/aunghein-dev/frontend_stocksManagement.git)
+    git clone [https://github.com/aunghein-dev/backend_stocksManagement.git](https://github.com/aunghein-dev/backend_stocksManagement.git)
     ```
 
 2.  **Frontend Installation:**
 
     ```bash
-    cd openware-stock-manager-frontend
+    cd frontend_stocksManagement # Corrected directory name
     npm install # or yarn install
     ```
 
 3.  **Backend Installation:**
 
     ```bash
-    cd openware-stock-manager-backend
+    cd backend_stocksManagement # Corrected directory name
     # If using Maven:
     mvn clean install
     # If using Gradle:
@@ -129,7 +129,7 @@ Before you begin, make sure you have the following installed:
 2.  Update the database connection details in the backend's `application.properties` (or `application.yml`):
 
     ```properties
-    # openware-stock-manager-backend/src/main/resources/application.properties
+    # backend_stocksManagement/src/main/resources/application.properties
     spring.datasource.url=jdbc:postgresql://localhost:5432/openware_stock_manager
     spring.datasource.username=your_pg_username
     spring.datasource.password=your_pg_password
@@ -144,7 +144,7 @@ Before you begin, make sure you have the following installed:
 4.  Update the frontend's `.env.local` file:
 
     ```env
-    # openware-stock-manager-frontend/.env.local
+    # frontend_stocksManagement/.env.local
     NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
     NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
     ```
@@ -152,7 +152,7 @@ Before you begin, make sure you have the following installed:
 5.  Configure the Supabase JWT secret in your Spring Boot backend for JWT validation. This is crucial for validating tokens issued by Supabase.
 
     ```properties
-    # openware-stock-manager-backend/src/main/resources/application.properties
+    # backend_stocksManagement/src/main/resources/application.properties
     app.jwt.supabase-secret=YOUR_SUPABASE_JWT_SECRET # Get this from Supabase project settings -> API -> JWT Secret
     ```
 
@@ -165,7 +165,7 @@ Ensure all necessary environment variables are set for both the frontend and bac
 1.  **Start the Backend:**
 
     ```bash
-    cd openware-stock-manager-backend
+    cd backend_stocksManagement
     # If using Maven:
     mvn spring-boot:run
     # If using Gradle:
@@ -177,7 +177,7 @@ Ensure all necessary environment variables are set for both the frontend and bac
 2.  **Start the Frontend:**
 
     ```bash
-    cd openware-stock-manager-frontend
+    cd frontend_stocksManagement
     npm run dev # or yarn dev
     ```
 
@@ -195,9 +195,7 @@ Once both the backend and frontend are running, open your web browser and naviga
 
 A preview of the application in action can be found here:
 
-<div align="center">
-  <video src="public/preview.MOV" controls width="640" height="480"></video>
-</div>
+[📽 Watch a video preview](https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview.MOV)
 
 ---
 
@@ -246,4 +244,4 @@ For any questions or inquiries, please reach out to:
 
 - Email: [aunghein.mailer@gmail.com]
 - Website: [https://app.openwaremyanmar.site](https://app.openwaremyanmar.site) (if applicable)
-- GitHub Issues: [https://github.com/aunghein-dev/openware-stock-manager-frontend/issues](https://github.com/aunghein-dev/openware-stock-manager-frontend/issues)
+- GitHub Issues: [https://github.com/aunghein-dev/frontend_stocksManagement/issues](https://github.com/aunghein-dev/frontend_stocksManagement/issues)
