@@ -65,10 +65,12 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
       {isLoading ? ( // Use isLoading for initial loading state
         <div className="flex items-center justify-between  w-full">
            <div className="w-12 h-12 bg-gray-400 rounded-full animate-pulse" />
-           <div className="w-20 h-6 bg-gray-400 rounded-sm animate-pulse"></div>
+           <div className="w-22 h-5 bg-gray-400 rounded-sm animate-pulse relative">
+            <div className="absolute top-7 right-0 h-4.5 w-12 bg-gray-400 rounded-sm animate-pulse"></div>
+           </div>
         </div>
       ) : ( // Once not loading, display content
-        <div className="flex items-center w-full">
+        <div className="flex items-center w-full relative">
           {/* Always render the div for the logo, let the Image src handle the fallback */}
           <div
             className={`w-12 h-12 flex items-center justify-center mr-0 rounded-sm overflow-hidden flex-shrink-0 transition-opacity duration-300 ease-in-out 
@@ -98,8 +100,9 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
           </div>
           {/* Always render the h1, use fallback for empty string */}
           <h1
-            className={`text-xl font-bold 
+            className={`text-xl font-bold
                         bg-gradient-to-r from-blue-500 to-red-500 bg-clip-text text-transparent
+                        cursor-default
                         transition-opacity duration-300 ease-in-out ${
               imgLoaded ? "opacity-100" : "opacity-0"
             }`}
@@ -107,7 +110,12 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
           >
             {business?.businessId === 1 ? business?.businessNameShortForm : "Openware"}
           </h1>
-        </div>
+          <div className={`absolute top-10 right-2 px-1 py-0.5 bg-blue-100
+                        text-blue-700 border border-blue-200 rounded-sm text-[0.55rem]
+                        cursor-default ${
+              imgLoaded ? "opacity-100" : "opacity-0"}`}
+               style={{ willChange: "opacity" }}>Free v0.1</div>
+        </div>  
       )}
     </div>
 

@@ -352,9 +352,9 @@ export default function Dashboard() {
                     />
                   
                     <Link href='/'
-                        className='text-blue-600 absolute right-2.5 top-2
+                        className='text-green-600 absolute right-2.5 top-2
                                   text-xs cursor-pointer hover:underline decoration-2
-                                  transition-all duration-200'>View Report</Link>
+                                  transition-all duration-200'>Upgrade Pro</Link>
                   </div>
                 ) : (
                   <p className="text-sm text-gray-400">No storage data available.</p>

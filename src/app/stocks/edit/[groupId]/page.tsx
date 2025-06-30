@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import Link from "next/link";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -11,15 +10,18 @@ import { useInfo } from "@/hooks/useInfo";
 import ImageUploadComponent from "@/components/common/ImageUploadComponent"; // Import the reusable component
 import { XMarkIcon } from '@heroicons/react/24/outline'; // For remove item button
 import { useModalStore } from "@/store/modalStore";
+import ColorThief from 'colorthief'; // IMPORT COLOR THIEF
+
 // --- Type Definitions ---
 type StockItem = {
-  itemId: number | null; //  for newly added items without server ID
+  itemId: number | null; // for newly added items without server ID
   itemImage: string | null; // Data URL or external URL for preview
   itemColorHex: string;
   itemQuantity: number;
   _tempFile?: File | null; // Holds the actual File object for new uploads
   _imageError?: string | null; // Client-side image specific error
   _isExistingImage: boolean; // True if itemImage is a URL from the server
+  _detectedPalette?: string[] | null; // NEW: To store HEX colors of the detected palette
 };
 
 type Stock = {
@@ -31,13 +33,15 @@ type Stock = {
   items: StockItem[];
 };
 
-// Form state type, without groupId as it's from params
+// Form state type, with groupId added back to track fetched ID
 type FormState = Omit<Stock, "groupId"> & {
-  _groupTempFile: File | null; // File object for the main group image
-  _groupImageError: string | null; // Error for group image
+  groupId: number | null; // ADDED: To track the groupId of the currently loaded data
+  _groupTempFile: File | null;
+  _groupImageError: string | null;
 };
 
 const getInitialFormState = (): FormState => ({
+  groupId: null, // Initialized to null
   groupImage: null,
   groupName: "",
   groupUnitPrice: 0,
@@ -47,6 +51,15 @@ const getInitialFormState = (): FormState => ({
   _groupImageError: null,
 });
 
+// Helper function to convert RGB to Hex
+const rgbToHex = (r: number, g: number, b: number): string => {
+  const toHex = (c: number) => {
+    const hex = Math.round(c).toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+  };
+  return "#" + toHex(r) + toHex(g) + toHex(b).toUpperCase();
+};
+
 // --- Main Component ---
 export default function StockEditForm() {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -54,16 +67,17 @@ export default function StockEditForm() {
   const params = useParams();
 
   // Ensure groupId is always a string for API calls
-  const groupId = Array.isArray(params.groupId) ? params.groupId[0] : (params.groupId as string);
+  const groupIdParam = Array.isArray(params.groupId) ? params.groupId[0] : (params.groupId as string);
 
   // --- State Management ---
   const [form, setForm] = useState<FormState>(getInitialFormState);
   const [submittingForm, setSubmittingForm] = useState(false);
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false); // Renamed from popperShow for clarity
-  const [fetchError, setFetchError] = useState<string | null>(null); // For initial data fetch errors
-  const [submissionError, setSubmissionError] = useState<string | null>(null); // For form submission errors
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  // NEW STATE: To track if initial data for the current group has been loaded
+  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false); // HIGHLIGHT: NEW STATE ADDED
 
-  // Use the useInfo hook to get business details
   const { business, isLoading: isBusinessInfoLoading, error: businessInfoError } = useInfo();
   const bizId = business?.businessId;
 
@@ -71,23 +85,38 @@ export default function StockEditForm() {
 
   // --- Initial Data Fetch Effect ---
   useEffect(() => {
-    // Only fetch if bizId and groupId are available and not already loading/loaded
-    if (!bizId || !groupId || (form.groupName && !fetchError)) {
+    // Ensure bizId and groupId from params are available
+    if (!bizId || !groupIdParam) {
       if (!bizId) {
         setFetchError("Business ID not available. Please ensure you are logged in.");
-      } else if (!groupId) {
+      } else if (!groupIdParam) {
         setFetchError("No Group ID provided for editing.");
       }
       return;
     }
 
+    // Convert groupIdParam to a number for comparison
+    const currentNumericGroupId = parseInt(groupIdParam);
+
+    // HIGHLIGHT: REVISED CONDITION FOR INITIAL FETCH
+    // Prevents re-fetching if data has already been successfully loaded for this specific groupId
+    // unless there was a previous fetchError that needs a retry.
+    if (hasFetchedInitialData && !fetchError && form.groupId === currentNumericGroupId) {
+      return;
+    }
+
     const fetchGroupData = async () => {
       setSubmittingForm(false); // Ensure submission state is off during initial fetch
-      setFetchError(null);
-      setForm(getInitialFormState()); // Reset form state before fetching new data
+      setFetchError(null); // Clear any previous fetch errors
+      // Only reset form completely if it's a new groupId or failed previous fetch
+      // Otherwise, keep current form state to avoid flicker while refetching if needed
+      if (form.groupId !== currentNumericGroupId || !hasFetchedInitialData) {
+         setForm(getInitialFormState()); // Reset form state before fetching new data for a different group
+      }
+
 
       try {
-        const response = await axios.get<Stock>(`${API_BASE_URL}/biz/${bizId}/stkG/${groupId}`, {
+        const response = await axios.get<Stock>(`${API_BASE_URL}/biz/${bizId}/stkG/${groupIdParam}`, {
           withCredentials: true,
         });
         const selectedGroupData = response.data;
@@ -95,6 +124,7 @@ export default function StockEditForm() {
         if (selectedGroupData && selectedGroupData.groupName) {
           setForm((prevForm) => ({
             ...prevForm,
+            groupId: selectedGroupData.groupId, // HIGHLIGHT: Store fetched groupId in form state
             groupImage: selectedGroupData.groupImage || null,
             groupName: selectedGroupData.groupName || "",
             groupUnitPrice: selectedGroupData.groupUnitPrice || 0,
@@ -102,14 +132,17 @@ export default function StockEditForm() {
             items: selectedGroupData.items.map(item => ({
               ...item,
               itemImage: item.itemImage || null,
-              _tempFile: null, // No temp file for existing images
+              _tempFile: null,
               _imageError: null,
-              _isExistingImage: true, // Mark as existing
+              _isExistingImage: true,
+              _detectedPalette: null, // Initialize palette for existing items
             })),
           }));
+          setHasFetchedInitialData(true); // HIGHLIGHT: Set to true on successful fetch
         } else {
           setFetchError("Stock group data is empty or invalid.");
-          router.push("/stocks"); // Redirect if data is truly not found or invalid
+          router.push("/stocks");
+          setHasFetchedInitialData(true); // HIGHLIGHT: Still set to true if data is invalid/empty to stop loading
         }
       } catch (error) {
         console.error("Error fetching stock group data:", error);
@@ -118,12 +151,13 @@ export default function StockEditForm() {
         } else {
           setFetchError("Failed to load stock data. Please try again.");
         }
-        router.push("/stocks"); // Redirect on fetch error
+        router.push("/stocks");
+        setHasFetchedInitialData(true); // HIGHLIGHT: Set to true even on fetch error to stop indefinite loading
       }
     };
 
     fetchGroupData();
-  }, [groupId, API_BASE_URL, bizId, router, form.groupName, fetchError]); // Rerun if these critical pieces change
+  }, [groupIdParam, API_BASE_URL, bizId, router, fetchError, hasFetchedInitialData, form.groupId]); // HIGHLIGHT: REMOVED form.groupName, ADDED hasFetchedInitialData, form.groupId
 
   // --- Alert Visibility Effect ---
   useEffect(() => {
@@ -146,92 +180,136 @@ export default function StockEditForm() {
       items: [
         ...prev.items,
         {
-          itemId: null, // Mark as new for distinct handling
+          itemId: null,
           itemImage: null,
           itemColorHex: "#000000",
           itemQuantity: 0,
           _tempFile: null,
           _imageError: null,
           _isExistingImage: false,
+          _detectedPalette: null, // Initialize palette for new items
         },
       ],
     }));
   }, []);
 
   // Handles updating a specific field of an item variant
-  const updateItem = useCallback((index: number, key: keyof StockItem, value: string | number) => {
+  const updateItem = useCallback((index: number, key: keyof StockItem, value: string | number | string[] | null) => {
     setForm((prev) => {
       const updatedItems = [...prev.items];
-      // Type assertion because keyof StockItem doesn't include _tempFile, etc.
-      (updatedItems[index] as any)[key] = value;
+      (updatedItems[index] as any)[key] = value; // Type assertion
       return { ...prev, items: updatedItems };
     });
   }, []);
-// Handles image selection for the main group image
-const handleGroupImageSelected = useCallback((file: File | null) => {
-  setForm((prev) => {
-    // Explicitly assert that newForm is of type FormState
-    const newForm: FormState = { ...prev, _groupImageError: null, _groupTempFile: null, groupImage: null };
-    if (file) {
-      if (file.size > 2 * 1024 * 1024) { // Example: 2MB limit
-        // This assignment is now valid because TypeScript knows _groupImageError can be a string
-        newForm._groupImageError = "Group image must be less than 2MB.";
-      } else {
-        newForm._groupTempFile = file;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setForm(current => ({ ...current, groupImage: reader.result as string }));
-        };
-        reader.readAsDataURL(file);
+
+  // Handles image selection for the main group image
+  const handleGroupImageSelected = useCallback((file: File | null) => {
+    setForm((prev) => {
+      const newForm: FormState = { ...prev, _groupImageError: null, _groupTempFile: null, groupImage: null };
+      if (file) {
+        if (file.size > 2 * 1024 * 1024) {
+          newForm._groupImageError = "Group image must be less than 2MB.";
+        } else {
+          newForm._groupTempFile = file;
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setForm(current => ({ ...current, groupImage: reader.result as string }));
+          };
+          reader.readAsDataURL(file);
+        }
       }
-    }
-    return newForm;
-  });
-}, []);
+      return newForm;
+    });
+  }, []);
 
-// Handles image selection for individual item variants
-const handleItemImageSelected = useCallback((index: number, file: File | null) => {
-  setForm((prev) => {
-    const updatedItems = [...prev.items];
-    // Explicitly assert that itemToUpdate is of type StockItem
-    const itemToUpdate: StockItem = { ...updatedItems[index], _imageError: null, _tempFile: null }; // Clear previous
-    itemToUpdate._isExistingImage = false; // A new selection means it's not the existing image anymore
+  // Handles image selection for individual item variants
+  const handleItemImageSelected = useCallback((index: number, file: File | null) => {
+    setForm((prev) => {
+      const updatedItems = [...prev.items];
+      const itemToUpdate: StockItem = { ...updatedItems[index], _imageError: null, _tempFile: null, _detectedPalette: null }; // Reset palette on new image
+      itemToUpdate._isExistingImage = false;
 
-    if (file) {
-      if (file.size > 1 * 1024 * 1024) { // Example: 1MB limit for item images
-        // This assignment is now valid
-        itemToUpdate._imageError = `Image too large (max 1MB).`;
+      if (file) {
+        if (file.size > 1 * 1024 * 1024) {
+          itemToUpdate._imageError = `Image too large (max 1MB).`;
+          itemToUpdate._tempFile = null;
+          itemToUpdate.itemImage = null;
+          itemToUpdate.itemColorHex = "#000000"; // Reset color if error
+          itemToUpdate._detectedPalette = null; // Clear palette if error
+        } else {
+          itemToUpdate._tempFile = file;
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const imageDataUrl = reader.result as string;
+            // Temporarily set itemImage for preview and then detect colors
+            setForm(current => {
+              const nextItems = [...current.items];
+              nextItems[index] = { ...nextItems[index], itemImage: imageDataUrl } as StockItem;
+              return { ...current, items: nextItems };
+            });
+
+            // --- ColorThief Integration ---
+            const img = new Image();
+            img.crossOrigin = 'Anonymous'; // Needed for cross-origin images, though local files usually don't need it
+            img.src = imageDataUrl;
+            img.onload = () => {
+              try {
+                const colorThief = new ColorThief();
+                const dominantColor = colorThief.getColor(img);
+                const hexColor = rgbToHex(dominantColor[0], dominantColor[1], dominantColor[2]);
+
+                // Get a palette of dominant colors (e.g., top 5)
+                const palette = colorThief.getPalette(img, 5); // Get 5 colors
+                const hexPalette = palette.map((rgb: number[]) => rgbToHex(rgb[0], rgb[1], rgb[2]));
+
+                setForm(current => {
+                  const nextItems = [...current.items];
+                  // Update image, detected dominant color, and the palette
+                  nextItems[index] = {
+                    ...nextItems[index],
+                    itemImage: imageDataUrl,
+                    itemColorHex: hexColor, // Set dominant color as default
+                    _detectedPalette: hexPalette, // Store the palette
+                  } as StockItem;
+                  return { ...current, items: nextItems };
+                });
+              } catch (colorThiefError) {
+                console.error("Error detecting colors:", colorThiefError);
+                setForm(current => {
+                  const nextItems = [...current.items];
+                  nextItems[index] = {
+                    ...nextItems[index],
+                    _imageError: "Could not detect colors from image.",
+                    _detectedPalette: null,
+                  } as StockItem;
+                  return { ...current, items: nextItems };
+                });
+              }
+            };
+            img.onerror = () => {
+              setForm(current => {
+                const nextItems = [...current.items];
+                nextItems[index] = {
+                  ...nextItems[index],
+                  _imageError: "Failed to load image for color detection.",
+                  _detectedPalette: null,
+                } as StockItem;
+                return { ...current, items: nextItems };
+              });
+            };
+          };
+          reader.readAsDataURL(file);
+        }
       } else {
-        itemToUpdate._tempFile = file;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setForm(current => {
-            const nextItems = [...current.items];
-            // Ensure nextItems[index] is also treated as StockItem
-            nextItems[index] = { ...nextItems[index], itemImage: reader.result as string } as StockItem;
-            return { ...current, items: nextItems };
-          });
-        };
-        reader.readAsDataURL(file);
+        itemToUpdate._tempFile = null;
+        itemToUpdate.itemImage = null;
+        itemToUpdate._isExistingImage = false;
+        itemToUpdate._detectedPalette = null; // Clear palette if no file
       }
-    } else {
-      // If file is null, it means image was cleared.
-      itemToUpdate._tempFile = null;
-      itemToUpdate.itemImage = null;
-      itemToUpdate._isExistingImage = false; // No longer existing or new
-    }
-    updatedItems[index] = itemToUpdate;
-    return { ...prev, items: updatedItems };
-  });
-}, []);
-
- useEffect(() => {
-    if(submittingForm) {
-      openModal("loading");
-    } else {
-      closeModal();
-    }
-  }, [submittingForm, openModal, closeModal]);
+      updatedItems[index] = itemToUpdate;
+      return { ...prev, items: updatedItems };
+    });
+  }, [updateItem]); // Dependency added for updateItem
 
   // --- Form Submission Handler ---
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -245,7 +323,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
       setSubmissionError("Business ID not available. Cannot submit.");
       return;
     }
-    if (!groupId) {
+    if (!groupIdParam) {
       setSubmittingForm(false);
       setSubmissionError("Group ID missing. Cannot submit update.");
       return;
@@ -266,17 +344,16 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
       return;
     }
 
-    if (!form.groupImage && !form._groupTempFile) { // Check if either current URL or new file exists
+    if (!form.groupImage && !form._groupTempFile) {
         setSubmittingForm(false);
         setSubmissionError("Group image is required.");
         return;
     }
-    if (form._groupImageError) { // Check for client-side image errors
+    if (form._groupImageError) {
         setSubmittingForm(false);
         setSubmissionError(form._groupImageError);
         return;
     }
-
 
     const invalidItem = form.items.find(item =>
         item.itemQuantity <= 0 || item._imageError || (!item.itemImage && !item._tempFile)
@@ -298,60 +375,35 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
     try {
       const formData = new FormData();
 
-      // Handle group image:
-      // If a new file was selected, append it.
       if (form._groupTempFile) {
         formData.append("groupImage", form._groupTempFile);
       }
-      // If groupImage was cleared, explicitly tell backend to remove it if your API supports it.
-      // E.g., formData.append("clearGroupImage", "true");
-      // If it's an existing image and not re-uploaded, you typically don't send it again.
-      // The backend should retain the existing image unless a new one is provided.
 
-
-      // Prepare item data for JSON and item image files for FormData
       const itemsPayload = await Promise.all(
         form.items.map(async (item, index) => {
-          let itemImageNameForBackend = ''; // This will be used to link file to JSON item
+          let itemImageNameForBackend = '';
 
           if (item._tempFile) {
-            // New or replaced image
             itemImageNameForBackend = `itemImage_${item.itemId || 'new_' + index}.jpg`;
             formData.append("itemImages", item._tempFile, itemImageNameForBackend);
           } else if (item._isExistingImage && item.itemImage) {
-            // Existing image, but backend expects URL in JSON for update (or you don't send file)
-            // If backend expects the URL in JSON and no new file, set it here.
-            itemImageNameForBackend = item.itemImage; // Send the URL back if backend needs it to know to retain
+            itemImageNameForBackend = item.itemImage;
           }
-          // If itemImage is null/cleared and not a new file, it will be excluded. Backend should handle deletion.
-
-          
 
           return {
-            itemId: item.itemId, // Include itemId for existing items
+            itemId: item.itemId,
             itemColorHex: item.itemColorHex,
             itemQuantity: item.itemQuantity,
-            // Only include image info if it's an existing URL that the backend needs to retain,
-            // OR if you're sending a filename for the backend to match with the uploaded file.
-            // For multipart, it's common for files to be separate from JSON for new uploads.
-            // If itemImageNameForBackend is a URL, send it. If it's a temp filename, perhaps backend will link it.
-            // This logic depends heavily on your backend's API design for updates.
-            // For now, assuming backend matches files sent in 'itemImages' array with the order of JSON items.
-            // Or that the backend identifies items by itemId and new files by their position/order.
-            // Let's assume if _tempFile exists, backend processes that. If not, if _isExistingImage, backend retains.
-            // If neither, backend deletes.
-            itemImage: item._isExistingImage && item.itemImage ? item.itemImage : undefined, // Only send URL if existing and not replaced
+            itemImage: item._isExistingImage && item.itemImage ? item.itemImage : undefined,
           };
         })
       );
 
-      // Append structured JSON for group and items
       const groupJson = {
         groupName: form.groupName,
         groupUnitPrice: form.groupUnitPrice,
         releasedDate: form.releasedDate,
         items: itemsPayload,
-        // _groupId: groupId, // Can include groupId in JSON for clarity if desired by backend
       };
 
       formData.append(
@@ -359,9 +411,8 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
         new Blob([JSON.stringify(groupJson)], { type: "application/json" })
       );
 
-      // --- API Call ---
       const response = await axios.put(
-        `${API_BASE_URL}/edit/stkG/${groupId}`, // Use PUT for updates
+        `${API_BASE_URL}/edit/stkG/${groupIdParam}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -371,8 +422,6 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
 
       if (response.status === 200  || response.status === 201) {
         setShowSuccessAlert(true);
-        // Optionally refetch data to reflect server changes or navigate
-        // router.push("/stocks");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -384,20 +433,23 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
     } finally {
       setSubmittingForm(false);
     }
-  }, [API_BASE_URL, bizId, groupId, form, router]);
+  }, [API_BASE_URL, bizId, groupIdParam, form, router]);
 
- 
+  // --- Modal Visibility Effect (Revised) ---
   useEffect(() => {
-    if(isBusinessInfoLoading || !form.groupName && !fetchError){
+    // HIGHLIGHT: REVISED MODAL LOADING LOGIC
+    // Show loading if:
+    // 1. Business info is still loading, OR
+    // 2. Initial group data hasn't been fetched yet AND there's no fetch error (meaning it's actively trying or waiting to fetch), OR
+    // 3. The form is currently submitting.
+    if (isBusinessInfoLoading || (!hasFetchedInitialData && fetchError === null) || submittingForm) {
       openModal("loading");
     } else {
       closeModal();
     }
-  }, [isBusinessInfoLoading, form.groupName, fetchError]);
+  }, [isBusinessInfoLoading, hasFetchedInitialData, fetchError, submittingForm, openModal, closeModal]);
 
-  
 
-  
   // --- Main Form Render ---
   return (
     <div className="bg-white p-1 overflow-hidden rounded-sm shadow-sm">
@@ -406,8 +458,6 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
         className="w-full mx-auto p-2.5 overflow-auto space-y-3 relative custom-scrollbar"
         style={{ height: "calc(100dvh - 118px)" }}
       >
-        
-
         {/* Success Alert */}
         {showSuccessAlert && (
           <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-60">
@@ -437,7 +487,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
         <div className="flex items-center justify-between">
           <button
               onClick={() => router.back()}
-              type="button" // 
+              type="button"
               className="flex items-center text-sm border-[0.5px] rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200"
             >
               <svg
@@ -512,6 +562,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
           </div>
           <div>
             <label htmlFor="releasedDate" className="block font-medium text-gray-700 mb-1">Released Date</label>
+            
             <input
               id="releasedDate"
               type="date"
@@ -540,7 +591,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
             {form.items.length > 0 ? (
               form.items.map((item, index) => (
                 <div
-                  key={item.itemId === null ? `new-${index}` : item.itemId} // Use robust key for new items
+                  key={item.itemId === null ? `new-${index}` : item.itemId}
                   className="flex flex-col md:flex-row justify-between border-[0.5px]
                            border-gray-300 p-2 rounded-sm shadow-xs text-sm items-center gap-2"
                 >
@@ -559,9 +610,9 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
                     </div>
 
                     {/* Color and Quantity */}
-                    <div className="flex gap-4 mt-2 sm:mt-0">
+                    <div className="flex gap-4 mt-2 sm:mt-0 items-end"> {/* Added items-end to align */}
                       <div>
-                        <label htmlFor={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">Color</label>
+                        <label htmlFor={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">Current Color</label>
                         <input
                           id={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`}
                           type="color"
@@ -580,7 +631,7 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
                           pattern="[0-9]*"
                           value={item.itemQuantity}
                           onChange={(e) => {
-                            const onlyDigits = e.target.value.replace(/\D/g, ""); // remove non-digits
+                            const onlyDigits = e.target.value.replace(/\D/g, "");
                             updateItem(index, "itemQuantity", onlyDigits === "" ? 0 : parseInt(onlyDigits));
                           }}
                           className="w-20 rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
@@ -589,6 +640,25 @@ const handleItemImageSelected = useCallback((index: number, file: File | null) =
                       </div>
                     </div>
                   </div>
+
+                  {/* Detected Color Palette (NEW) */}
+                  {item._detectedPalette && item._detectedPalette.length > 0 && (
+                    <div className="w-full md:w-auto mt-2 md:mt-0 flex flex-col items-center">
+                        <span className="text-xs font-medium text-gray-600 mb-1">Detected Colors:</span>
+                        <div className="flex flex-wrap gap-1 justify-center">
+                            {item._detectedPalette.map((color, colorIdx) => (
+                                <button
+                                    key={colorIdx}
+                                    type="button"
+                                    className="w-6 h-6 rounded-full border-2 border-gray-300 hover:border-blue-500"
+                                    style={{ backgroundColor: color }}
+                                    title={color}
+                                    onClick={() => updateItem(index, "itemColorHex", color)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                  )}
 
                   {/* Remove Button */}
                   <div className="w-full flex justify-end md:w-auto md:ml-auto mt-2 md:mt-0">
