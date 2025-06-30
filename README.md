@@ -1,8 +1,9 @@
 ---
+<p align="center">
+  <img src="https://github.com/aunghein-dev/frontend_stocksManagement/blob/main/public/applogo.png?raw=true" alt="Openware Logo" width="100"/>
+</p>
 
 # Openware Stock Manager
-
-![Openware Stock Manager Logo](public/applogo.png)
 
 Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) inspired web application designed to streamline inventory management for businesses. Built with a powerful **Next.js** frontend and a secure **Spring Boot** backend, it leverages **PostgreSQL** and **Supabase** for efficient and scalable data management, featuring a multi-tenant architecture with single-database tenancy.
 
@@ -13,10 +14,18 @@ Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) in
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Architecture](#architecture)
+  - [Frontend (Next.js)](#frontend-nextjs)
+  - [Backend (Spring Boot)](#backend-spring-boot)
+  - [Database (PostgreSQL)](#database-postgresql)
+  - [Supabase](#supabase)
+  - [Tenant Isolation (Single DB Multi-Tenancy)](#tenant-isolation-single-db-multi-tenancy)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Configuration](#configuration)
+    - [PostgreSQL Database](#postgresql-database)
+    - [Supabase](#supabase-1)
+    - [Environment Variables (General)](#environment-variables-general)
   - [Running the Application](#running-the-application)
 - [Usage](#usage)
 - [Deployment](#deployment)
@@ -193,9 +202,16 @@ Once both the backend and frontend are running, open your web browser and naviga
 - **Manage Products:** Navigate to the products section to add new items, update existing ones, or view your inventory.
 - **Process Orders:** Utilize the POS-like interface to create and manage sales transactions.
 
-A preview of the application in action can be found here:
+### Application Preview
 
-[📽 Watch a video preview](https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview.MOV)
+<div align="center">
+  <a href="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview.MOV" target="_blank">
+    <img src="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview_thumb.gif" 
+         alt="Watch a video preview of Openware Stock Manager" 
+         width="640" style="max-width:100%;">
+  </a>
+  <p>Click the image above to watch a full video preview!</p>
+</div>
 
 ---
 
