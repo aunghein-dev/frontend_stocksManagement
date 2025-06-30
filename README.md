@@ -204,14 +204,15 @@ Once both the backend and frontend are running, open your web browser and naviga
 
 ### Application Preview
 
-<div align="center">
-  <a href="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview.MOV" target="_blank">
+<p align="center">
+  <a href="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview.MOV">
     <img src="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview_thumb.gif" 
          alt="Watch a video preview of Openware Stock Manager" 
-         width="640" style="max-width:100%;">
+         width="100%" />
   </a>
-  <p>Click the image above to watch a full video preview!</p>
-</div>
+  <br />
+  <em>Click the image above to watch a full video preview!</em>
+</p>
 
 ---
 
