@@ -297,7 +297,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; ref
     >
       <Link
       href="/stocks/new"
-      className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 w-10 h-10 flex justify-center items-center rounded-full border-1 border-blue-600 ease-in-out duration-300 text-3xl font-semibold z-50"
+      className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 w-13 h-13 flex justify-center items-center rounded-full border-1 border-blue-600 ease-in-out duration-300 text-4xl font-semibold z-50 hover:scale-105"
     >
       +
     </Link>

@@ -259,7 +259,7 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
       rowHeight={60}
     >
       {/* Plus button for sales table, if applicable, otherwise remove */}
-      <Link href="/" className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 w-10 h-10 flex justify-center items-center rounded-full border-1 border-blue-600 ease-in-out duration-300 text-3xl font-semibold z-50">
+      <Link href="/" className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 w-13 h-13 flex justify-center items-center rounded-full border-1 border-blue-600 ease-in-out duration-300 text-4xl font-semibold z-50 hover:scale-105">
         +
       </Link>
     </DataTable>

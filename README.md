@@ -35,6 +35,19 @@ Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) in
 
 ---
 
+### Application Preview
+
+<p align="center">
+  <a href="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview.MOV">
+    <img src="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview_thumb.gif" 
+         alt="Watch a video preview of Openware Stock Manager" 
+         width="300" />
+  </a><br />
+  <em>Click to watch the full video preview!</em>
+</p>
+
+---
+
 ## Features
 
 - **Modern POS-style Interface:** Enjoy a clean, user-friendly design inspired by modern Point-of-Sale systems for efficient stock management.
@@ -201,17 +214,6 @@ Once both the backend and frontend are running, open your web browser and naviga
 - **Sign Up / Log In:** Use the Supabase integrated authentication to create a new account or log in with existing credentials.
 - **Manage Products:** Navigate to the products section to add new items, update existing ones, or view your inventory.
 - **Process Orders:** Utilize the POS-like interface to create and manage sales transactions.
-
-### Application Preview
-
-<p align="center">
-  <a href="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview.MOV">
-    <img src="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview_thumb.gif" 
-         alt="Watch a video preview of Openware Stock Manager" 
-         width="300" />
-  </a><br />
-  <em>Click to watch the full video preview!</em>
-</p>
 
 ---
 

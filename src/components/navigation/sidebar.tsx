@@ -111,7 +111,7 @@ function SidebarComponent(props : { sidebarOpen: boolean , setSidebarOpen: (open
             {business?.businessId === 1 ? business?.businessNameShortForm : "Openware"}
           </h1>
           <div className={`absolute top-10 right-2 px-1 py-0.5 bg-blue-100
-                        text-blue-700 border border-blue-200 rounded-sm text-[0.55rem]
+                        text-blue-700 border-[0.5px] border-blue-500 rounded-xs text-[0.55rem]
                         cursor-default ${
               imgLoaded ? "opacity-100" : "opacity-0"}`}
                style={{ willChange: "opacity" }}>Free v0.1</div>
