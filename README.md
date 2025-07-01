@@ -41,7 +41,7 @@ Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) in
   <a href="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview.MOV">
     <img src="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview_thumb.gif" 
          alt="Watch a video preview of Openware Stock Manager" 
-         width="300" />
+         width="400" />
   </a><br />
   <em>Click to watch the full video preview!</em>
 </p>
@@ -69,9 +69,9 @@ Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) in
 
 - **Next.js:** A powerful React framework for production, offering server-side rendering (SSR) and static site generation (SSG).
 - **React:** For building dynamic and responsive user interfaces.
-- **Tailwind CSS (or similar CSS framework):** For rapid and consistent styling.
-- **React Query (or similar data fetching library):** For efficient data fetching, caching, and synchronization.
-- **Formik/Yup (or similar form libraries):** For streamlined form management and validation.
+- **Tailwind CSS:** For rapid and consistent styling.
+- **React Query:** For efficient data fetching, caching, and synchronization.
+- **Formik/Yup:** For streamlined form management and validation.
 
 **Backend:**
 
@@ -94,7 +94,7 @@ The Openware Stock Manager employs a microservices-inspired architecture with a 
 - **Database (PostgreSQL):** Stores all application data.
 - **Supabase:** Primarily used for its **authentication capabilities**, acting as an identity provider, and potentially for real-time features if integrated. The `account_id` is a crucial element in the JWT, enabling the backend to filter data for the correct tenant within the single PostgreSQL database.
 
-**Tenant Isolation (Single DB Multi-Tenancy):**
+**Tenant Isolation (Single DB Multi-Tenancy):**  
 Each customer account has a unique `account_id` embedded within the JWT upon successful authentication. All database queries made by the Spring Boot backend include a filter based on this `account_id`, ensuring strict data isolation between tenants within the same PostgreSQL database.
 
 ---
@@ -116,150 +116,133 @@ Before you begin, make sure you have the following installed:
 
 ### Installation
 
-1.  **Clone the repositories:**
+1. **Clone the repositories:**
 
-    ```bash
-    git clone [https://github.com/aunghein-dev/frontend_stocksManagement.git](https://github.com/aunghein-dev/frontend_stocksManagement.git)
-    git clone [https://github.com/aunghein-dev/backend_stocksManagement.git](https://github.com/aunghein-dev/backend_stocksManagement.git)
-    ```
+```bash
+git clone https://github.com/aunghein-dev/frontend_stocksManagement.git
+git clone https://github.com/aunghein-dev/backend_stocksManagement.git
+```
 
-2.  **Frontend Installation:**
+2. **Frontend Installation:**
 
-    ```bash
-    cd frontend_stocksManagement # Corrected directory name
-    npm install # or yarn install
-    ```
+```bash
+cd frontend_stocksManagement
+npm install # or yarn install
+```
 
-3.  **Backend Installation:**
+3. **Backend Installation:**
 
-    ```bash
-    cd backend_stocksManagement # Corrected directory name
-    # If using Maven:
-    mvn clean install
-    # If using Gradle:
-    ./gradlew clean build
-    ```
+```bash
+cd backend_stocksManagement
+# If using Maven:
+mvn clean install
+# If using Gradle:
+./gradlew clean build
+```
 
 ### Configuration
 
 #### PostgreSQL Database
 
-1.  Create a new PostgreSQL database for Openware Stock Manager:
-    ```sql
-    CREATE DATABASE openware_stock_manager;
-    ```
-2.  Update the database connection details in the backend's `application.properties` (or `application.yml`):
+1. Create a new PostgreSQL database for Openware Stock Manager:
 
-    ```properties
-    # backend_stocksManagement/src/main/resources/application.properties
-    spring.datasource.url=jdbc:postgresql://localhost:5432/openware_stock_manager
-    spring.datasource.username=your_pg_username
-    spring.datasource.password=your_pg_password
-    spring.jpa.hibernate.ddl-auto=update # or create for initial setup
-    ```
+```sql
+CREATE DATABASE openware_stock_manager;
+```
+
+2. Update the database connection details in the backend's `application.properties` (or `application.yml`):
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/openware_stock_manager
+spring.datasource.username=your_pg_username
+spring.datasource.password=your_pg_password
+spring.jpa.hibernate.ddl-auto=update
+```
 
 #### Supabase
 
-1.  Create a new project in Supabase.
-2.  Configure your authentication settings in Supabase (e.g., enable email/password login).
-3.  Obtain your Supabase Project URL and Anon Key.
-4.  Update the frontend's `.env.local` file:
+1. Create a new project in Supabase.
+2. Configure authentication settings (e.g., enable email/password login).
+3. Get your Supabase Project URL and Anon Key.
+4. Update the frontend `.env.local`:
 
-    ```env
-    # frontend_stocksManagement/.env.local
-    NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
-    NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
-    ```
+```env
+NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+```
 
-5.  Configure the Supabase JWT secret in your Spring Boot backend for JWT validation. This is crucial for validating tokens issued by Supabase.
+5. Add Supabase JWT secret to backend config:
 
-    ```properties
-    # backend_stocksManagement/src/main/resources/application.properties
-    app.jwt.supabase-secret=YOUR_SUPABASE_JWT_SECRET # Get this from Supabase project settings -> API -> JWT Secret
-    ```
+```properties
+app.jwt.supabase-secret=YOUR_SUPABASE_JWT_SECRET
+```
 
 #### Environment Variables (General)
 
-Ensure all necessary environment variables are set for both the frontend and backend. Refer to `.env.example` files if provided in the respective repositories.
+Make sure to define all required variables in `.env` files for both frontend and backend.
 
 ### Running the Application
 
-1.  **Start the Backend:**
+1. **Start the Backend:**
 
-    ```bash
-    cd backend_stocksManagement
-    # If using Maven:
-    mvn spring-boot:run
-    # If using Gradle:
-    ./gradlew bootRun
-    ```
+```bash
+cd backend_stocksManagement
+mvn spring-boot:run # or ./gradlew bootRun
+```
 
-    The backend will typically run on `http://localhost:8080`.
+2. **Start the Frontend:**
 
-2.  **Start the Frontend:**
-
-    ```bash
-    cd frontend_stocksManagement
-    npm run dev # or yarn dev
-    ```
-
-    The frontend will typically run on `http://localhost:3000`.
+```bash
+cd frontend_stocksManagement
+npm run dev # or yarn dev
+```
 
 ---
 
 ## Usage
 
-Once both the backend and frontend are running, open your web browser and navigate to `http://localhost:3000`.
+Open `http://localhost:3000` in your browser.
 
-- **Sign Up / Log In:** Use the Supabase integrated authentication to create a new account or log in with existing credentials.
-- **Manage Products:** Navigate to the products section to add new items, update existing ones, or view your inventory.
-- **Process Orders:** Utilize the POS-like interface to create and manage sales transactions.
+- **Sign Up / Log In:** Auth via Supabase.
+- **Manage Products:** Create/edit products.
+- **Process Orders:** Use POS-like order flow.
 
 ---
 
 ## Deployment
 
-Detailed deployment instructions will vary based on your chosen hosting providers.
+- **Frontend:** Deploy via Vercel, Netlify, or server.
+- **Backend:** Deploy via Heroku, EC2, Cloud Run, etc.
+- **Database:** Use PostgreSQL managed service.
+- **Supabase:** Hosted automatically.
 
-- **Frontend (Next.js):** Can be deployed to Vercel, Netlify, or a custom server.
-- **Backend (Spring Boot):** Can be deployed to Heroku, AWS EC2, Google Cloud Run, DigitalOcean Droplets, or a Kubernetes cluster.
-- **Database (PostgreSQL):** Can be a managed service (e.g., AWS RDS, Azure Database for PostgreSQL, Google Cloud SQL) or a self-hosted instance.
-- **Supabase:** Already a hosted service; just ensure your project is correctly configured for production.
+**Production Tips:**
 
-**Key considerations for production deployment:**
-
-- Set `spring.jpa.hibernate.ddl-auto=none` or `validate` in production for the backend.
-- Configure proper CORS settings on the backend.
-- Use secure environment variables for sensitive data.
-- Implement robust logging and monitoring.
+- Set `ddl-auto=none` or `validate`
+- Configure CORS and secure env vars
+- Add logging and monitoring
 
 ---
 
 ## Contributing
 
-We welcome contributions to the Openware Stock Manager! If you'd like to contribute, please follow these steps:
-
-1.  Fork the repository.
-2.  Create a new branch (`git checkout -b feature/your-feature-name`).
-3.  Make your changes and ensure they are well-tested.
-4.  Commit your changes (`git commit -m 'feat: Add new feature'`).
-5.  Push to the branch (`git push origin feature/your-feature-name`).
-6.  Open a Pull Request.
-
-Please ensure your code adheres to the project's coding standards.
+1. Fork the repo
+2. Create a branch: `git checkout -b feature/your-feature`
+3. Make and test changes
+4. Commit: `git commit -m "feat: your change"`
+5. Push: `git push origin feature/your-feature`
+6. Open a Pull Request
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License – see the [LICENSE](LICENSE) file
 
 ---
 
 ## Contact
 
-For any questions or inquiries, please reach out to:
-
-- Email: [aunghein.mailer@gmail.com]
-- Website: [https://app.openwaremyanmar.site](https://app.openwaremyanmar.site) (if applicable)
-- GitHub Issues: [https://github.com/aunghein-dev/frontend_stocksManagement/issues](https://github.com/aunghein-dev/frontend_stocksManagement/issues)
+- 📧 Email: [aunghein.mailer@gmail.com](mailto:aunghein.mailer@gmail.com)
+- 🌐 Website: [https://app.openwaremyanmar.site](https://app.openwaremyanmar.site)
+- 🐛 GitHub Issues: [Open an Issue](https://github.com/aunghein-dev/frontend_stocksManagement/issues)
