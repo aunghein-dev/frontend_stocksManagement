@@ -55,16 +55,16 @@ function DataTable<V, R extends { id: GridRowId }>({
   }, [data, dataMapper]); // dataMapper added as dependency as it's passed from parent
 
   // Filter rows based on searchText and filterField
-  const filteredRows = React.useMemo(() => {
-    if (!searchText) {
-      return rows;
-    }
-    const lowercasedSearchText = searchText.toLowerCase();
-    return rows.filter((row) => {
-      const fieldValue = String(row[filterField]).toLowerCase();
-      return fieldValue.includes(lowercasedSearchText);
-    });
-  }, [rows, searchText, filterField]);
+    const filteredRows = React.useMemo(() => {
+      if (!searchText) {
+        return rows;
+      }
+      const lowercasedSearchText = searchText.toLowerCase();
+      return rows.filter((row) => {
+        const fieldValue = String(row[filterField]).toLowerCase();
+        return fieldValue.includes(lowercasedSearchText);
+      });
+    }, [rows, searchText, filterField]);
 
   // Handle cell edit committed (if enabled for some columns)
   const handleEditCellChangeCommitted = React.useCallback((params: any) => {
@@ -118,6 +118,13 @@ function DataTable<V, R extends { id: GridRowId }>({
           showToolbar
           filterDebounceMs={300}
           rowHeight={rowHeight}
+          slotProps={{
+            toolbar: {
+              csvOptions: {
+                utf8WithBom: true, // Apply UTF-8 
+              },
+           },
+          }}
           // The style prop can be simplified by using `sx` prop which is more idiomatic for MUI
           sx={{
           border: 0,

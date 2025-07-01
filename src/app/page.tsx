@@ -82,6 +82,8 @@ export default function Home() {
           className="w-full flex flex-col items-center justify-center"
           style={{ height: "calc(100dvh - 170px)" }}
         >
+
+          
           <div className="relative w-[300px] h-[300px] flex flex-col justify-end items-center">
             <Image
               src="/noitemsfound.svg"
@@ -90,7 +92,7 @@ export default function Home() {
               priority
               className="object-contain"
             />
-            <p className="text-gray-400 text-lg font-semibold absolute bottom-7 animate-pulse">
+            <p className="text-gray-500 text-md font-bold absolute bottom-7 animate-pulse">
               No items found
             </p>
           </div>
