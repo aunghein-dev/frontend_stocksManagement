@@ -118,7 +118,9 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
      
 
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
-        
+          <div className="mr-5 hidden md:block">
+              <LanguageSwitcher />
+          </div>
            
           <div
             onClick={() => props.handleToggle()}
@@ -158,14 +160,10 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
 
           </button>
 
-          <div className="ml-2">
-              <LanguageSwitcher />
-          </div>
-
           {isOpen && (
             <div
               ref={dropdownRef}
-              className="z-50 my-4 text-sm text-gray-900 absolute right-14 top-11 list-none bg-white divide-y divide-gray-100 rounded-sm shadow-xl pt-1"
+              className="z-50 my-4 text-sm text-gray-900 absolute -right-3 top-11 list-none bg-white divide-y divide-gray-100 rounded-sm shadow-xl pt-1"
             >
               <button onClick={() => router.push("/settings/profile")}>
                 <div className="px-4 py-3 cursor-pointer text-left hover:bg-blue-200">

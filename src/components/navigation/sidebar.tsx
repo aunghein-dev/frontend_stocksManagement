@@ -18,7 +18,7 @@ import {
 } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
 import { IconType } from "react-icons"; // Import IconType for the map
-
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 // Update iconMap to use the 'key' from navbarData
 const iconMap: { [key: string]: IconType } = {
   home: HiHome,
@@ -154,9 +154,12 @@ function SidebarComponent(props: { sidebarOpen: boolean; setSidebarOpen: (open: 
         </ul>
       </nav>
 
+      <div className="flex items-center justify-left px-3 mb-2 md:hidden">
+          <LanguageSwitcher />
+      </div>
       <footer className="px-4 py-6 text-center text-xs border-t border-gray-100 text-gray-500">
         <p className="font-semibold text-gray-700">
-          {t("developedBy")}{" "}
+          {t("lbl_dvlpBy")}{" "}
           <span className="text-blue-500 font-bold">Aung Hein</span>
         </p>
         <p className="mt-1 text-[11px] text-gray-400">

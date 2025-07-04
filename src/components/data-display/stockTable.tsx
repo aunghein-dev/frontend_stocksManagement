@@ -101,7 +101,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; ref
     {
       field: 'releasedDate',
       headerName: 'Released Date',
-      width: 130,
+      width: 100,
       align: 'center',
       headerAlign: 'center',
     },
@@ -111,14 +111,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; ref
       width: 70,
       align: 'center',
       headerAlign: 'center',
-/*************  ✨ Windsurf Command ⭐  *************/
-      /**
-       * Render a circle with the color of the item.
-       * 
-       * The circle is centered horizontally and has a 1px border.
-       * The background color of the circle is the item's color.
-       */
-/*******  ed6beff3-46fa-44de-b2e4-cd43570572d0  *******/      renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
+      renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
         <Box
           sx={{
             width: 30,
@@ -137,8 +130,8 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; ref
       field: 'groupName',
       headerName: 'Group Name',
       flex: 1,
-      minWidth: 120,
-      align: 'center',
+      minWidth: 160,
+      align: 'left',
       headerAlign: 'center',
     },
     {
@@ -186,9 +179,9 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; ref
     },
     {
       field: 'groupUnitPrice',
-      headerName: 'Unit Price',
+      headerName: 'Price',
       type: 'number',
-      width: 150,
+      width: 100,
       editable: false,
       align: 'center',
       headerAlign: 'center',

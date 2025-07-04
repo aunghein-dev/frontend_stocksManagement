@@ -14,6 +14,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'; // For remove item butt
 import { useRouter } from "next/navigation";
 import { useModalStore } from "@/store/modalStore";
 import ColorThief from 'colorthief';
+import { useTranslation } from "@/hooks/useTranslation";
 
 // --- Type Definitions ---
 type NewStockItem = {
@@ -58,7 +59,7 @@ export default function StockEntryForm() {
   // Use the useInfo hook to get business details
   const { business, isLoading: isBusinessInfoLoading, error: businessInfoError } = useInfo();
   const router = useRouter();
-
+  const { t } = useTranslation();
   // --- Effects ---
   const { openModal, closeModal } = useModalStore();
 
@@ -457,15 +458,15 @@ export default function StockEntryForm() {
                 d="M5 12h14M5 12l4-4m-4 4 4 4"
               />
             </svg>
-            Back
+            {t("btTxt_back")}
           </button>
-          <h2 className="text-xl font-semibold text-gray-600 mr-3">Create Stock Entry</h2>
+          <h2 className="text-xl font-semibold text-gray-600 mr-3">{t("hd_stockentry")}</h2>
         </div>
 
         {/* Group Image Upload with ImageUploadComponent */}
         <ImageUploadComponent
           id="groupImageUpload"
-          label="Group Image"
+          label={t("lbl_gpImg")}
           currentImageUrl={form.groupImage}
           onImageSelected={handleGroupImageSelected}
           isLoading={false} // No specific loading for this component, main form handles it
@@ -476,7 +477,7 @@ export default function StockEntryForm() {
         {/* Group Info */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div>
-            <label htmlFor="groupName" className="block font-medium text-gray-700 mb-1">Group Name</label>
+            <label htmlFor="groupName" className="block font-medium text-gray-700 mb-1">{t("lbl_groupNn")}</label>
             <input
               id="groupName"
               type="text"
@@ -484,11 +485,11 @@ export default function StockEntryForm() {
               onChange={(e) => setForm({ ...form, groupName: e.target.value })}
               required
               className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
-              placeholder="Enter group name"
+              placeholder={t("lbl_groupNnInput")}
             />
           </div>
           <div>
-            <label htmlFor="unitPrice" className="block font-medium text-gray-700 mb-1">Unit Price (MMK)</label>
+            <label htmlFor="unitPrice" className="block font-medium text-gray-700 mb-1">{t("lbl_unitPrice")}</label>
             <input
               id="unitPrice"
               type="text"
@@ -507,12 +508,12 @@ export default function StockEntryForm() {
                 });
               }}
               required
-              placeholder="Enter unit price"
+              placeholder={t("lbl_unitPriceInput")}
               className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
             />
           </div>
           <div>
-            <label htmlFor="releasedDate" className="block font-medium text-gray-700 mb-1">Released Date</label>
+            <label htmlFor="releasedDate" className="block font-medium text-gray-700 mb-1">{t("lbl_releasedDate")}</label>
             <input
               id="releasedDate"
               type="date"
@@ -527,13 +528,13 @@ export default function StockEntryForm() {
         {/* Color Variants */}
         <div>
           <div className="flex justify-between items-center mb-1.5 mt-4">
-            <h3 className="text-sm font-semibold text-gray-800">Color Variants</h3>
+            <h3 className="text-sm font-semibold text-gray-800">{t("lbl_colorvarients")}</h3>
             <button
               type="button"
               onClick={addItem}
               className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              + Add Variant
+              {t("btnTxt_addvarient")}
             </button>
           </div>
 
@@ -626,7 +627,7 @@ export default function StockEntryForm() {
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500 min-h-30 p-4 text-center">No color variants added yet. Click "+ Add Variant" to begin.</p>
+              <p className="text-sm text-gray-500 min-h-30 p-4 text-center">{t("msg_noVarient")}</p>
             )}
           </div>
         </div>
@@ -642,7 +643,7 @@ export default function StockEntryForm() {
                   : "bg-blue-600 hover:bg-blue-700"
               }`}
             >
-              {submitting ? "Saving..." : "Save Stock Entry"}
+              {submitting ? t("btTxt_saving") : t("btnTxt_saveEntry")}
             </button>
         </div>
       </form>

@@ -2,6 +2,7 @@
 import React, { useCallback, useRef, useState, ChangeEvent } from 'react';
 import Image from 'next/image';
 import { PhotoIcon, TrashIcon, CloudArrowUpIcon } from '@heroicons/react/24/outline'; // Adjust paths as per your setup
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface ImageUploadProps {
   id: string; // Unique ID for the input
@@ -26,7 +27,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState(false);
-
+  
   const handleFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -66,6 +67,8 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
     // No need to clear fileInputRef.current.value here if a file was dropped,
     // as onImageSelected will handle the new file.
   }, [onImageSelected]);
+
+  const { t } = useTranslation();
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
@@ -116,7 +119,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
         ) : (
           <div className="flex flex-col items-center text-gray-500">
             <CloudArrowUpIcon className="w-8 h-8 mb-2" />
-            <p className="text-sm font-medium">Drag & drop image here, or</p>
+            <p className="text-sm font-medium">{t("lbl_imgUploadIO")}</p>
           </div>
         )}
 
@@ -125,7 +128,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
           htmlFor={id}
           className="cursor-pointer inline-flex items-center px-4 py-2 mt-2 border border-blue-400 rounded-sm shadow-sm text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          <PhotoIcon className="w-4 h-4 mr-2" /> Select File
+          <PhotoIcon className="w-4 h-4 mr-2" /> {t("lbl_selectImg")}
           <input
             ref={fileInputRef}
             id={id}

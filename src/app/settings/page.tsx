@@ -15,7 +15,7 @@ import {
 import Image from 'next/image';
 import { useModalStore } from "@/store/modalStore"; 
 import { useTranslation } from '@/hooks/useTranslation';
-
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 interface BusinessSettings {
   businessId: number;
   businessLogo: string;
@@ -547,6 +547,8 @@ export default function Settings() {
                 />
               </div>
             </div>
+
+
           </div>
 
           {/* Action Buttons and Feedback */}
@@ -582,6 +584,7 @@ export default function Settings() {
             </button>
           </div>
         </form>
+
       </div>
     </section>
   );

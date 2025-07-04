@@ -123,8 +123,8 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
       field: 'groupName',
       headerName: 'Group Name',
       flex: 1,
-      minWidth: 150,
-      align: 'center',
+      minWidth: 180,
+      align: 'left',
       headerAlign: 'center',
     },
   
@@ -145,9 +145,9 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
     },
     {
       field: 'itemUnitPrice',
-      headerName: 'Unit Price',
+      headerName: 'Price',
       type: 'number',
-      width: 120,
+      width: 80,
       align: 'center',
       headerAlign: 'center',
     },
@@ -172,8 +172,8 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
     {
       field: 'tranUserEmail',
       headerName: 'Teller',
-      width: 140,
-      align: 'center',
+      width: 70,
+      align: 'left',
       headerAlign: 'center',
     },
     {
