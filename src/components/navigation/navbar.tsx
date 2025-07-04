@@ -118,9 +118,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
      
 
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
-          <div className="mr-4">
-              <LanguageSwitcher />
-          </div>
+        
            
           <div
             onClick={() => props.handleToggle()}
@@ -159,6 +157,10 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
               }
 
           </button>
+
+            <div className="ml-2">
+              <LanguageSwitcher />
+          </div>
 
           {isOpen && (
             <div

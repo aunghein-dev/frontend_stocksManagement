@@ -11,8 +11,8 @@ import { useLocale } from "../context/LocaleContext";
 
 // Language list with `as const` to infer literal types
 const LANGUAGES = [
-  { code: "en", name: "EN", flag: "🇬🇧" },
-  { code: "my", name: "MM", flag: "🇲🇲" },
+  { code: "en", name: "English", flag: "🇬🇧" },
+  { code: "my", name: "မြန်မာ", flag: "🇲🇲" },
 ] as const;
 
 // Infer types from LANGUAGES
@@ -104,30 +104,18 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="relative inline-block text-left">
-      <button
+        <button
         ref={buttonRef}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-labelledby="language-switcher-label"
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onButtonKeyDown}
-        className="inline-flex items-center pl-3 py-2.5 rounded-md border-[1px] border-gray-200 bg-white font-medium text-gray-700 hover:bg-gray-100 max-w-24 min-w-24 text-sm"
+        className="inline-flex items-center rounded-full border-[1px] border-gray-200 bg-white font-medium text-gray-700 hover:bg-gray-100 px-2 py-2 justify-center cursor-pointer"
       >
-        <span className="mr-2 text-xl leading-none">{currentLang.flag}</span>
-        <span id="language-switcher-label">{currentLang.name}</span>
-        <svg
-          className="ml-2 h-5 w-5 text-gray-400"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            fillRule="evenodd"
-            d="M5.23 7.21a.75.75 0 011.06.02L10 11.292l3.71-4.06a.75.75 0 111.08 1.04l-4.25 4.65a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z"
-            clipRule="evenodd"
-          />
-        </svg>
+        <span className="text-3xl leading-none translate-y-[1px]"> {/* <--- Add translate-y for visual adjustment */}
+          {currentLang.flag}
+        </span>
       </button>
 
       {open && (
