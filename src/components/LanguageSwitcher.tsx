@@ -124,7 +124,7 @@ export default function LanguageSwitcher() {
           role="listbox"
           tabIndex={-1}
           aria-activedescendant={`language-option-${locale}`}
-          className="absolute right-0 mt-1 w-24 rounded-sm 
+          className="absolute -right-3 top-15 w-26 rounded-sm 
                     bg-gray-50 z-60 p-0 border-[0.5px] border-gray-300 shadow-md"
         >
           {LANGUAGES.map((lang, i) => {
@@ -146,7 +146,7 @@ export default function LanguageSwitcher() {
                     : "text-gray-900"
                 }`}
               >
-                <span className="text-lg leading-none">{lang.flag}</span>
+                <span className="text-lg leading-none mr-2">{lang.flag}</span>
                 <span>{lang.name}</span>
               </div>
             );
