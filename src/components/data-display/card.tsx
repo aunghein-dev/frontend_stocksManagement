@@ -9,24 +9,25 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Image from "next/image";
 import formatMoney from "@/components/utils/formatMoney";
 import dayjs from "dayjs";
+import { useTranslation } from "@/hooks/useTranslation"; // This hook is fine as is
 
 export default function Product(props: Stock) {
   const { cart, addItem } = useCartStore();
-const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const colorSet = useMemo(() => Array.from(new Set(props.items.map(item => item.itemColorHex))), [props.items]);
   const [selectedColor, setSelectedColor] = useState("");
   const isColorSelected = selectedColor !== "";
+  const { t } = useTranslation(); // Use the translation hook
 
   const [alert, setAlert] = useState<{ type: "success" | "warning"; show: boolean }>({ type: "success", show: false });
 
   const selectedItem = useMemo(() => props.items.find(item => item.itemColorHex === selectedColor) || null, [selectedColor, props.items]);
   const selectedImage = 
-  selectedItem?.itemImage && selectedItem.itemImage.trim().toUpperCase() !== "NULL"
-    ? selectedItem.itemImage
-    : props.groupImage && props.groupImage.trim().toUpperCase() !== "NULL"
-      ? props.groupImage
-      : "/Box.png"; 
-
+    selectedItem?.itemImage && selectedItem.itemImage.trim().toUpperCase() !== "NULL"
+      ? selectedItem.itemImage
+      : props.groupImage && props.groupImage.trim().toUpperCase() !== "NULL"
+        ? props.groupImage
+        : "/Box.png"; 
 
   const availableQty = useMemo(() => {
     const totalQty = props.items.filter(i => i.itemColorHex === selectedColor).reduce((sum, i) => sum + i.itemQuantity, 0);
@@ -69,13 +70,13 @@ const [loaded, setLoaded] = useState(false);
   // Determine button text and disabled state
   const buttonText = useMemo(() => {
     if (!isColorSelected) {
-      return "SELECT COLOR";
+      return t("selectColor");
     }
     if (availableQty <= 0) {
-      return "OUT OF STOCK";
+      return t("outOfStock"); // Use translation
     }
-    return "ADD TO CART";
-  }, [isColorSelected, availableQty]);
+    return t("addToCart"); // Use translation
+  }, [isColorSelected, availableQty, t]); 
 
   const isAddToCartDisabled = useMemo(() => {
     return !isColorSelected || availableQty <= 0;
@@ -83,99 +84,98 @@ const [loaded, setLoaded] = useState(false);
 
   return (
     <Card
-      className="max-w-3xs text-gray-900 relative sm:max-w-2xs
+      className="max-w-xs text-gray-900 relative sm:max-w-xs
                  cursor-pointer transition duration-200 ease-in-out
                  shadow-xs hover:shadow-md"
-
-        renderImage={() => {
-              return (
-                <div className="w-full max-h-[180px] min-h-[180px] relative">
-                  {!loaded && (
-                    <div className="w-full h-full bg-gray-200 rounded-t-[14px] animate-pulse" />
-                  )}
-                  <Image
-                    fill
-                    sizes="100%"
-                    src={selectedImage}
-                    alt={props.groupName}
-                    onLoad={() => setLoaded(true)}
-                    className={`w-full max-h-[180px]
-                                min-h-[180px] object-cover 
-                                rounded-t-[14px] absolute top-0 
-                                left-0 transition-opacity duration-300 ${
-                      loaded ? 'opacity-100' : 'opacity-0'
-                    }`}
-                  />
-                  
-                </div>
-              );
-            }
-          }
-          style={{ backgroundColor: "white",
-                   border: "0.5px solid oklch(90.9% 0.005 56.366)",
-                   borderRadius: '14px',
-                   maxHeight: "350px"
-          }}
-        >
-       {dayjs().diff(dayjs(props.releasedDate), 'day') <= 7 && (
+      renderImage={() => {
+        return (
+          <div className="w-full max-h-[180px] min-h-[180px] relative">
+            {!loaded && (
+              <div className="w-full h-full bg-gray-200 rounded-t-[14px] animate-pulse" />
+            )}
+            <Image
+              fill
+              sizes="100%"
+              src={selectedImage}
+              alt={props.groupName}
+              onLoad={() => setLoaded(true)}
+              className={`w-full max-h-[180px]
+                          min-h-[180px] object-cover 
+                          rounded-t-[14px] absolute top-0 
+                          left-0 transition-opacity duration-300 ${
+                loaded ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          </div>
+        );
+      }}
+      style={{
+        backgroundColor: "white",
+        border: "0.5px solid oklch(90.9% 0.005 56.366)",
+        borderRadius: '14px',
+        maxHeight: "350px"
+      }}
+    >
+      {dayjs().diff(dayjs(props.releasedDate), 'day') <= 7 && (
         <div className="absolute top-2 left-2 bg-green-600 text-white px-3 py-1 text-sm rounded-sm">
-          New
+          {t("newProduct")} {/* Use translation */}
         </div>
       )}
 
-
-        <div className="flex flex-col justify-between gap-2.5 h-full -mt-6">
-            <div className="w-full max-w-xs">
-              <p className="text-sm font-bold text-gray-600 truncate">{props.groupName}</p>
-            </div>
-
-
-            <div className="flex items-center justify-between relative">
-              <span className="text-sm text-gray-600">{formatMoney(props.groupUnitPrice)} </span>
-              <span className="bg-green-100 text-green-800 font-semibold px-2.5 py-1 rounded-sm text-xs">
-                In stock: {isColorSelected ? colorQty : totalStockQty}
-              </span>
-
-              {alert.show && (
-                <Alert severity={alert.type} className="absolute -top-2 right-0 " style={{
-                  fontSize: "0.75rem",
-                  border: "1px solid #e5e7eb",
-                }}>
-                  <AlertTitle style={{ fontSize: "0.75rem" }}>{alert.type === "success" ? "Success" : "Warning"}</AlertTitle>
-                  <strong>{alert.type === "success" ? "Added to cart!" : "Out of stock"}</strong>
-                </Alert>
-              )}
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <div className="flex gap-1">
-                {colorSet.map((color) => (
-                  <button
-                    key={color}
-                    className={`w-5 h-5 rounded-full ring-2 transition duration-200 border-[0.5px] border-gray-300 ${
-                      selectedColor === color ? "ring-offset-1 ring-blue-500" : "ring-transparent"
-                    }`}
-                    style={{ backgroundColor: color }}
-                    onClick={() => setSelectedColor(color)}
-                  />
-                ))}
-              </div>
-            </div>
-
-           <button
-              onClick={handleAddToCart}
-              className={`w-full py-2.5 rounded-xs text-xs transition-all duration-200
-                          cursor-pointer font-semibold
-                ${isAddToCartDisabled
-                  ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                  : 'bg-blue-500 hover:bg-blue-600 text-white shadow-md'
-                }`}
-              disabled={isAddToCartDisabled}
-            >
-              {buttonText}
-            </button>
+      <div className="flex flex-col justify-between gap-2.5 h-full -mt-6">
+        <div className="w-full max-w-xs">
+          <p className="text-sm font-bold text-gray-600 truncate">{props.groupName}</p>
         </div>
-        
+
+        <div className="flex items-center justify-between relative">
+          <span className="text-sm text-gray-600">{formatMoney(props.groupUnitPrice)} </span>
+          <span className="bg-green-100 text-green-800 font-semibold px-2.5 py-1 rounded-sm text-xs">
+            {t("inStock")}: {isColorSelected ? colorQty : totalStockQty} {/* Use translation */}
+          </span>
+
+          {alert.show && (
+            <Alert severity={alert.type} className="absolute -top-2 right-0 " style={{
+              fontSize: "0.75rem",
+              border: "1px solid #e5e7eb",
+            }}>
+              <AlertTitle style={{ fontSize: "0.75rem" }}>
+                {alert.type === "success" ? t("success") : t("warning")} {/* Use translation */}
+              </AlertTitle>
+              <strong>
+                {alert.type === "success" ? t("addedToCart") : t("notInStock")} {/* Use translation */}
+              </strong>
+            </Alert>
+          )}
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <div className="flex gap-1">
+            {colorSet.map((color) => (
+              <button
+                key={color}
+                className={`w-5 h-5 rounded-full ring-2 transition duration-200 border-[0.5px] border-gray-300 ${
+                  selectedColor === color ? "ring-offset-1 ring-blue-500" : "ring-transparent"
+                }`}
+                style={{ backgroundColor: color }}
+                onClick={() => setSelectedColor(color)}
+              />
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={handleAddToCart}
+          className={`w-full py-2.5 rounded-xs text-xs transition-all duration-200
+                      cursor-pointer font-semibold
+            ${isAddToCartDisabled
+              ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+              : 'bg-blue-500 hover:bg-blue-600 text-white shadow-md'
+            }`}
+          disabled={isAddToCartDisabled}
+        >
+          {buttonText}
+        </button>
+      </div>
     </Card>
   );
 }

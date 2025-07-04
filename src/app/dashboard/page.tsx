@@ -9,6 +9,7 @@ import MiniDataCard from "@/components/data-display/atoms/miniDataCard";
 import { useInfo } from "@/hooks/useInfo";
 import { useModalStore } from "@/store/modalStore";
 import Link from 'next/link';
+import { useTranslation } from "@/hooks/useTranslation";
 
 
 // --- Type Definitions ---
@@ -62,7 +63,7 @@ export default function Dashboard() {
 
   const { business, isLoading: isBusinessInfoLoading, error: businessInfoError } = useInfo();
   const { openModal, closeModal } = useModalStore();
-
+  const { t } = useTranslation();
   // --- Memoized Data Transformations ---
 
   // Memoize radar data reshaping to prevent unnecessary re-calculations
@@ -288,10 +289,10 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 justify-between pb-4 md:pb-6 border-b border-gray-200 pl-3 pr-2">
             {dashboardData.minicard ? (
               <>
-                <MiniDataCard title="Revenue" value={`${dashboardData.minicard.revenue?.toLocaleString() ?? '0'}`} icon={<FaDollarSign />} />
-                <MiniDataCard title="Growth" value={`${dashboardData.minicard.growth ?? 0}%`} icon={<FaChartLine />} />
-                <MiniDataCard title="Orders" value={dashboardData.minicard.orders ?? 0} icon={<FaShoppingCart />} />
-                <MiniDataCard title="Products" value={dashboardData.minicard.products ?? 0} icon={<FaBoxOpen />} />
+                <MiniDataCard title={t("dash_revenue")} value={`${dashboardData.minicard.revenue?.toLocaleString() ?? '0'}`} icon={<FaDollarSign />} />
+                <MiniDataCard title={t("dash_growth")} value={`${dashboardData.minicard.growth ?? 0}%`} icon={<FaChartLine />} />
+                <MiniDataCard title={t("dash_orders")} value={dashboardData.minicard.orders ?? 0} icon={<FaShoppingCart />} />
+                <MiniDataCard title={t("dash_products")} value={dashboardData.minicard.products ?? 0} icon={<FaBoxOpen />} />
               </>
             ) : (
                 <p className="col-span-full text-center text-gray-500 py-4">No mini card data available.</p>
@@ -310,7 +311,7 @@ export default function Dashboard() {
                      <Link href='/'
                            className='text-blue-600 absolute right-2.5 top-2
                                       text-xs cursor-pointer hover:underline decoration-2
-                                      transition-all duration-200'>View Report</Link>
+                                      transition-all duration-200'>{t("btTxt_viewReport")}</Link>
                   </div>
                  
               ) : (
@@ -330,7 +331,7 @@ export default function Dashboard() {
                     <Link href='/'
                           className='text-blue-600 absolute right-2.5 top-2
                                     text-xs cursor-pointer hover:underline decoration-2
-                                    transition-all duration-200'>View Report</Link>
+                                    transition-all duration-200'>{t("btTxt_viewReport")}</Link>
                 </div>
                
               ) : (
@@ -352,9 +353,9 @@ export default function Dashboard() {
                     />
                   
                     <Link href='/'
-                        className='text-green-600 absolute right-2.5 top-2
+                        className='text-green-500 absolute right-2.5 top-2
                                   text-xs cursor-pointer hover:underline decoration-2
-                                  transition-all duration-200'>Upgrade Pro</Link>
+                                  transition-all duration-200'>{t("btTxt_upgradePro")}</Link>
                   </div>
                 ) : (
                   <p className="text-sm text-gray-400">No storage data available.</p>
@@ -368,7 +369,7 @@ export default function Dashboard() {
                     <Link href='/'
                           className='text-blue-600 absolute right-2.5 top-2
                                     text-xs cursor-pointer hover:underline decoration-2
-                                    transition-all duration-200'>View Report</Link>
+                                    transition-all duration-200'>{t("btTxt_viewReport")}</Link>
                   </div>
                 ) : (
                   <p className="text-sm text-gray-400">No pie chart data available.</p>
@@ -386,7 +387,7 @@ export default function Dashboard() {
                   series={[
                     {
                       data: dashboardData.line,
-                      label: 'Sales',
+                      label: t('lbl_sales'),
                       color: '#876FD4',
                       area: false,
                     }
@@ -395,7 +396,7 @@ export default function Dashboard() {
                 <Link href='/'
                             className='text-blue-600 absolute right-2.5 top-2
                                       text-xs cursor-pointer hover:underline decoration-2
-                                      transition-all duration-200'>View Report</Link>
+                                      transition-all duration-200'>{t("btTxt_viewReport")}</Link>
               </div>
             ) : (
               <p className="text-sm text-gray-400">No line chart data available.</p>

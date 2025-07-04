@@ -10,7 +10,8 @@ import axios from "axios";
 import { FiMenu, FiX } from 'react-icons/fi';
 import { useUser } from "@/hooks/useUser";
 import { useModalStore } from "@/store/modalStore";
-
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Navbar(props: { handleToggle: () => void, handleSidebarOpen: () => void, sidebarOpen: boolean }) {
 
@@ -27,6 +28,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
   const cart = useCartStore((state) => state.cart);
 
   const { openModal, closeModal } = useModalStore();
+  const { t } = useTranslation();
   
   useEffect(() => {
     setHasMounted(true);
@@ -116,6 +118,10 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
      
 
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
+          <div className="mr-4">
+              <LanguageSwitcher />
+          </div>
+           
           <div
             onClick={() => props.handleToggle()}
             className="mr-5 border-[1px] border-gray-200 rounded-full p-2 cursor-pointer hover:bg-gray-100 relative"
@@ -174,7 +180,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                              text-gray-700 hover:bg-blue-200
                                cursor-pointer w-full text-left"
                   >
-                    Dashboard
+                    {t("dashboard")}
                   </button>
                 </li>
                 <li>
@@ -184,7 +190,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                              text-gray-700 hover:bg-blue-200
                                cursor-pointer w-full text-left"
                   >
-                    Settings
+                    {t("settings")}
                   </button>
                 </li>
                 <li>
@@ -194,7 +200,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                              text-gray-700 hover:bg-blue-200
                                cursor-pointer"
                   >
-                    Sign out
+                    {t("btTxt_signOut")}
                   </a>
                 </li>
               </ul>

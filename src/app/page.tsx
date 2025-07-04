@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useModalStore } from "@/store/modalStore";
 import { useStocks } from "@/hooks/useStocks";
 import type { Stock } from "@/data/table.data";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -16,6 +17,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const { items, isLoading, error } = useStocks();
   const { openModal, closeModal } = useModalStore();
+  const { t } = useTranslation();
 
   // Show modal loading when fetching
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function Home() {
       {/* Top bar */}
       <div className="flex items-center mb-3 min-w-0 gap-2 justify-between">
         <Search
-          placeholder="Search items, groups, IDs..."
+          placeholder={t("searchPlaceholderProd")}
           onChange={handleSearch}
         />
         <PaginationComponent

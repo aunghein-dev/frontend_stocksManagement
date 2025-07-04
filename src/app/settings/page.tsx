@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useModalStore } from "@/store/modalStore"; 
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface BusinessSettings {
   businessId: number;
@@ -65,6 +66,7 @@ export default function Settings() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { t } = useTranslation();
   // --- Data Initialization Effect (Primary effect for loading settings and initial logo) ---
   // This effect runs once when business data is loaded or changes.
   useEffect(() => {
@@ -277,7 +279,7 @@ export default function Settings() {
 
   if (businessInfoError) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100dvh - 169px)] text-red-600 h-full p-4">
+      <div className=" flex flex-col items-center justify-center h-[calc(100dvh - 169px)] text-red-600 h-full p-4">
         <p className="text-lg font-semibold text-center">Error Loading Business Information</p>
         <p className="text-sm text-center mt-2">{businessInfoError.message}</p>
         <button
@@ -314,7 +316,7 @@ export default function Settings() {
         <form onSubmit={handleSubmit}>
           {/* General Settings */}
           <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-sm shadow-sm">
-            <h3 className="text-xl font-bold text-gray-900 mb-5 border-b-[0.5px] border-gray-200 pb-3">Business Information</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-5 border-b-[0.5px] border-gray-200 pb-3">{t("hd_bizInfo")}</h3>
             
             {/* --- Logo Upload Section --- */}
             <div className="flex flex-col items-center justify-center p-6 rounded-lg border border-dashed border-gray-200 mb-6">
@@ -345,10 +347,10 @@ export default function Settings() {
              <p className="mt-3 text-sm text-gray-600 font-medium">
                 {selectedLogoFile
                   ? `${selectedLogoFile.name.slice(0, 10)}...${selectedLogoFile.name.slice(-6)}`
-                  : 'Click to select logo'}
+                  : t("io_logoClick")}
               </p>
 
-              <p className="text-xs text-gray-500 mb-4">PNG, JPG, JPEG, GIF up to 2MB</p>
+              <p className="text-xs text-gray-500 mb-4 mt-2">PNG, JPG, JPEG, GIF up to 2MB</p>
               
               <button
                 type="button"
@@ -388,7 +390,7 @@ export default function Settings() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Business Name
+                  {t("io_bizNn")}
                 </label>
                 <input
                   type="text"
@@ -402,7 +404,7 @@ export default function Settings() {
               </div>
               <div>
                 <label htmlFor="businessNameShortForm" className="block text-sm font-medium text-gray-700 mb-1">
-                  Short Name (Optional)
+                  {t("io_bizShortNn")}
                 </label>
                 <input
                   type="text"
@@ -415,7 +417,7 @@ export default function Settings() {
               </div>
               <div className="relative">
                 <label htmlFor="defaultCurrency" className="block text-sm font-medium text-gray-700 mb-1">
-                  Default Currency
+                  {t("io_dfCurrency")}
                 </label>
                 <select
                   id="defaultCurrency"
@@ -436,7 +438,7 @@ export default function Settings() {
 
               <div>
                 <label htmlFor="taxRate" className="block text-sm font-medium text-gray-700 mb-1">
-                  Tax Rate (%) <span className="text-xs text-gray-500">(e.g., 5 for 5%)</span>
+                  {t("io_taxRate")} (%) <span className="text-xs text-gray-500">(e.g., 5 for 5%)</span>
                 </label>
                 <input
                   type="number"
@@ -450,13 +452,13 @@ export default function Settings() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Registered By</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("io_rgstBy")}</label>
                 <p className="w-full px-4 py-3 text-sm bg-gray-50 text-gray-600 rounded-md border border-gray-200">
                   {settings.registeredBy || 'N/A'}
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Registered At</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("io_rgstAt")}</label>
                 <p className="w-full px-4 py-3 text-sm bg-gray-50 text-gray-600 rounded-md border border-gray-200">
                   {settings.registeredAt ? dayjs(settings.registeredAt).format('DD-MMM-YYYY hh:mm A') : 'N/A'}
                 </p>
@@ -466,11 +468,11 @@ export default function Settings() {
 
           {/* Invoice Settings */}
           <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-sm shadow-sm">
-            <h3 className="text-xl font-bold text-gray-900 mb-5 border-b-[0.5px] border-gray-200 pb-3">Invoice & Receipt Settings</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-5 border-b-[0.5px] border-gray-200 pb-3">{t("hd_invRcptSettings")}</h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <label htmlFor="showLogoOnInvoice" className="text-sm font-medium text-gray-700 cursor-pointer">
-                  Show Business Logo on Invoice
+                  {t("lbl_showInvOnVcher")}
                 </label>
                 <input
                   type="checkbox"
@@ -482,7 +484,7 @@ export default function Settings() {
               </div>
               <div className="flex items-center justify-between">
                 <label htmlFor="autoPrintAfterCheckout" className="text-sm font-medium text-gray-700 cursor-pointer">
-                  Auto Print Receipt After Checkout
+                  {t("lbl_autoPrintAftSale")}
                 </label>
                 <input
                   type="checkbox"
@@ -494,7 +496,7 @@ export default function Settings() {
               </div>
               <div>
                 <label htmlFor="invoiceFooterMessage" className="block text-sm font-medium text-gray-700 mb-2">
-                  Invoice Footer Message
+                  {t("lbl_invceFtMsg")}
                 </label>
                 <input
                   type="text"
@@ -512,7 +514,9 @@ export default function Settings() {
 
           {/* User Preferences */}
           <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-sm shadow-sm">
-            <h3 className="text-xl font-bold text-gray-900 mb-5 border-b-[0.5px] border-gray-200 pb-3">User Interface Preferences</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-5 border-b-[0.5px] border-gray-200 pb-3">
+              {t("hd_uxPrefer")}
+            </h3>
 
 
             <div className="space-y-4">
@@ -560,7 +564,7 @@ export default function Settings() {
               className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-2 rounded-sm text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
               disabled={isSaving || !hasChanges}
             >
-              Reset
+              {t("btTxt_reset")}
             </button>
             <button
               type="submit"
@@ -570,10 +574,10 @@ export default function Settings() {
               {isSaving ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  Saving...
+                  {t("btTxt_saving")}
                 </>
               ) : (
-                'Save Settings'
+                t("btTxt_saveSettings")
               )}
             </button>
           </div>

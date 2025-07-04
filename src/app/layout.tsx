@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Container from "@/app/container";
 import Modal from "@/components/Modal";
+import { LocaleProvider } from "../context/LocaleContext";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,9 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="min-h-screen">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
-        <Container>
-          {children}
-        </Container>
+         <LocaleProvider>
+            <Container>
+              {children}
+            </Container>
+         </LocaleProvider>
         <Modal/>
       </body>
     </html>

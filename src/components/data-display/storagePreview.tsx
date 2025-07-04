@@ -1,9 +1,11 @@
 import GuageArch from "@/components/data-display/atoms/guage";
+import { useTranslation } from "@/hooks/useTranslation";
 export default function StoragePreview(props: { number: number, storage: number }) {
 
 
 const MAX_STORAGE_GB = 1; // 1 GB
 const MAX_STORAGE_KB = MAX_STORAGE_GB * 1024 * 1024; // Convert 1 GB to KB
+const { t } = useTranslation();
 
 // Function to determine the dynamic message based on percentage
 const getStorageMessage = (kbUsed: number) => { // Renamed parameter to kbUsed for clarity
@@ -12,13 +14,13 @@ const getStorageMessage = (kbUsed: number) => { // Renamed parameter to kbUsed f
   const percentage = (kbUsed / MAX_STORAGE_KB) * 100;
 
   if (percentage <= 50) {
-    return "Plenty of storage available.";
+    return t("msg_stg_available");
   } else if (percentage > 50 && percentage < 80) { // Changed >= to > to avoid overlap with previous condition
-    return "Storage usage is moderate.";
+    return t("msg_stg_moderate");
   } else if (percentage >= 80 && percentage < 95) {
-    return "Nearly full storage limit.";
+    return t("msg_stg_almostFull");
   } else { // percentage >= 95
-    return "Storage is almost full!";
+    return t("msg_stg_full");
   }
 };
 
