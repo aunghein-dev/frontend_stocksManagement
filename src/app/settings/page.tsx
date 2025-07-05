@@ -350,7 +350,7 @@ export default function Settings() {
                   : t("io_logoClick")}
               </p>
 
-              <p className="text-xs text-gray-500 mb-4 mt-2">PNG, JPG, JPEG, GIF up to 2MB</p>
+              <p className="text-xs text-gray-500 mb-4 mt-2">PNG, JPG, JPEG, GIF up to 10MB</p>
               
               <button
                 type="button"

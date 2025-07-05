@@ -233,8 +233,8 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
   const handleGroupImageSelected = useCallback((file: File | null) => {
     setGroupImageError(null); // Clear previous errors
     if (file) {
-      if (file.size > 2 * 1024 * 1024) { // Example: 2MB limit
-        setGroupImageError("Group image must be less than 2MB.");
+      if (file.size > 10 * 1024 * 1024) { //: 10MB limit
+        setGroupImageError("Group image must be less than 10MB.");
         setSelectedGroupFile(null);
         setForm(prev => ({ ...prev, groupImage: null }));
         return;
@@ -259,8 +259,8 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
       itemToUpdate._imageError = null; // Clear any previous item image error
 
       if (file) {
-        if (file.size > 1 * 1024 * 1024) { // Example: 1MB limit for item images
-          itemToUpdate._imageError = `Image too large (max 1MB).`;
+        if (file.size > 10 * 1024 * 1024) { //: 1MB limit for item images
+          itemToUpdate._imageError = `Image too large (max 10MB).`;
           itemToUpdate._tempFile = null;
           itemToUpdate.itemImage = null;
           itemToUpdate.itemColorHex = "#000000"; // Reset color if error

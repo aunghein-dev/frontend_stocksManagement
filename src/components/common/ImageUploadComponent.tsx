@@ -140,7 +140,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
           />
         </label>
         {/* File Type and Size Hint */}
-        <p className="mt-2 text-xs text-gray-500">PNG, JPG, JPEG, GIF up to 2MB (or your limit)</p>
+        <p className="mt-2 text-xs text-gray-500">PNG, JPG, JPEG, GIF up to 10MB</p>
         {/* Error Message */}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </div>

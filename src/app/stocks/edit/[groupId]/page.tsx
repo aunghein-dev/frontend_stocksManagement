@@ -209,8 +209,8 @@ export default function StockEditForm() {
     setForm((prev) => {
       const newForm: FormState = { ...prev, _groupImageError: null, _groupTempFile: null, groupImage: null };
       if (file) {
-        if (file.size > 2 * 1024 * 1024) {
-          newForm._groupImageError = "Group image must be less than 2MB.";
+        if (file.size > 10 * 1024 * 1024) {
+          newForm._groupImageError = "Group image must be less than 10MB.";
         } else {
           newForm._groupTempFile = file;
           const reader = new FileReader();
@@ -232,8 +232,8 @@ export default function StockEditForm() {
       itemToUpdate._isExistingImage = false;
 
       if (file) {
-        if (file.size > 1 * 1024 * 1024) {
-          itemToUpdate._imageError = `Image too large (max 1MB).`;
+        if (file.size > 10 * 1024 * 1024) {
+          itemToUpdate._imageError = `Image too large (max 10MB).`;
           itemToUpdate._tempFile = null;
           itemToUpdate.itemImage = null;
           itemToUpdate.itemColorHex = "#000000"; // Reset color if error
