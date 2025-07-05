@@ -113,12 +113,15 @@ export default function Home() {
           >
             <div className="grid 
                             grid-cols-1 
-                            min-[555px]:grid-cols-2
-                            min-[920px]:grid-cols-3
+                            min-[475px]:grid-cols-2
+                            min-[600px]:grid-cols-2
+                            min-[640px]:grid-cols-1
+                            min-[720px]:grid-cols-2
+                            min-[940px]:grid-cols-3
                             min-[1200px]:grid-cols-4
-                            min-[1400px]:grid-cols-5
-                            min-[1600px]:grid-cols-6
-                            min-[1800px]:grid-cols-7
+                            min-[1480px]:grid-cols-5
+                            min-[1800px]:grid-cols-6
+                            min-[1900px]:grid-cols-7
                             gap-4 py-3 pl-3 pr-1">
               {currentItems.map((stock: Stock) => (
                 <Product key={stock.groupId} {...stock} />

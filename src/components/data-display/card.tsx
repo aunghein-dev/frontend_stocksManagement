@@ -84,12 +84,12 @@ export default function Product(props: Stock) {
 
   return (
     <Card
-      className="max-w-xs text-gray-900 relative sm:max-w-xs
+      className="max-w-sm text-gray-900 relative sm:max-w-xs
                  cursor-pointer transition duration-200 ease-in-out
                  shadow-xs hover:shadow-md"
       renderImage={() => {
         return (
-          <div className="w-full max-h-[180px] min-h-[180px] relative">
+          <div className="w-full max-h-[240px] min-h-[240px] relative">
             {!loaded && (
               <div className="w-full h-full bg-gray-200 rounded-t-[14px] animate-pulse" />
             )}
@@ -99,8 +99,8 @@ export default function Product(props: Stock) {
               src={selectedImage}
               alt={props.groupName}
               onLoad={() => setLoaded(true)}
-              className={`w-full max-h-[180px]
-                          min-h-[180px] object-cover 
+              className={`w-full max-h-[240px]
+                          min-h-[240px] object-cover 
                           rounded-t-[14px] absolute top-0 
                           left-0 transition-opacity duration-300 ${
                 loaded ? 'opacity-100' : 'opacity-0'
@@ -124,7 +124,7 @@ export default function Product(props: Stock) {
         backgroundColor: "white",
         border: "0.5px solid oklch(90.9% 0.005 56.366)",
         borderRadius: '14px',
-        maxHeight: "350px"
+        maxHeight: "390px"
       }}
     >
       {dayjs().diff(dayjs(props.releasedDate), 'day') <= 7 && 
@@ -161,7 +161,7 @@ export default function Product(props: Stock) {
           )}
         </div>
 
-        <div className="flex items-center gap-1.5 min-h-4">
+        <div className="flex flex-wrap items-center gap-1.5 min-h-4">
           <div className="flex gap-1">
             {colorSet.map((color) => (
               <button
