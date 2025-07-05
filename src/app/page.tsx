@@ -6,7 +6,7 @@ import PaginationComponent from "@/components/data-display/atoms/pagination";
 import Search from "@/components/form/search";
 import Image from "next/image";
 import { useModalStore } from "@/store/modalStore";
-import { useStocks } from "@/hooks/useStocks";
+import { useFilteredStocks } from "@/hooks/useStocks";
 import type { Stock } from "@/data/table.data";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -15,7 +15,7 @@ const ITEMS_PER_PAGE = 24;
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const { items, isLoading, error } = useStocks();
+  const { items, isLoading, error } = useFilteredStocks();
   const { openModal, closeModal } = useModalStore();
   const { t } = useTranslation();
 

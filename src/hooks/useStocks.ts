@@ -20,3 +20,23 @@ export const useStocks = () => {
     refresh,
   };
 };
+
+
+export const useFilteredStocks = () => {
+  const { business } = useInfo();
+  const API = process.env.NEXT_PUBLIC_API_URL;
+
+  // Only run SWR when businessId is available
+  const shouldFetch = business?.businessId ? `${API}/stkG/biz/nonZero/${business.businessId}` : null;
+
+  const { data, error, isLoading, mutate } = useSWR(shouldFetch, getter);
+
+  const refresh = () => mutate(); // manually trigger refresh
+
+  return {
+    items: data,
+    error,
+    isLoading,
+    refresh,
+  };
+};
