@@ -106,6 +106,17 @@ export default function Product(props: Stock) {
                 loaded ? 'opacity-100' : 'opacity-0'
               }`}
             />
+            {props.items.length === 0 && (
+            <div
+              className="absolute inset-0 bg-black/50 bg-opacity-50
+                        flex items-center justify-center
+                        rounded-t-[14px] z-10" 
+            >
+              <span className="text-white text-xl font-bold uppercase tracking-wider select-none">
+                {t("outOfStock")}
+              </span>
+            </div>
+          )}
           </div>
         );
       }}
@@ -116,7 +127,9 @@ export default function Product(props: Stock) {
         maxHeight: "350px"
       }}
     >
-      {dayjs().diff(dayjs(props.releasedDate), 'day') <= 7 && (
+      {dayjs().diff(dayjs(props.releasedDate), 'day') <= 7 && 
+       props.items.length > 1 &&
+      (
         <div className="absolute top-2 left-2 bg-green-600 text-white px-3 py-1 text-sm rounded-sm">
           {t("newProduct")} {/* Use translation */}
         </div>
@@ -129,7 +142,7 @@ export default function Product(props: Stock) {
 
         <div className="flex items-center justify-between relative">
           <span className="text-sm text-gray-600">{formatMoney(props.groupUnitPrice)} </span>
-          <span className="bg-green-100 text-green-800 font-semibold px-2.5 py-1 rounded-sm text-xs">
+          <span className={`${props.items.length === 0 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}  font-semibold px-2.5 py-1 rounded-sm text-xs`}>
             {t("inStock")}: {isColorSelected ? colorQty : totalStockQty} {/* Use translation */}
           </span>
 
@@ -148,7 +161,7 @@ export default function Product(props: Stock) {
           )}
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 min-h-4">
           <div className="flex gap-1">
             {colorSet.map((color) => (
               <button
@@ -168,12 +181,13 @@ export default function Product(props: Stock) {
           className={`w-full py-2.5 rounded-xs text-xs transition-all duration-200
                       cursor-pointer font-semibold
             ${isAddToCartDisabled
-              ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+              ? props.items.length > 0 ? 'bg-gray-300 text-gray-600 cursor-not-allowed' 
+                                       : 'bg-gray-200 text-gray-600 border-[0.5px] border-gray-300 opacity-50 cursor-not-allowed'
               : 'bg-blue-500 hover:bg-blue-600 text-white shadow-md'
             }`}
           disabled={isAddToCartDisabled}
         >
-          {buttonText}
+           {props.items.length > 0 ? buttonText : t("outOfStock")} {/* Use translation */}
         </button>
       </div>
     </Card>

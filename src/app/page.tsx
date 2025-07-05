@@ -28,6 +28,9 @@ export default function Home() {
     }
   }, [isLoading]);
 
+  console.log(items);
+  
+
   // Filter stocks using search query
   const filteredStocks = useMemo(() => {
     if (!items) return [];
