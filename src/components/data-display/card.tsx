@@ -84,7 +84,7 @@ export default function Product(props: Stock) {
 
   return (
     <Card
-      className="max-w-sm text-gray-900 relative sm:max-w-xs
+      className="max-w-[330px] text-gray-900 relative sm:max-w-sm
                  cursor-pointer transition duration-200 ease-in-out
                  shadow-xs hover:shadow-md"
       renderImage={() => {
