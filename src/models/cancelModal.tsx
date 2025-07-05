@@ -6,21 +6,23 @@ import { XCircle, CheckCircle, AlertTriangle } from "lucide-react";
 import axios from "axios";
 import useSales from "@/hooks/useSales";
 import { useInfo } from "@/hooks/useInfo";
+import { Checkbox } from "@mui/material"; 
 
 export default function CancelConfirmationModal() {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const { modalData, closeModal } = useModalStore();
-  const [reason, setReason] = useState("");
+  const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const {refresh} = useSales();
   const { business } = useInfo();
 
   const handleSubmit = async () => {
-  if (reason.trim() !== modalData?.groupName.trim()) {
-    setError("Your input and group name do not match.");
-    return;
-  }
+   // Check if the user has agreed (checkbox is checked)
+    if (!agreed) {
+      setError("You must confirm that you understand this action cannot be undone.");
+      return;
+    }
 
   setLoading(true);
   if (modalData && 'oldTranId' in modalData) {
@@ -75,18 +77,16 @@ export default function CancelConfirmationModal() {
         </div>
 
         <div>
-          <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
-            Retype the Group Name
+          <label htmlFor="agreeCheckbox" className="text-sm font-medium text-gray-700 mb-1 flex flex-row items-center cursor-pointer">
+          <Checkbox
+            id="agreeCheckbox" // Use a proper ID for the checkbox
+            checked={agreed} // Control the checkbox state
+            onChange={(e) => setAgreed(e.target.checked)} // Update state with true/false
+            color="primary" // Optional: set a color from MUI palette
+          /> 
+          <span>I understand that this action cannot be undone.</span>
           </label>
-          <input
-            type="text"
-            name="reason"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            className="w-full p-2.5 text-sm border border-gray-300 rounded-sm focus:ring-2 focus:ring-red-400 focus:outline-none"
-            placeholder={`eg. ${modalData?.groupName}`}
-          />
-          {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
+          {error && <p className="text-red-600 text-xs mt-2 ml-3">{error}</p>}
         </div>
 
         <div className="flex justify-end gap-3 pt-2">

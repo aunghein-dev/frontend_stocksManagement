@@ -62,6 +62,7 @@ export default function StockEntryForm() {
   const { t } = useTranslation();
   // --- Effects ---
   const { openModal, closeModal } = useModalStore();
+const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
 
     // This useEffect controls the modal's open/close state
     useEffect(() => {
@@ -117,6 +118,95 @@ export default function StockEntryForm() {
       ],
     }));
   }, []);
+
+
+  const handleMultipleVariantsUpload = useCallback((files: FileList | null) => {
+      if (!files || files.length === 0) return;
+
+      const fileArray = Array.from(files);
+      const promises = fileArray.map((file, i) => {
+        return new Promise<NewStockItem>((resolve) => {
+          if (file.size > 1 * 1024 * 1024) {
+            resolve({
+              tempId: Date.now() + i,
+              itemImage: null,
+              itemColorHex: "#000000",
+              itemQuantity: 1,
+              _tempFile: null,
+              _imageError: "Image too large (max 1MB).",
+              _detectedPalette: null,
+            });
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const imageDataUrl = reader.result as string;
+            const img = new Image();
+            // Remove crossOrigin for local files
+            img.src = imageDataUrl;
+
+            img.onload = () => {
+              try {
+                const colorThief = new ColorThief();
+                const dominantColor = colorThief.getColor(img);
+                const palette = colorThief.getPalette(img, 5);
+
+                const hexColor = rgbToHex(dominantColor[0], dominantColor[1], dominantColor[2]);
+                const hexPalette = palette.map((rgb: any) => rgbToHex(rgb[0], rgb[1], rgb[2]));
+
+                resolve({
+                  tempId: Date.now() + i,
+                  itemImage: imageDataUrl,
+                  itemColorHex: hexColor,
+                  itemQuantity: 1,
+                  _tempFile: file,
+                  _imageError: null,
+                  _detectedPalette: hexPalette,
+                });
+              } catch (error) {
+                console.error("Color detection failed:", error);
+                resolve({
+                  tempId: Date.now() + i,
+                  itemImage: imageDataUrl,
+                  itemColorHex: "#000000",
+                  itemQuantity: 1,
+                  _tempFile: file,
+                  _imageError: null,
+                  _detectedPalette: null,
+                });
+              }
+            };
+
+            img.onerror = () => {
+              resolve({
+                tempId: Date.now() + i,
+                itemImage: null,
+                itemColorHex: "#000000",
+                itemQuantity: 1,
+                _tempFile: null,
+                _imageError: "Failed to load image.",
+                _detectedPalette: null,
+              });
+            };
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      Promise.all(promises).then((newItems) => {
+        const validNewItems = newItems.filter((item) => item.itemImage !== null);
+        if (validNewItems.length > 0) {
+          setForm((prev) => ({
+            ...prev,
+            items: [...prev.items, ...validNewItems],
+          }));
+        }
+        console.log("✅ New item variants added:", validNewItems.length);
+        console.log("📦 Total item count:", form.items.length + validNewItems.length);
+      });
+    }, []);
+
 
   // Helper function to convert RGB to Hex
   const rgbToHex = (r: number, g: number, b: number): string => {
@@ -269,53 +359,53 @@ export default function StockEntryForm() {
     // --- Pre-submission Validation ---
     if (isBusinessInfoLoading) {
       setSubmitting(false);
-      setSubmissionError("Business information is still loading. Please wait.");
+      setSubmissionError(t("msg_noBizInfo"));
       return;
     }
 
     if (businessInfoError || !business?.businessId) {
       setSubmitting(false);
-      setSubmissionError("Business information is missing or failed to load. Cannot submit.");
+      setSubmissionError(t("msg_noFoundBiz"));
       return;
     }
 
     if (!selectedGroupFile || groupImageError) {
       setSubmitting(false);
-      setSubmissionError(groupImageError || "Please select a group image.");
+      setSubmissionError(groupImageError || t("lbl_slctGpImg"));
       return;
     }
 
     if (!form.groupName.trim()) {
         setSubmitting(false);
-        setSubmissionError("Group Name is required.");
+        setSubmissionError(t("lbl_reqrGpNn"));
         return;
     }
     if (form.groupUnitPrice <= 0) {
         setSubmitting(false);
-        setSubmissionError("Unit Price must be greater than 0.");
+        setSubmissionError(t("lbl_limitPrice"));
         return;
     }
     if (!form.releasedDate) {
         setSubmitting(false);
-        setSubmissionError("Released Date is required.");
+        setSubmissionError(t("lbl_rldDatRequired"));
         return;
     }
 
     if (form.items.length === 0) {
       setSubmitting(false);
-      setSubmissionError("Please add at least one color variant.");
+      setSubmissionError(t("lbl_atLeastVarient"));
       return;
     }
 
     // Validate individual items
     const invalidItem = form.items.find(item =>
-        !item._tempFile || item.itemQuantity <= 0 || item._imageError
+        !item._tempFile || item.itemQuantity < 0 || item._imageError
     );
     if (invalidItem) {
       setSubmitting(false);
       setSubmissionError(
         invalidItem._imageError ||
-        (item => !item._tempFile ? "All color variants must have an image." :
+        (item => !item._tempFile ? t("lbl_limitImg") :
         "All color variants must have a quantity greater than zero.")(invalidItem)
       );
       return;
@@ -366,14 +456,14 @@ export default function StockEntryForm() {
           resetForm(); // Clear the form on successful submission
       } else {
           console.warn("Unexpected response status:", response.status, response.data);
-          setSubmissionError(`Submission successful but with unexpected status: ${response.status}`);
+          setSubmissionError(`${t("msg_submtErr")}: ${response.status}`);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       if (axios.isAxiosError(error) && error.response) {
         setSubmissionError(`Failed to save: ${error.response.data?.message || error.message || "Server error"}`);
       } else {
-        setSubmissionError("An unknown error occurred during submission. Please try again.");
+        setSubmissionError(t("msg_submtErrUnkown"));
       }
     } finally {
       setSubmitting(false);
@@ -394,27 +484,22 @@ export default function StockEntryForm() {
 
   // --- Main Form Render ---
   return (
-    <div className="bg-white p-1 overflow-hidden rounded-sm">
+    <div className="bg-white p-1 overflow-hidden rounded-sm relative">
       <form
         onSubmit={handleSubmit}
         className="w-full mx-auto p-2.5 overflow-auto space-y-3 relative custom-scrollbar"
         style={{ height: "calc(100dvh - 119px)" }}
       >
-        {/* Submission Loading Overlay */}
-        {submitting && (
-          <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center z-20 rounded-sm">
-            <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
-          </div>
-        )}
+  
 
         {/* Success Alert */}
         {showSuccessAlert && (
-          <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-30">
+          <div className="fixed top-26 right-6.5 z-60">
             <Alert
               severity="success"
               sx={{ fontSize: "0.75rem", border: "1px solid #e5e7eb", borderRadius: '4px' }}
             >
-              <AlertTitle sx={{ fontSize: "0.75rem" }}>New stock entry created successfully!</AlertTitle>
+              <AlertTitle sx={{ fontSize: "0.75rem" }}>{t("msg_addSucess")}</AlertTitle>
             </Alert>
           </div>
         )}
@@ -434,32 +519,35 @@ export default function StockEntryForm() {
 
         {/* Back Link and Title */}
         <div className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="flex items-center text-sm border-[0.5px]
-                       rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100
-                      hover:bg-blue-200 cursor-pointer transition duration-150"
-          >
-            <svg
-              className="w-4 h-4 text-blue-600"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
+
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="flex items-center text-sm border-[0.5px]
+                        rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100
+                        hover:bg-blue-200 cursor-pointer transition duration-150"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 12h14M5 12l4-4m-4 4 4 4"
-              />
-            </svg>
-            {t("btTxt_back")}
-          </button>
+              <svg
+                className="w-4 h-4 text-blue-600"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 12h14M5 12l4-4m-4 4 4 4"
+                />
+              </svg>
+              {t("btTxt_back")}
+            </button>
+
+        
           <h2 className="text-xl font-semibold text-gray-600 mr-3">{t("hd_stockentry")}</h2>
         </div>
 
@@ -529,13 +617,37 @@ export default function StockEntryForm() {
         <div>
           <div className="flex justify-between items-center mb-1.5 mt-4">
             <h3 className="text-sm font-semibold text-gray-800">{t("lbl_colorvarients")}</h3>
-            <button
-              type="button"
-              onClick={addItem}
-              className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              {t("btnTxt_addvarient")}
-            </button>
+            <div className="flex gap-3">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                hidden
+                ref={multipleUploadInputRef}
+                onChange={(e) => {
+                  handleMultipleVariantsUpload(e.target.files);
+                  // Reset input to allow re-uploading the same files
+                  e.target.value = "";
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => multipleUploadInputRef.current?.click()}
+                className="flex items-center text-sm border-[0.5px] rounded-sm space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200 cursor-pointer transition duration-150 px-4 py-2"
+              >
+                {t("btnTxt_addMultipleVariants")}
+              </button>
+
+
+              <button
+                type="button"
+                onClick={addItem}
+                className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                {t("btnTxt_addvarient")}
+              </button>
+            </div>
+          
           </div>
 
           <div className="space-y-2 p-2 rounded-sm border-[0.5px] border-gray-300">
@@ -633,19 +745,24 @@ export default function StockEntryForm() {
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-end pt-4">
-            <button
-              type="submit"
-              disabled={submitting || isBusinessInfoLoading || !!businessInfoError} // Simplified disabled logic
-              className={`py-2 px-4 rounded-sm text-sm text-white ${
-                (submitting || isBusinessInfoLoading || !!businessInfoError)
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700"
-              }`}
-            >
-              {submitting ? t("btTxt_saving") : t("btnTxt_saveEntry")}
-            </button>
+        {/* Submit Button and Loading Spinner */}
+        <div className="flex items-center justify-end gap-x-3 pt-4"> {/* This div now controls both */}
+          {submitting && ( // Show spinner ONLY when submitting
+            <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          )}
+          <button
+            type="submit"
+            disabled={submitting || isBusinessInfoLoading || !!businessInfoError} // Simplified disabled logic
+            className={`py-2 px-4 rounded-sm text-sm text-white ${
+              (submitting || isBusinessInfoLoading || !!businessInfoError)
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {submitting ? t("btTxt_saving") : t("btnTxt_saveEntry")}
+          </button>
         </div>
+        
       </form>
     </div>
   );

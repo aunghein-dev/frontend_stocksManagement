@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { useReactToPrint } from "react-to-print";
 import Image from "next/image";
 import { useInfo } from "@/hooks/useInfo";
+import { toJpeg } from 'html-to-image';
 
 // Assuming formatMoney utility exists at this path
 // If not, you'll need to define it or import from where it actually is
@@ -82,6 +83,34 @@ export default function PopupVoucher({
   });
   const { business, isLoading } = useInfo();
 
+const handleSavePhoto = async () => {
+  const node = componentRef.current;
+  if (!node) return;
+
+  // 🔴 Find and hide the print buttons
+  const buttons = node.querySelectorAll(".exclude-from-image");
+  buttons.forEach(btn => (btn as HTMLElement).style.display = "none");
+
+  try {
+    const dataUrl = await toJpeg(node, {
+      quality: 0.95,
+      backgroundColor: "#ffffff",
+      pixelRatio: 2,
+    });
+
+    // Trigger download
+    const link = document.createElement("a");
+    link.download = `voucher-${uniqueId}.jpg`;
+    link.href = dataUrl;
+    link.click();
+  } catch (error) {
+    console.error("Failed to generate image:", error);
+  } finally {
+    // ✅ Show the buttons again
+    buttons.forEach(btn => (btn as HTMLElement).style.display = "");
+  }
+};
+
 
   return (
     <div
@@ -91,45 +120,28 @@ export default function PopupVoucher({
 
       <div
         ref={componentRef}
-        className="relative h-[90dvh] w-full sm:w-[600px] shadow-2xl flex flex-col animate-slide-up p-0.5 overflow-hidden bg-white rounded-sm"
+        className="relative h-[90dvh] w-full sm:w-[600px] shadow-2xl flex flex-col animate-slide-up p-0.5 overflow-hidden bg-white rounded-sm
+        print:h-auto print:overflow-visible print:shadow-none print:bg-transparent print:animate-none print:rounded-none"
       >
 
         {/* Close Button */}
-        <div className="min-h-[40px] w-[40px] absolute top-2 right-2 print:hidden">
+        <div className="min-h-[40px] w-[40px] absolute top-2 right-1 print:hidden exclude-from-image">
           <button
-            className="flex items-center justify-center w-9 h-9 rounded-full
-                       bg-white text-gray-600 hover:text-red-600
-                       shadow-md hover:shadow-lg
-                       border border-gray-200 hover:border-red-300
-                       transition-all duration-300 ease-in-out
-                       focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 cursor-pointer"
+            className="text-gray-500 hover:text-gray-900
+                     text-2xl cursor-pointer hover:bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center ease-in-out duration-300"
             onClick={handleToggle}
             aria-label="Close Popup"
             title="Close" // Added title for hover tooltip
           >
-            {/* SVG Close Icon (more professional than 'x') */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2.5" // Slightly thicker stroke for better visibility
-              stroke="currentColor"
-              className="w-4 h-4" // Tailwind classes for size
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+             &times;
           </button>
         </div>
 
         {/* Logo & Header */}
-        <div className="">
+        <div className="exclude-from-image">
           {/* Ensure this image path is correct relative to your public folder */}
           <Image
-            className="absolute top-4 left-4 w-[75px]"
+            className="absolute top-4 left-4 w-[75px] "
             src="/Box.png" // This should be /Box.png if it's in public folder
             alt="QR Code" // Change alt text if it's not a QR Code
             width={75}
@@ -146,7 +158,7 @@ export default function PopupVoucher({
               className="w-20 h-20 rounded-md object-cover flex-shrink-0" // New size: 80px x 80px
               width={80} // Match intrinsic width to the Tailwind size
               height={80} // Match intrinsic height to the Tailwind size
-              src={business?.businessLogo}
+              src={business?.businessLogo? business.businessLogo : "/onlylogo.png"}
               alt={business?.businessName ? `${business.businessName} Logo` : "Business Logo"}
               draggable={false}
             />
@@ -216,10 +228,16 @@ export default function PopupVoucher({
         </div>
 
         {/* Print Button */}
-        <div className="absolute bottom-2 right-4 print:hidden">
+        <div className="absolute bottom-2 right-4 print:hidden grid grid-cols-2 gap-2">
+          <button
+            onClick={handleSavePhoto}
+            className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-medium rounded-sm text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
+          >
+            Save Photo
+          </button>
           <button
             onClick={handlePrint}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-sm text-sm py-2 px-4"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-sm text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
           >
             Print
           </button>

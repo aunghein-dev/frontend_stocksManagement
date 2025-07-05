@@ -62,9 +62,9 @@ function SidebarComponent(props: { sidebarOpen: boolean; setSidebarOpen: (open: 
       `}
     >
       <button
-        className="absolute top-2 right-2 text-gray-300 hover:text-gray-400 text-md
-                   cursor-pointer p-1.5 transition-colors duration-200 ease-in-out
-                   sm:hidden"
+        className="absolute top-2 right-2 text-gray-400 hover:text-gray-900 text-md
+                   cursor-pointer p-1.5 transition-colors 
+                   sm:hidden hover:bg-gray-200 rounded-full w-6 h-6 flex items-center justify-center ease-in-out duration-300"
         onClick={() => props.setSidebarOpen(false)}
       >
         <AiOutlineClose />
@@ -154,7 +154,7 @@ function SidebarComponent(props: { sidebarOpen: boolean; setSidebarOpen: (open: 
         </ul>
       </nav>
 
-      <div className="flex items-center justify-left px-3 mb-2 md:hidden">
+      <div className="flex items-center justify-left px-4.5 mb-2 md:hidden">
           <LanguageSwitcher />
       </div>
       <footer className="px-4 py-6 text-center text-xs border-t border-gray-100 text-gray-500">

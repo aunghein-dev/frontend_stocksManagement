@@ -12,6 +12,7 @@ import { useInfo } from "@/hooks/useInfo";
 import PopupVouncher from "./voucherPopup";
 import formatMoney from "@/components/utils/formatMoney";
 import { motion, AnimatePresence } from "framer-motion"; 
+import { useTranslation } from "@/hooks/useTranslation";
 
 type SalesProps = {
   tranDate: string;
@@ -37,6 +38,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
   const { items: stocks, refresh } = useStocks();
   const { business } = useInfo();
   const [showVouncher, setShowVouncher] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (outOfStockItemId !== null) {
@@ -156,7 +158,9 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         {group.item.map((item) => (
           <li
             key={item.itemId}
-            className="relative flex items-center justify-between gap-2 px-1 py-5 rounded-xl border-[0.5px] border-gray-200"
+            className="relative flex items-center justify-between gap-2 px-1 py-5 
+                       rounded-xl border-[0.5px] border-gray-200 transition-all duration-300
+                      cursor-pointer"
             style={{
               background: `linear-gradient(to right, ${hexToRgba(item.colorHex, 0.2)}, rgba(0, 0, 0, 0.08))`,
             }}
@@ -173,7 +177,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
                 }}
               >
                 <AlertTitle style={{ fontSize: "0.75rem" }}></AlertTitle>
-                <strong>Out of stock</strong>
+                <strong>{t("outOfStock")}</strong>
               </Alert>
             )}
 
@@ -192,10 +196,11 @@ export default function CartPopup(props: { handleToggle: () => void }) {
                 unoptimized
                 className={`rounded-md border border-gray-200 shadow-sm
                             w-14 h-14 sm:w-20 sm:h-20
+                            cursor-pointer hover:scale-104
                             object-cover transition-all duration-300 ease-in-out
                             ${imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                 onLoadingComplete={() => setImageLoaded(true)}
-              />
+              /> 
               <span className="text-xs text-gray-600 font-medium sm:text-sm">
                 #{item.itemId}
               </span>
@@ -204,14 +209,16 @@ export default function CartPopup(props: { handleToggle: () => void }) {
             {/* Quantity Controls */}
             <div className="flex items-center gap-1">
               <button
-                className="w-6 h-6 rounded-full bg-gray-400 hover:bg-gray-500 text-white font-bold"
+                className="w-6 h-6 rounded-full bg-gray-400 hover:bg-gray-500 text-white font-bold
+                           flex items-center justify-center ease-in-out duration-300 cursor-pointer"
                 onClick={() => removeItem(group.groupId, item.itemId)}
               >
                 –
               </button>
               <span className="px-2 text-sm font-medium">{item.boughtQty}</span>
               <button
-                className="w-6 h-6 rounded-full bg-gray-400 hover:bg-gray-500 text-white font-bold"
+                className="w-6 h-6 rounded-full bg-gray-400 hover:bg-gray-500 text-white font-bold
+                           flex items-center justify-center ease-in-out duration-300 cursor-pointer"
                 onClick={() => handleClickAdd(group, item)}
               >
                 +
@@ -232,11 +239,11 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
             {/* Delete */}
             <button
-              className="text-red-500 hover:text-red-600 text-sm font-semibold bg-gray-200 h-7 w-7 rounded-full cursor-pointer hover:bg-gray-300"
+              className="text-gray-500 hover:text-gray-900 text-2xl bg-gray-200 h-7 w-7 rounded-full cursor-pointer hover:bg-gray-300 ease-in-out duration-300 flex items-center justify-center"
               title="Remove Item"
               onClick={() => deleteItem(group.groupId, item.itemId)}
             >
-              ✕
+              &times;
             </button>
           </li>
         ))}
@@ -265,7 +272,8 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         {/* Close Button */}
         <button
           onClick={props.handleToggle}
-          className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-2xl font-bold"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-900
+                     text-2xl cursor-pointer hover:bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center ease-in-out duration-300"
           aria-label="Close"
         >
           &times;
@@ -281,7 +289,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         <div className="p-5 border-b border-gray-200 
                       bg-gray-100 text-lg font-semibold 
                       text-gray-800 flex">
-           Shopping Cart
+           {t("hd_shoppingCart")}
         </div>
 
         {/* Cart Items */}
@@ -331,18 +339,18 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         {/* Footer */}
         <div className="p-5 border-t border-gray-200 bg-gray-100">
           <div className="flex justify-between mb-4 items-center">
-            <span className="text-sm text-gray-600">Subtotal</span>
+            <span className="text-md text-gray-600 font-bold">{t("lbl_subTotal")}</span>
             <span className="text-lg font-bold text-gray-900">
                <span className="text-gray-400 text-sm mr-3">(Qty. {grandTotalQty})</span>
                {formatMoney(grandTotal)} MMK
             </span>
           </div>
           <button
-            className="w-full py-3 bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold rounded-sm transition duration-200"
-            disabled={grandTotal === 0}
+            className="w-full py-3 bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold rounded-sm transition duration-200 cursor-pointer"
+            disabled={grandTotal === 0 && loading}
             onClick={() => handleCheckout()}
           >
-            Proceed to Checkout
+            {loading ? t("bntTxt_chking") : t("btnTxt_chkout")}
           </button>
         </div>
       </div>

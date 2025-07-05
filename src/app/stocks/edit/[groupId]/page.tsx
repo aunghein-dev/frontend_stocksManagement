@@ -11,6 +11,7 @@ import ImageUploadComponent from "@/components/common/ImageUploadComponent"; // 
 import { XMarkIcon } from '@heroicons/react/24/outline'; // For remove item button
 import { useModalStore } from "@/store/modalStore";
 import ColorThief from 'colorthief'; // IMPORT COLOR THIEF
+import { useTranslation } from "@/hooks/useTranslation";
 
 // --- Type Definitions ---
 type StockItem = {
@@ -82,6 +83,7 @@ export default function StockEditForm() {
   const bizId = business?.businessId;
 
   const { openModal, closeModal } = useModalStore();
+  const { t } = useTranslation();
 
   // --- Initial Data Fetch Effect ---
   useEffect(() => {
@@ -320,33 +322,33 @@ export default function StockEditForm() {
     // --- Pre-submission Validation ---
     if (!bizId) {
       setSubmittingForm(false);
-      setSubmissionError("Business ID not available. Cannot submit.");
+      setSubmissionError(t("msg_noFoundBiz"));
       return;
     }
     if (!groupIdParam) {
       setSubmittingForm(false);
-      setSubmissionError("Group ID missing. Cannot submit update.");
+      setSubmissionError(t("msg_gpIdNotFound"));
       return;
     }
     if (!form.groupName.trim()) {
       setSubmittingForm(false);
-      setSubmissionError("Group Name is required.");
+      setSubmissionError(t("lbl_reqrGpNn"));
       return;
     }
     if (form.groupUnitPrice <= 0) {
       setSubmittingForm(false);
-      setSubmissionError("Unit Price must be greater than 0.");
+      setSubmissionError(t("lbl_limitPrice"));
       return;
     }
     if (!form.releasedDate) {
       setSubmittingForm(false);
-      setSubmissionError("Released Date is required.");
+      setSubmissionError(t("lbl_rldDatRequired"));
       return;
     }
 
     if (!form.groupImage && !form._groupTempFile) {
         setSubmittingForm(false);
-        setSubmissionError("Group image is required.");
+        setSubmissionError(t("lbl_reqrGpImg"));
         return;
     }
     if (form._groupImageError) {
@@ -356,19 +358,19 @@ export default function StockEditForm() {
     }
 
     const invalidItem = form.items.find(item =>
-        item.itemQuantity <= 0 || item._imageError || (!item.itemImage && !item._tempFile)
+        item.itemQuantity < 0 || item._imageError || (!item.itemImage && !item._tempFile)
     );
     if (invalidItem) {
       setSubmittingForm(false);
       setSubmissionError(
         invalidItem._imageError ||
-        (!invalidItem.itemImage && !invalidItem._tempFile ? "All variants must have an image." : "All variants must have a quantity greater than zero.")
+        (!invalidItem.itemImage && !invalidItem._tempFile ? t("lbl_limitImg") : "All variants must have a quantity greater than zero.")
       );
       return;
     }
     if (form.items.length === 0) {
         setSubmittingForm(false);
-        setSubmissionError("Please add at least one color variant.");
+        setSubmissionError(t("lbl_atLeastVarient"));
         return;
     }
 
@@ -428,7 +430,7 @@ export default function StockEditForm() {
       if (axios.isAxiosError(error) && error.response) {
         setSubmissionError(`Failed to update: ${error.response.data?.message || error.message || "Server error"}`);
       } else {
-        setSubmissionError("An unknown error occurred during submission. Please try again.");
+        setSubmissionError(t("msg_submtErrUnkown"));
       }
     } finally {
       setSubmittingForm(false);
@@ -460,24 +462,24 @@ export default function StockEditForm() {
       >
         {/* Success Alert */}
         {showSuccessAlert && (
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-60">
+          <div className="fixed top-26 right-6.5 z-60">
             <Alert
               severity="success"
               sx={{ fontSize: "0.75rem", border: "1px solid #e5e7eb", borderRadius: '4px' }}
             >
-              <AlertTitle sx={{ fontSize: "0.75rem" }}>Stock entry updated successfully!</AlertTitle>
+              <AlertTitle sx={{ fontSize: "0.75rem" }}>{t("msg_updtStkSucess")}</AlertTitle>
             </Alert>
           </div>
         )}
 
         {/* Submission Error Alert */}
         {submissionError && (
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-60">
+          <div className="fixed top-26 right-6.5 z-60">
             <Alert
               severity="error"
               sx={{ fontSize: "0.75rem", border: "1px solid #e5e7eb", borderRadius: '4px' }}
             >
-              <AlertTitle sx={{ fontSize: "0.75rem" }}>Submission Error</AlertTitle>
+              <AlertTitle sx={{ fontSize: "0.75rem" }}>{t("msg_sbmtErr")}</AlertTitle>
               {submissionError}
             </Alert>
           </div>
@@ -507,15 +509,15 @@ export default function StockEditForm() {
                   d="M5 12h14M5 12l4-4m-4 4 4 4"
                 />
               </svg>
-              Back
+              {t("btTxt_back")}
             </button>
-          <h2 className="text-xl font-semibold text-gray-600 mr-3">Edit Stock Entry</h2>
+          <h2 className="text-xl font-semibold text-gray-600 mr-3">{t("hd_stkEdit")}</h2>
         </div>
 
         {/* Group Image Upload with ImageUploadComponent */}
         <ImageUploadComponent
           id="groupImageUpload"
-          label="Group Image"
+          label={t("lbl_gpImg")}
           currentImageUrl={form.groupImage}
           onImageSelected={handleGroupImageSelected}
           isLoading={false}
@@ -527,7 +529,7 @@ export default function StockEditForm() {
         {/* Group Info */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div>
-            <label htmlFor="groupName" className="block font-medium text-gray-700 mb-1">Group Name</label>
+            <label htmlFor="groupName" className="block font-medium text-gray-700 mb-1">{t("lbl_groupNn")}</label>
             <input
               id="groupName"
               type="text"
@@ -535,11 +537,11 @@ export default function StockEditForm() {
               onChange={(e) => setForm({ ...form, groupName: e.target.value })}
               required
               className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
-              placeholder="Enter group name"
+              placeholder={t("lbl_groupNnInput")}
             />
           </div>
           <div>
-            <label htmlFor="unitPrice" className="block font-medium text-gray-700 mb-1">Unit Price (MMK)</label>
+            <label htmlFor="unitPrice" className="block font-medium text-gray-700 mb-1">{t("lbl_unitPrice")}</label>
             <input
               id="unitPrice"
               type="text"
@@ -556,12 +558,12 @@ export default function StockEditForm() {
                 });
               }}
               required
-              placeholder="Enter unit price"
+              placeholder={t("lbl_unitPriceInput")}
               className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
             />
           </div>
           <div>
-            <label htmlFor="releasedDate" className="block font-medium text-gray-700 mb-1">Released Date</label>
+            <label htmlFor="releasedDate" className="block font-medium text-gray-700 mb-1">{t("lbl_releasedDate")}</label>
             
             <input
               id="releasedDate"
@@ -577,13 +579,13 @@ export default function StockEditForm() {
         {/* Color Variants */}
         <div>
           <div className="flex justify-between items-center mb-1.5 mt-4">
-            <h3 className="text-sm font-semibold text-gray-800">Color Variants</h3>
+            <h3 className="text-sm font-semibold text-gray-800">{t("lbl_colorvarients")}</h3>
             <button
               type="button"
               onClick={addItem}
               className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              + Add Variant
+              {t("btnTxt_addvarient")}
             </button>
           </div>
 
@@ -600,7 +602,7 @@ export default function StockEditForm() {
                     <div className="flex-grow">
                         <ImageUploadComponent
                             id={`itemImage-${item.itemId === null ? `new-${index}` : item.itemId}`}
-                            label={`Varient #${index + 1}`}
+                            label={`${t("lbl_varient")} #${index + 1}`}
                             currentImageUrl={item.itemImage}
                             onImageSelected={(file) => handleItemImageSelected(index, file)}
                             error={item._imageError}
@@ -611,8 +613,8 @@ export default function StockEditForm() {
 
                     {/* Color and Quantity */}
                     <div className="flex gap-4 mt-2 sm:mt-0 items-end"> {/* Added items-end to align */}
-                      <div>
-                        <label htmlFor={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">Current Color</label>
+                      <div className="flex flex-col">
+                        <label htmlFor={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">{t("lbl_color")}</label>
                         <input
                           id={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`}
                           type="color"
@@ -621,8 +623,8 @@ export default function StockEditForm() {
                           className="w-10 h-10 border-[0.5px] border-gray-200 rounded-sm"
                         />
                       </div>
-                      <div>
-                        <label htmlFor={`itemQuantity-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">Quantity</label>
+                      <div className="flex flex-col">
+                        <label htmlFor={`itemQuantity-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">{t("lbl_qty")}</label>
                         <input
                           id={`itemQuantity-${item.itemId === null ? `new-${index}` : item.itemId}`}
                           required
@@ -695,7 +697,7 @@ export default function StockEditForm() {
                 : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
           >
-            {submittingForm ? "Updating..." : "Update Stock"}
+            {submittingForm ? t("btnTxt_updating") : t("btnTxt_svStk")}
           </button>
         </div>
       </form>

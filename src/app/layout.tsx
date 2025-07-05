@@ -41,8 +41,8 @@ export default function RootLayout({
             <Container>
               {children}
             </Container>
+            <Modal/>
          </LocaleProvider>
-        <Modal/>
       </body>
     </html>
   );
