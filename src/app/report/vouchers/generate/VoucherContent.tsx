@@ -175,7 +175,7 @@ export default function VoucherContent() {
             className="w-20 h-20 rounded-md object-cover flex-shrink-0" // New size: 80px x 80px
             width={80} // Match intrinsic width to the Tailwind size
             height={80} // Match intrinsic height to the Tailwind size
-            src={business?.businessLogo}
+            src={business?.businessLogo? business?.businessLogo : "/onlylogo.png"}
             alt={business?.businessName ? `${business.businessName} Logo` : "Business Logo"}
             draggable={false}
           />
