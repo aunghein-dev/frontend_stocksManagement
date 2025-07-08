@@ -29,7 +29,7 @@ type SalesProps = {
 
 export default function CartPopup(props: { handleToggle: () => void }) {
   const API = process.env.NEXT_PUBLIC_API_URL;
-  const { cart, addItem, removeItem, deleteItem, deleteAll, total, totalQty } = useCartStore();
+  const { cart, addItem, removeItem, deleteItem, total, totalQty } = useCartStore();
   const grandTotal = total;
   const grandTotalQty = totalQty;
   const [error, setError] = useState<string | null>(null);
@@ -101,7 +101,6 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
         setVoucherUUID(newUUID);
         setVoucherData(voucher);
-        deleteAll();
         refresh();
         setShowVouncher(true);
       }
