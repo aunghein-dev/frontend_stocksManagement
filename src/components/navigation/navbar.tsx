@@ -3,11 +3,11 @@
 import Image from "next/image";
 import dayjs from "dayjs";
 import { IoCartOutline } from "react-icons/io5";
-import { useCartStore } from "@/lib/stores/useCartStore";
+import { useCartStore } from "@/lib/stores/useCartStore"; // Make sure this path is correct
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu } from 'react-icons/fi'; // FiX is not used, can remove
 import { useUser } from "@/hooks/useUser";
 import { useModalStore } from "@/store/modalStore";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -24,46 +24,39 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
   const profileButtonRef = useRef<HTMLButtonElement>(null);
   const { data, isLoading } = useUser();
 
-
-  const cart = useCartStore((state) => state.cart);
+  // --- FIX APPLIED HERE ---
+  // Select totalQty directly from the store. This ensures the component
+  // re-renders whenever total quantity changes, which is what we need for itemCount.
+  const itemCount = useCartStore((state) => state.totalQty);
+  // No need for `hasMounted` check for itemCount anymore, Zustand handles reactivity.
 
   const { openModal, closeModal } = useModalStore();
   const { t } = useTranslation();
   
+  // Keep hasMounted for other parts of the component if still necessary,
+  // but for itemCount, it's now handled by Zustand's reactivity.
   useEffect(() => {
     setHasMounted(true);
   }, []);
-
-  const itemCount = hasMounted
-    ? cart.reduce(
-        (sum, group) =>
-          sum +
-          group.item.reduce((groupTotal, item) => groupTotal + item.boughtQty, 0),
-        0
-      )
-    : 0;
-
 
   function handleToggle() {
     setIsOpen(!isOpen);
   }
 
-
   const handleLogout = async () => {
-  openModal("loading");
-   try{
-    await axios.post(`${API}/auth/logout`, {}, {
+    openModal("loading");
+    try {
+      await axios.post(`${API}/auth/logout`, {}, {
         withCredentials: true,
         headers: { 'Content-Type': 'application/json' }
       });
-  } catch (error: any) {
-    console.error("Logout failed:", error.response?.data?.message || error.message);
-  } finally {
-    closeModal();
-    router.push('/login');
-  }
-};
-
+    } catch (error: any) {
+      console.error("Logout failed:", error.response?.data?.message || error.message);
+    } finally {
+      closeModal();
+      router.push('/login');
+    }
+  };
 
   // Close dropdown on clicking outside dropdown and profile button
   useEffect(() => {
@@ -92,32 +85,31 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
   return (
     <nav className={`bg-[var(--background)] fixed top-0 left-0 right-0 
                     py-3 px-3 border-b-[1px] border-gray-200 
-                    ${props.sidebarOpen===true ? "z-40" : "z-50"}`}>
+                    ${props.sidebarOpen === true ? "z-40" : "z-50"}`}>
 
       <div className="ml-[0px] sm:ml-[200px] h-14 py-8 px-3 bg-white shadow-xs rounded-sm flex items-center justify-between">
 
-      <div className="flex items-center">
-        <button
-          aria-label="Toggle menu"
-          className="text-xl mr-4 px-2 py-1
-                    rounded-sm cursor-pointer sm:hidden text-gray-500 hover:text-gray-600"
-          onClick={() => props.handleSidebarOpen()}
-        >
-          <FiMenu />
-        </button>
+        <div className="flex items-center">
+          <button
+            aria-label="Toggle menu"
+            className="text-xl mr-4 px-2 py-1
+                      rounded-sm cursor-pointer sm:hidden text-gray-500 hover:text-gray-600"
+            onClick={() => props.handleSidebarOpen()}
+          >
+            <FiMenu />
+          </button>
           <div className="flex items-left flex-col">
-            <h1 className="text-xl font-bold min-h-[25px] text-blue-700">{isLoading? "" : data?.fullName}</h1>
-          {hasMounted && (
+            <h1 className="text-xl font-bold min-h-[25px] text-blue-700">{isLoading ? "" : data?.fullName}</h1>
+            {hasMounted && ( // Keep hasMounted for dayjs if it depends on client-side rendering
               <p className="text-xs text-gray-500">
-                {isLoading? "" : dayjs(new Date().toLocaleString()).format("ddd, MMMM D, YYYY")}
+                {isLoading ? "" : dayjs(new Date().toLocaleString()).format("ddd, MMMM D, YYYY")}
               </p>
             )}
-
           </div>
-      </div>
+        </div>
      
-
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
+
           <div className="mr-5 hidden md:block">
               <LanguageSwitcher />
           </div>
@@ -126,11 +118,10 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
             onClick={() => props.handleToggle()}
             className="mr-5 border-[1px] border-gray-200 rounded-full p-2 cursor-pointer hover:bg-gray-100 relative"
           >
-            {hasMounted && (
-              <div className="absolute -top-1 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
-                {itemCount}
-              </div>
-            )}
+            {/* The itemCount from Zustand is always reactive, no need for hasMounted here */}
+            <div className="absolute -top-1 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+              {itemCount}
+            </div>
             <IoCartOutline size={28} />
           </div>
 
@@ -144,20 +135,18 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
             onClick={handleToggle}
           >
             <span className="sr-only">Open user menu</span>
-              {
-              isLoading ? (
-                <div className="w-12 h-12 rounded-full bg-gray-100 animate-pulse"></div>
-              ) :
+            {isLoading ? (
+              <div className="w-12 h-12 rounded-full bg-gray-100 animate-pulse"></div>
+            ) : (
               <Image
-                className="rounded-full" // Removed w-12 h-12 here
+                className="rounded-full"
                 height={48}
                 width={48}
                 src={data?.userImgUrl || "/man.png"}
                 alt="user photo"
                 priority
               />
-              }
-
+            )}
           </button>
 
           {isOpen && (

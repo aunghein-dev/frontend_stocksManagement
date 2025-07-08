@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@ericblade/quagga2": "^1.8.4",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.1.1",
     "@mui/icons-material": "^7.1.1",
@@ -28,6 +29,7 @@
     "lucide-react": "^0.513.0",
     "marked": "^15.0.12",
     "next": "15.3.2",
+    "quagga": "^0.12.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.58.1",

@@ -7,10 +7,8 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useInfo } from "@/hooks/useInfo";
 import dayjs from "dayjs";
-// imgDataURLtoFile is not directly used in this version of handleItemImageSelected, keeping for completeness if other parts of project use it
-import imgDataURLtoFile from "@/components/utils/imgDataURLtoFile";
-import ImageUploadComponent from "@/components/common/ImageUploadComponent"; // Import the reusable component
-import { XMarkIcon } from '@heroicons/react/24/outline'; // For remove item button
+import ImageUploadComponent from "@/components/common/ImageUploadComponent";
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRouter } from "next/navigation";
 import { useModalStore } from "@/store/modalStore";
 import ColorThief from 'colorthief';
@@ -22,13 +20,14 @@ type NewStockItem = {
   itemImage: string | null; // Data URL for preview, or null if no image/removed
   itemColorHex: string;
   itemQuantity: number;
-  _tempFile?: File | null; // Holds the actual File object if selected
-  _imageError?: string | null; // Client-side image specific error
-  _detectedPalette?: string[] | null; // New: To store HEX colors of the detected palette
+  barcodeNo: string; // <--- NEW: Barcode number for each variant
+  _tempFile?: File | null;
+  _imageError?: string | null;
+  _detectedPalette?: string[] | null;
 };
 
 type NewStockGroup = {
-  groupImage: string | null; // Data URL for preview, or null if no image/removed
+  groupImage: string | null;
   groupName: string;
   groupUnitPrice: number;
   releasedDate: string; // YYYY-MM-DD format
@@ -37,7 +36,7 @@ type NewStockGroup = {
 
 // --- Helper for Initial Form State ---
 const getInitialFormState = (): NewStockGroup => ({
-  groupImage: null, // Start with no image
+  groupImage: null,
   groupName: "",
   groupUnitPrice: 0,
   releasedDate: dayjs(new Date()).format('YYYY-MM-DD'),
@@ -53,38 +52,31 @@ export default function StockEntryForm() {
   const [submitting, setSubmitting] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
-  const [groupImageError, setGroupImageError] = useState<string | null>(null); // Specific error for group image
-  const [selectedGroupFile, setSelectedGroupFile] = useState<File | null>(null); // Actual File object for group image
+  const [groupImageError, setGroupImageError] = useState<string | null>(null);
+  const [selectedGroupFile, setSelectedGroupFile] = useState<File | null>(null);
 
-  // Use the useInfo hook to get business details
   const { business, isLoading: isBusinessInfoLoading, error: businessInfoError } = useInfo();
   const router = useRouter();
   const { t } = useTranslation();
-  // --- Effects ---
   const { openModal, closeModal } = useModalStore();
-const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
+  const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
 
-    // This useEffect controls the modal's open/close state
-    useEffect(() => {
-      let timer: NodeJS.Timeout | null = null;
-      if(isBusinessInfoLoading || !business) {
-        // Open the loading modal immediately when loading starts
-        openModal("loading");
-      } else {
-        // Close the modal after a short delay when loading finishes
-        // This prevents flickering if the load is very fast
-        timer = setTimeout(() => {
-          closeModal();
-        }, 100); // FETCH_MODAL_DELAY = 100ms
+  // This useEffect controls the modal's open/close state for business info loading
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    if (isBusinessInfoLoading || !business) {
+      openModal("loading");
+    } else {
+      timer = setTimeout(() => {
+        closeModal();
+      }, 100);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
       }
-
-      // Cleanup function to clear the timer if the component unmounts
-      return () => {
-        if (timer) {
-          clearTimeout(timer);
-        }
-      };
-    }, [isBusinessInfoLoading, openModal, closeModal]); // Dependencies
+    };
+  }, [isBusinessInfoLoading, openModal, closeModal, business]); // Added business to dependencies
 
   // Effect to manage alert visibility
   useEffect(() => {
@@ -100,117 +92,8 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
 
   // --- Memoized Callbacks ---
 
-  // Handles adding a new item variant to the form
-  const addItem = useCallback(() => {
-    setForm((prev) => ({
-      ...prev,
-      items: [
-        ...prev.items,
-        {
-          tempId: Date.now(), // Unique client-side key
-          itemImage: null, // Start with no image
-          itemColorHex: "#000000", // Default to black
-          itemQuantity: 1,
-          _tempFile: null,
-          _imageError: null,
-          _detectedPalette: null, // Initialize palette as null
-        },
-      ],
-    }));
-  }, []);
-
-
-  const handleMultipleVariantsUpload = useCallback((files: FileList | null) => {
-      if (!files || files.length === 0) return;
-
-      const fileArray = Array.from(files);
-      const promises = fileArray.map((file, i) => {
-        return new Promise<NewStockItem>((resolve) => {
-          if (file.size > 1 * 1024 * 1024) {
-            resolve({
-              tempId: Date.now() + i,
-              itemImage: null,
-              itemColorHex: "#000000",
-              itemQuantity: 1,
-              _tempFile: null,
-              _imageError: "Image too large (max 1MB).",
-              _detectedPalette: null,
-            });
-            return;
-          }
-
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const imageDataUrl = reader.result as string;
-            const img = new Image();
-            // Remove crossOrigin for local files
-            img.src = imageDataUrl;
-
-            img.onload = () => {
-              try {
-                const colorThief = new ColorThief();
-                const dominantColor = colorThief.getColor(img);
-                const palette = colorThief.getPalette(img, 5);
-
-                const hexColor = rgbToHex(dominantColor[0], dominantColor[1], dominantColor[2]);
-                const hexPalette = palette.map((rgb: any) => rgbToHex(rgb[0], rgb[1], rgb[2]));
-
-                resolve({
-                  tempId: Date.now() + i,
-                  itemImage: imageDataUrl,
-                  itemColorHex: hexColor,
-                  itemQuantity: 1,
-                  _tempFile: file,
-                  _imageError: null,
-                  _detectedPalette: hexPalette,
-                });
-              } catch (error) {
-                console.error("Color detection failed:", error);
-                resolve({
-                  tempId: Date.now() + i,
-                  itemImage: imageDataUrl,
-                  itemColorHex: "#000000",
-                  itemQuantity: 1,
-                  _tempFile: file,
-                  _imageError: null,
-                  _detectedPalette: null,
-                });
-              }
-            };
-
-            img.onerror = () => {
-              resolve({
-                tempId: Date.now() + i,
-                itemImage: null,
-                itemColorHex: "#000000",
-                itemQuantity: 1,
-                _tempFile: null,
-                _imageError: "Failed to load image.",
-                _detectedPalette: null,
-              });
-            };
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-
-      Promise.all(promises).then((newItems) => {
-        const validNewItems = newItems.filter((item) => item.itemImage !== null);
-        if (validNewItems.length > 0) {
-          setForm((prev) => ({
-            ...prev,
-            items: [...prev.items, ...validNewItems],
-          }));
-        }
-        console.log("✅ New item variants added:", validNewItems.length);
-        console.log("📦 Total item count:", form.items.length + validNewItems.length);
-      });
-    }, []);
-
-
   // Helper function to convert RGB to Hex
   const rgbToHex = (r: number, g: number, b: number): string => {
-    // Ensure numbers are within 0-255 range and are integers
     const toHex = (c: number) => {
       const hex = Math.round(c).toString(16);
       return hex.length === 1 ? "0" + hex : hex;
@@ -219,11 +102,123 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
   };
 
 
+  // Handles adding a new item variant to the form
+  const addItem = useCallback(() => {
+    setForm((prev) => ({
+      ...prev,
+      items: [
+        ...prev.items,
+        {
+          tempId: Date.now(),
+          itemImage: null,
+          itemColorHex: "#000000",
+          itemQuantity: 1,
+          barcodeNo: "", // <--- Initialize barcodeNo
+          _tempFile: null,
+          _imageError: null,
+          _detectedPalette: null,
+        },
+      ],
+    }));
+  }, []);
+
+  const handleMultipleVariantsUpload = useCallback((files: FileList | null) => {
+    if (!files || files.length === 0) return;
+
+    const fileArray = Array.from(files);
+    const promises = fileArray.map((file, i) => {
+      return new Promise<NewStockItem>((resolve) => {
+        if (file.size > 1 * 1024 * 1024) { // 1MB limit for individual variant images
+          resolve({
+            tempId: Date.now() + i,
+            itemImage: null,
+            itemColorHex: "#000000",
+            itemQuantity: 1,
+            barcodeNo: "", // <--- Initialize barcodeNo for multiple upload
+            _tempFile: null,
+            _imageError: "Image too large (max 1MB).",
+            _detectedPalette: null,
+          });
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const imageDataUrl = reader.result as string;
+          const img = new Image();
+          img.src = imageDataUrl; // No crossOrigin for local files
+
+          img.onload = () => {
+            try {
+              const colorThief = new ColorThief();
+              const dominantColor = colorThief.getColor(img);
+              const palette = colorThief.getPalette(img, 5);
+
+              const hexColor = rgbToHex(dominantColor[0], dominantColor[1], dominantColor[2]);
+              const hexPalette = palette.map((rgb: number[]) => rgbToHex(rgb[0], rgb[1], rgb[2]));
+
+              resolve({
+                tempId: Date.now() + i,
+                itemImage: imageDataUrl,
+                itemColorHex: hexColor,
+                itemQuantity: 1,
+                barcodeNo: "", // <--- Initialize barcodeNo for multiple upload
+                _tempFile: file,
+                _imageError: null,
+                _detectedPalette: hexPalette,
+              });
+            } catch (error) {
+              console.error("Color detection failed:", error);
+              resolve({
+                tempId: Date.now() + i,
+                itemImage: imageDataUrl,
+                itemColorHex: "#000000",
+                itemQuantity: 1,
+                barcodeNo: "", // <--- Initialize barcodeNo
+                _tempFile: file,
+                _imageError: null,
+                _detectedPalette: null,
+              });
+            }
+          };
+
+          img.onerror = () => {
+            resolve({
+              tempId: Date.now() + i,
+              itemImage: null,
+              itemColorHex: "#000000",
+              itemQuantity: 1,
+              barcodeNo: "", // <--- Initialize barcodeNo
+              _tempFile: null,
+              _imageError: "Failed to load image.",
+              _detectedPalette: null,
+            });
+          };
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(promises).then((newItems) => {
+      const validNewItems = newItems.filter((item) => item.itemImage !== null);
+      if (validNewItems.length > 0) {
+        setForm((prev) => ({
+          ...prev,
+          items: [...prev.items, ...validNewItems],
+        }));
+      }
+      // Log for debugging
+      // console.log("✅ New item variants added:", validNewItems.length);
+      // console.log("📦 Total item count:", form.items.length + validNewItems.length); // This might be stale due to closure
+    });
+  }, []); // form.items is removed from deps to prevent re-creating handleMultipleVariantsUpload unnecessarily
+
   // Handles updating a specific field of an item variant
+  // Added 'barcodeNo' as a possible key
   const updateItem = useCallback((index: number, key: keyof NewStockItem, value: string | number | string[] | null) => {
     setForm((prev) => {
       const updatedItems = [...prev.items];
-      // Type assertion for dynamically setting properties that might include internal ones
+      // Type assertion for dynamically setting properties
       (updatedItems[index] as any)[key] = value;
       return { ...prev, items: updatedItems };
     });
@@ -231,9 +226,9 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
 
   // Handles image selection for the main group image
   const handleGroupImageSelected = useCallback((file: File | null) => {
-    setGroupImageError(null); // Clear previous errors
+    setGroupImageError(null);
     if (file) {
-      if (file.size > 10 * 1024 * 1024) { //: 10MB limit
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit
         setGroupImageError("Group image must be less than 10MB.");
         setSelectedGroupFile(null);
         setForm(prev => ({ ...prev, groupImage: null }));
@@ -256,25 +251,24 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
     setForm((prev) => {
       const updatedItems = [...prev.items];
       const itemToUpdate = { ...updatedItems[index] };
-      itemToUpdate._imageError = null; // Clear any previous item image error
+      itemToUpdate._imageError = null;
 
       if (file) {
-        if (file.size > 10 * 1024 * 1024) { //: 1MB limit for item images
-          itemToUpdate._imageError = `Image too large (max 10MB).`;
+        if (file.size > 1 * 1024 * 1024) { // 1MB limit for item images
+          itemToUpdate._imageError = `Image too large (max 1MB).`; // Corrected limit in message
           itemToUpdate._tempFile = null;
           itemToUpdate.itemImage = null;
-          itemToUpdate.itemColorHex = "#000000"; // Reset color if error
-          itemToUpdate._detectedPalette = null; // Clear palette if error
+          itemToUpdate.itemColorHex = "#000000";
+          itemToUpdate._detectedPalette = null;
         } else {
           itemToUpdate._tempFile = file;
           const reader = new FileReader();
           reader.onloadend = () => {
             const imageDataUrl = reader.result as string;
-            itemToUpdate.itemImage = imageDataUrl; // Set image preview
+            itemToUpdate.itemImage = imageDataUrl;
 
-            // --- ColorThief Integration ---
             const img = new Image();
-            img.crossOrigin = 'Anonymous'; // Needed for cross-origin images, though local files usually don't need it
+            img.crossOrigin = 'Anonymous';
             img.src = imageDataUrl;
             img.onload = () => {
               try {
@@ -282,13 +276,11 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
                 const dominantColor = colorThief.getColor(img);
                 const hexColor = rgbToHex(dominantColor[0], dominantColor[1], dominantColor[2]);
 
-                // Get a palette of dominant colors (e.g., top 5)
-                const palette = colorThief.getPalette(img, 5); // Get 5 colors
+                const palette = colorThief.getPalette(img, 5);
                 const hexPalette = palette.map((rgb: number[]) => rgbToHex(rgb[0], rgb[1], rgb[2]));
 
                 setForm(current => {
                   const nextItems = [...current.items];
-                  // Update image, detected dominant color, and the palette
                   nextItems[index] = {
                     ...nextItems[index],
                     itemImage: imageDataUrl,
@@ -304,8 +296,8 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
                   nextItems[index] = {
                     ...nextItems[index],
                     itemImage: imageDataUrl,
-                    itemColorHex: "#000000", // Default to black on error
-                    _detectedPalette: null, // Clear palette on error
+                    itemColorHex: "#000000",
+                    _detectedPalette: null,
                   };
                   return { ...current, items: nextItems };
                 });
@@ -318,8 +310,8 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
                 nextItems[index] = {
                   ...nextItems[index],
                   itemImage: imageDataUrl,
-                  itemColorHex: "#000000", // Default to black on error
-                  _detectedPalette: null, // Clear palette on error
+                  itemColorHex: "#000000",
+                  _detectedPalette: null,
                 };
                 return { ...current, items: nextItems };
               });
@@ -329,15 +321,12 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
         }
       } else {
         itemToUpdate._tempFile = null;
-        itemToUpdate.itemImage = null; // Clear preview
-        itemToUpdate.itemColorHex = "#000000"; // Reset color
-        itemToUpdate._detectedPalette = null; // Clear palette
+        itemToUpdate.itemImage = null;
+        itemToUpdate.itemColorHex = "#000000";
+        itemToUpdate._detectedPalette = null;
+        itemToUpdate.barcodeNo = ""; // Clear barcode if image removed
       }
       updatedItems[index] = itemToUpdate;
-
-      // Note: The main setForm call here will be overridden by the one inside reader.onloadend
-      // to ensure the color is updated AFTER the image is loaded.
-      // So, this initial setForm is mainly for the _tempFile and _imageError updates.
       return { ...prev, items: updatedItems };
     });
   }, []);
@@ -345,16 +334,16 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
   // Resets the entire form to its initial state
   const resetForm = useCallback(() => {
     setForm(getInitialFormState());
-    setSelectedGroupFile(null); // Clear selected group file
-    setGroupImageError(null); // Clear group image errors
-    setSubmissionError(null); // Clear submission errors
+    setSelectedGroupFile(null);
+    setGroupImageError(null);
+    setSubmissionError(null);
   }, []);
 
   // --- Form Submission Handler ---
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
-    setSubmissionError(null); // Clear previous errors
+    setSubmissionError(null);
 
     // --- Pre-submission Validation ---
     if (isBusinessInfoLoading) {
@@ -376,19 +365,19 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
     }
 
     if (!form.groupName.trim()) {
-        setSubmitting(false);
-        setSubmissionError(t("lbl_reqrGpNn"));
-        return;
+      setSubmitting(false);
+      setSubmissionError(t("lbl_reqrGpNn"));
+      return;
     }
     if (form.groupUnitPrice <= 0) {
-        setSubmitting(false);
-        setSubmissionError(t("lbl_limitPrice"));
-        return;
+      setSubmitting(false);
+      setSubmissionError(t("lbl_limitPrice"));
+      return;
     }
     if (!form.releasedDate) {
-        setSubmitting(false);
-        setSubmissionError(t("lbl_rldDatRequired"));
-        return;
+      setSubmitting(false);
+      setSubmissionError(t("lbl_rldDatRequired"));
+      return;
     }
 
     if (form.items.length === 0) {
@@ -399,15 +388,19 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
 
     // Validate individual items
     const invalidItem = form.items.find(item =>
-        !item._tempFile || item.itemQuantity < 0 || item._imageError
+      !item._tempFile || item.itemQuantity <= 0 || item._imageError || !item.barcodeNo.trim()
     );
     if (invalidItem) {
       setSubmitting(false);
-      setSubmissionError(
-        invalidItem._imageError ||
-        (item => !item._tempFile ? t("lbl_limitImg") :
-        "All color variants must have a quantity greater than zero.")(invalidItem)
-      );
+      if (invalidItem._imageError) {
+          setSubmissionError(invalidItem._imageError);
+      } else if (!invalidItem._tempFile) {
+          setSubmissionError(t("lbl_limitImg"));
+      } else if (invalidItem.itemQuantity <= 0) {
+          setSubmissionError(t("lbl_qtyGtZero")); // New translation key
+      } else if (!invalidItem.barcodeNo.trim()) {
+          setSubmissionError(t("lbl_barcodeRequired")); // New translation key
+      }
       return;
     }
 
@@ -415,10 +408,8 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
       const bizId = business.businessId;
       const formData = new FormData();
 
-      // Append groupImage file
       formData.append("groupImage", selectedGroupFile);
 
-      // Prepare item data for JSON and item image files for FormData
       const itemFiles: File[] = [];
       const itemDataForJson = form.items.map((item, index) => {
         if (item._tempFile) {
@@ -427,16 +418,14 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
         return {
           itemColorHex: item.itemColorHex,
           itemQuantity: item.itemQuantity,
-          // itemImage is NOT sent in JSON as it's a file
+          barcodeNo: item.barcodeNo.trim(), 
         };
       });
 
-      // Append all collected item image files under a single key "itemImages"
       itemFiles.forEach(file => {
         formData.append("itemImages", file);
       });
 
-      // Append the JSON data for the group and its items
       const groupJson = {
         groupName: form.groupName,
         groupUnitPrice: form.groupUnitPrice,
@@ -445,18 +434,17 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
       };
       formData.append("json", new Blob([JSON.stringify(groupJson)], { type: "application/json" }));
 
-      // --- API Call ---
       const response = await axios.post(`${API_BASE_URL}/stkG/biz/${bizId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
 
       if (response.status === 200 || response.status === 201) {
-          setShowSuccessAlert(true);
-          resetForm(); // Clear the form on successful submission
+        setShowSuccessAlert(true);
+        resetForm();
       } else {
-          console.warn("Unexpected response status:", response.status, response.data);
-          setSubmissionError(`${t("msg_submtErr")}: ${response.status}`);
+        console.warn("Unexpected response status:", response.status, response.data);
+        setSubmissionError(`${t("msg_submtErr")}: ${response.status}`);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -468,7 +456,7 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
     } finally {
       setSubmitting(false);
     }
-  }, [API_BASE_URL, business?.businessId, businessInfoError, isBusinessInfoLoading, form, resetForm, selectedGroupFile, groupImageError]);
+  }, [API_BASE_URL, business?.businessId, businessInfoError, isBusinessInfoLoading, form, resetForm, selectedGroupFile, groupImageError, t]);
 
 
   if (businessInfoError) {
@@ -491,7 +479,6 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
         style={{ height: "calc(100dvh - 119px)" }}
       >
   
-
         {/* Success Alert */}
         {showSuccessAlert && (
           <div className="fixed top-26 right-6.5 z-60">
@@ -519,7 +506,6 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
 
         {/* Back Link and Title */}
         <div className="flex items-center justify-between">
-
             <button
               type="button"
               onClick={() => router.back()}
@@ -546,8 +532,7 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
               </svg>
               {t("btTxt_back")}
             </button>
-
-        
+          
           <h2 className="text-xl font-semibold text-gray-600 mr-3">{t("hd_stockentry")}</h2>
         </div>
 
@@ -557,7 +542,7 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
           label={t("lbl_gpImg")}
           currentImageUrl={form.groupImage}
           onImageSelected={handleGroupImageSelected}
-          isLoading={false} // No specific loading for this component, main form handles it
+          isLoading={false}
           error={groupImageError}
           className="p-2 rounded-sm border-[0.5px] border-gray-300"
         />
@@ -585,8 +570,7 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
               pattern="^\d*\.?\d*$"
               value={form.groupUnitPrice === 0 && !String(form.groupUnitPrice).includes('.') ? "" : form.groupUnitPrice}
               onChange={(e) => {
-                const raw = e.target.value.replace(/[^\d.]/g, ''); // Allow only digits and one dot
-                // Prevent multiple dots
+                const raw = e.target.value.replace(/[^\d.]/g, '');
                 const parts = raw.split('.');
                 if (parts.length > 2) return;
 
@@ -626,7 +610,6 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
                 ref={multipleUploadInputRef}
                 onChange={(e) => {
                   handleMultipleVariantsUpload(e.target.files);
-                  // Reset input to allow re-uploading the same files
                   e.target.value = "";
                 }}
               />
@@ -638,7 +621,6 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
                 {t("btnTxt_addMultipleVariants")}
               </button>
 
-
               <button
                 type="button"
                 onClick={addItem}
@@ -647,7 +629,6 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
                 {t("btnTxt_addvarient")}
               </button>
             </div>
-          
           </div>
 
           <div className="space-y-2 p-2 rounded-sm border-[0.5px] border-gray-300">
@@ -657,7 +638,7 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
                   key={item.tempId}
                   className="flex flex-col md:flex-row justify-between border-[0.5px] border-gray-300 p-2 rounded-sm shadow-xs text-sm items-center gap-2"
                 >
-                  <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+                  <div className="flex flex-row sm:flex-row items-center gap-4 w-full">
                     {/* Item Image Upload with ImageUploadComponent */}
                     <div className="flex-grow">
                         <ImageUploadComponent
@@ -670,9 +651,9 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
                         />
                     </div>
 
-                    {/* Color and Quantity */}
-                    <div className="flex flex-col gap-2 mt-2 sm:mt-0">
-                      <div>
+                    {/* Color, Quantity, and Barcode */}
+                    <div className="flex flex-col gap-2 mt-2 sm:mt-0 flex-grow">
+                      <div className="max-w-[150px]">
                         <label htmlFor={`itemColor-${item.tempId}`} className="block font-medium text-gray-700 mb-1">Color (Detected)</label>
                         <input
                           id={`itemColor-${item.tempId}`}
@@ -707,14 +688,27 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
                           id={`itemQuantity-${item.tempId}`}
                           required
                           type="text"
-                          inputMode="numeric"         // 📱 shows number keyboard on mobile
-                          pattern="[0-9]*"            // 🚫 blocks non-numeric input on mobile
+                          inputMode="numeric"
+                          pattern="[0-9]*"
                           value={item.itemQuantity}
                           onChange={(e) => {
-                            const onlyDigits = e.target.value.replace(/\D/g, ""); // remove non-digits
+                            const onlyDigits = e.target.value.replace(/\D/g, "");
                             updateItem(index, "itemQuantity", onlyDigits === "" ? 0 : parseInt(onlyDigits));
                           }}
                           className="w-20 rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
+                        />
+                      </div>
+                      {/* --- NEW: Barcode Input Field --- */}
+                      <div className="max-w-[300px] mt-3">
+                        <label htmlFor={`barcodeNo-${item.tempId}`} className="block font-medium text-gray-700 mb-1">Barcode Number</label>
+                        <input
+                          id={`barcodeNo-${item.tempId}`}
+                          type="text"
+                          value={item.barcodeNo}
+                          onChange={(e) => updateItem(index, "barcodeNo", e.target.value)}
+                          required
+                          className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2.5 px-3 border-[0.5px]"
+                          placeholder="Enter barcode"
                         />
                       </div>
                     </div>
@@ -744,15 +738,14 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
           </div>
         </div>
 
-        {/* Submit Button */}
         {/* Submit Button and Loading Spinner */}
-        <div className="flex items-center justify-end gap-x-3 pt-4"> {/* This div now controls both */}
-          {submitting && ( // Show spinner ONLY when submitting
+        <div className="flex items-center justify-end gap-x-3 pt-4">
+          {submitting && (
             <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
           )}
           <button
             type="submit"
-            disabled={submitting || isBusinessInfoLoading || !!businessInfoError} // Simplified disabled logic
+            disabled={submitting || isBusinessInfoLoading || !!businessInfoError}
             className={`py-2 px-4 rounded-sm text-sm text-white ${
               (submitting || isBusinessInfoLoading || !!businessInfoError)
                 ? "bg-gray-400 cursor-not-allowed"
@@ -762,7 +755,6 @@ const multipleUploadInputRef = useRef<HTMLInputElement | null>(null);
             {submitting ? t("btTxt_saving") : t("btnTxt_saveEntry")}
           </button>
         </div>
-        
       </form>
     </div>
   );

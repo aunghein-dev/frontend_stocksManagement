@@ -12,6 +12,20 @@ export interface CartGroup {
   item: CartItem[];
 }
 
+export interface Stock {
+    groupId: number;
+    groupImage: string;
+    groupName: string;
+    groupUnitPrice: number;
+    releasedDate: string;
+    items: {
+        itemId: number;
+        itemImage: string;
+        itemColorHex: string;
+        itemQuantity: number; // Important for stock check
+        barcodeNo: string; // The barcode we're searching by
+    }[];
+}
 
 const CART_KEY = "cartkey-doorpos.mm.com";
 
@@ -59,6 +73,49 @@ class Cart {
 
     this.saveCart();
   }
+
+  addItemByBarcode(barcode: string, allAvailableStocks: Stock[]): boolean {
+    let foundItemForCart: CartItem | null = null;
+    let foundGroupName: string = "";
+    let foundGroupId: number = 0;
+
+    for (const stockGroup of allAvailableStocks) {
+      const foundItem = stockGroup.items.find(item => item.barcodeNo === barcode);
+      if (foundItem) {
+        const currentItemInCart = this.cart
+            .find(group => group.groupId === stockGroup.groupId)
+            ?.item.find(item => item.itemId === foundItem.itemId);
+
+        const alreadyBought = currentItemInCart ? currentItemInCart.boughtQty : 0;
+        const availableInStock = foundItem.itemQuantity - alreadyBought;
+
+        if (availableInStock <= 0) {
+            console.warn(`Barcode ${barcode} found, but item ${foundItem.itemId} is out of available stock.`);
+            return false;
+        }
+
+        foundItemForCart = {
+          itemId: foundItem.itemId,
+          itemImage: foundItem.itemImage || "/Box.png",
+          colorHex: foundItem.itemColorHex,
+          unitPrice: stockGroup.groupUnitPrice,
+          boughtQty: 1,
+        };
+        foundGroupName = stockGroup.groupName;
+        foundGroupId = stockGroup.groupId;
+        break;
+      }
+    }
+
+    if (foundItemForCart) {
+      this.addItem(foundGroupId, foundGroupName, foundItemForCart);
+      return true;
+    } else {
+      console.warn(`Barcode ${barcode} not found in available stocks.`);
+      return false;
+    }
+  }
+
 
   removeItem(groupId: number, itemId: number) {
     this.cart = this.cart.map((group) => {

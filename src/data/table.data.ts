@@ -9,6 +9,7 @@ export type Stock = {
     itemImage: string;
     itemColorHex: string;
     itemQuantity: number;
+    barcodeNo: string;
   }[];
 }
 

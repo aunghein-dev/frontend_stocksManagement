@@ -9,15 +9,16 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Image from "next/image";
 import formatMoney from "@/components/utils/formatMoney";
 import dayjs from "dayjs";
-import { useTranslation } from "@/hooks/useTranslation"; // This hook is fine as is
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Product(props: Stock) {
   const { cart, addItem } = useCartStore();
   const [loaded, setLoaded] = useState(false);
   const colorSet = useMemo(() => Array.from(new Set(props.items.map(item => item.itemColorHex))), [props.items]);
+  // Removed selectedBarcode useMemo as its logic is now integrated into displayBarcode
   const [selectedColor, setSelectedColor] = useState("");
   const isColorSelected = selectedColor !== "";
-  const { t } = useTranslation(); // Use the translation hook
+  const { t } = useTranslation();
 
   const [alert, setAlert] = useState<{ type: "success" | "warning"; show: boolean }>({ type: "success", show: false });
 
@@ -37,6 +38,21 @@ export default function Product(props: Stock) {
 
   const totalStockQty = useMemo(() => props.items.reduce((sum, i) => sum + i.itemQuantity, 0), [props.items]);
   const colorQty = useMemo(() => props.items.filter(i => i.itemColorHex === selectedColor).reduce((sum, i) => sum + i.itemQuantity, 0), [selectedColor, props.items]);
+
+  // New useMemo for the barcode to display
+  const displayBarcode = useMemo(() => {
+    // If a specific color variant is selected, show its barcode
+    if (selectedItem?.barcodeNo) {
+      return selectedItem.barcodeNo;
+    }
+    // If no color is selected but there are items, show the barcode of the first item
+    // (assuming all items in a group share the same barcode, which your JSON suggests)
+    if (props.items.length > 0 && props.items[0].barcodeNo) {
+      return props.items[0].barcodeNo;
+    }
+    // Fallback if no barcode is found or no items
+    return '';
+  }, [selectedItem, props.items]);
 
   useEffect(() => {
     if (alert.show) {
@@ -59,7 +75,7 @@ export default function Product(props: Stock) {
       itemId: selectedItem.itemId,
       itemImage: selectedItem.itemImage,
       colorHex: selectedItem.itemColorHex,
-      unitPrice: props.groupUnitPrice,
+      unitPrice: props.groupUnitPrice, // Assuming groupUnitPrice is used for cart item
       boughtQty: 1,
     };
 
@@ -73,9 +89,9 @@ export default function Product(props: Stock) {
       return t("selectColor");
     }
     if (availableQty <= 0) {
-      return t("outOfStock"); // Use translation
+      return t("outOfStock");
     }
-    return t("addToCart"); // Use translation
+    return t("addToCart");
   }, [isColorSelected, availableQty, t]); 
 
   const isAddToCartDisabled = useMemo(() => {
@@ -131,7 +147,14 @@ export default function Product(props: Stock) {
        props.items.length > 1 &&
       (
         <div className="absolute top-2 left-2 bg-green-600 text-white px-3 py-1 text-sm rounded-sm">
-          {t("newProduct")} {/* Use translation */}
+          {t("newProduct")}
+        </div>
+      )}
+
+      {/* Barcode Display */}
+      {selectedColor && ( // Only render if displayBarcode has a value
+        <div className="absolute top-2 right-2 bg-white text-gray-800 px-3 py-1 text-sm rounded-sm">
+           {displayBarcode}
         </div>
       )}
 
@@ -143,7 +166,7 @@ export default function Product(props: Stock) {
         <div className="flex items-center justify-between relative">
           <span className="text-sm text-gray-600">{formatMoney(props.groupUnitPrice)} </span>
           <span className={`${props.items.length === 0 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}  font-semibold px-2.5 py-1 rounded-sm text-xs`}>
-            {t("inStock")}: {isColorSelected ? colorQty : totalStockQty} {/* Use translation */}
+            {t("inStock")}: {isColorSelected ? colorQty : totalStockQty}
           </span>
 
           {alert.show && (
@@ -152,10 +175,10 @@ export default function Product(props: Stock) {
               border: "1px solid #e5e7eb",
             }}>
               <AlertTitle style={{ fontSize: "0.75rem" }}>
-                {alert.type === "success" ? t("success") : t("warning")} {/* Use translation */}
+                {alert.type === "success" ? t("success") : t("warning")}
               </AlertTitle>
               <strong>
-                {alert.type === "success" ? t("addedToCart") : t("notInStock")} {/* Use translation */}
+                {alert.type === "success" ? t("addedToCart") : t("notInStock")}
               </strong>
             </Alert>
           )}
@@ -187,7 +210,7 @@ export default function Product(props: Stock) {
             }`}
           disabled={isAddToCartDisabled}
         >
-           {props.items.length > 0 ? buttonText : t("outOfStock")} {/* Use translation */}
+           {props.items.length > 0 ? buttonText : t("outOfStock")}
         </button>
       </div>
     </Card>

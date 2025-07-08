@@ -1,16 +1,20 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import Product from "@/components/data-display/card";
 import PaginationComponent from "@/components/data-display/atoms/pagination";
 import Search from "@/components/form/search";
 import Image from "next/image";
 import { useModalStore } from "@/store/modalStore";
 import { useFilteredStocks } from "@/hooks/useStocks";
-import type { Stock } from "@/data/table.data";
+import type { Stock } from "@/lib/classes/Cart"; // Correctly import Stock type from your Cart file
 import { useTranslation } from "@/hooks/useTranslation";
+import { useCartStore } from "@/lib/stores/useCartStore"; // Your Zustand store
+import { ScanBarcode, X as CloseIcon } from "lucide-react"; // Import X as CloseIcon for the modal close button
+
 
 const ITEMS_PER_PAGE = 24;
+const BARCODE_SCAN_DEBOUNCE_MS = 50; // Max time between characters in a barcode scan
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,28 +23,132 @@ export default function Home() {
   const { openModal, closeModal } = useModalStore();
   const { t } = useTranslation();
 
-  // Show modal loading when fetching
+  // State to control visibility of manual barcode scanner modal
+  const [openManualScanner, setOpenManualScanner] = useState(false);
+  // State to hold manual barcode input value
+  const [manualBarcodeInput, setManualBarcodeInput] = useState("");
+
+
+  // Access the addItemByBarcode action directly from the Zustand store
+  const addItemByBarcodeAction = useCartStore(state => state.addItemByBarcode);
+
+  const [loadingBarcode, setLoadingBarcode] = useState(false);
+  const [barcodeScanError, setBarcodeScanError] = useState<string | null>(null);
+
+  // State and ref for silent hardware scanning
+  const barcodeBuffer = useRef<string>("");
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+  // Ref for the manual input field for auto-focus
+  const manualInputRef = useRef<HTMLInputElement>(null);
+
+
+  // Open manual scanner modal and focus the input
+  const handleOpenScanner = () => {
+    setOpenManualScanner(true);
+    // Use a timeout to ensure modal is rendered before focusing
+    setTimeout(() => {
+      manualInputRef.current?.focus();
+    }, 0);
+  };
+
+  // Handle manual barcode submission
+  const handleManualBarcodeSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent page reload
+    if (manualBarcodeInput.trim()) {
+      handleBarcodeDetected(manualBarcodeInput.trim());
+      setManualBarcodeInput(""); // Clear input after submission
+      setOpenManualScanner(false); // Close the manual scanner modal
+    }
+  };
+
+  // Show modal loading when fetching initial data or processing barcode
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || loadingBarcode) {
       openModal("loading");
     } else {
       closeModal();
     }
-  }, [isLoading]);
+  }, [isLoading, loadingBarcode, openModal, closeModal]);
 
-  console.log(items);
-  
+  // Barcode detection and adding to cart logic
+  const handleBarcodeDetected = useCallback(async (barcode: string) => {
+    console.log("Barcode detected:", barcode);
+    setLoadingBarcode(true);
+    setBarcodeScanError(null); // Clear previous errors
 
-  // Filter stocks using search query
+    if (!items || items.length === 0) {
+      setBarcodeScanError("Product data not loaded yet. Cannot process barcode.");
+      setLoadingBarcode(false);
+      return;
+    }
+
+    try {
+      const addedSuccessfully = addItemByBarcodeAction(barcode, items);
+
+      if (addedSuccessfully) {
+        console.log(`Added item for barcode ${barcode} to cart.`);
+        // Optionally show a temporary success toast/notification
+      } else {
+        setBarcodeScanError(`Barcode "${barcode}" not found or item out of stock.`);
+      }
+    } catch (error: any) {
+      console.error("Error processing barcode:", error);
+      setBarcodeScanError(`An unexpected error occurred: ${error.message || 'Unknown error'}. Barcode: ${barcode}`);
+    } finally {
+      setLoadingBarcode(false);
+    }
+  }, [items, addItemByBarcodeAction]);
+
+  // Global keyboard listener for hardware scanner (only active when manual scanner is closed)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // If manual scanner is open, let its input handle key presses
+      if (openManualScanner) {
+        return;
+      }
+
+      if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
+        barcodeBuffer.current += event.key;
+      } else if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent default behavior like form submission
+        if (barcodeBuffer.current.length > 0) {
+          handleBarcodeDetected(barcodeBuffer.current);
+          barcodeBuffer.current = ""; // Clear buffer after processing
+        }
+      }
+
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+      debounceTimeout.current = setTimeout(() => {
+        barcodeBuffer.current = ""; // Clear buffer if no key pressed for a while
+        console.log("Barcode buffer cleared due to debounce.");
+      }, BARCODE_SCAN_DEBOUNCE_MS);
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, [handleBarcodeDetected, openManualScanner]); // openManualScanner is now a dependency
+
+  // Filter stocks using search query (including barcode search)
   const filteredStocks = useMemo(() => {
     if (!items) return [];
     if (!searchQuery) return items;
 
+    const lowerCaseSearchQuery = searchQuery.toLowerCase();
+
     return items.filter((stock: Stock) =>
-      stock.groupName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      stock.groupId.toString().includes(searchQuery) ||
+      stock.groupName.toLowerCase().includes(lowerCaseSearchQuery) ||
+      stock.groupId.toString().includes(lowerCaseSearchQuery) ||
       stock.items.some(item =>
-        item.itemColorHex.toLowerCase().includes(searchQuery.toLowerCase())
+        item.itemColorHex.toLowerCase().includes(lowerCaseSearchQuery) ||
+        (item.barcodeNo && item.barcodeNo.toLowerCase().includes(lowerCaseSearchQuery))
       )
     );
   }, [items, searchQuery]);
@@ -58,6 +166,7 @@ export default function Home() {
 
   return (
     <section className="h-full">
+
       {/* Top bar */}
       <div className="flex items-center mb-3 min-w-0 gap-2 justify-between">
         <Search
@@ -71,8 +180,8 @@ export default function Home() {
         />
       </div>
 
-      {/* Loading Spinner (fallback in case modal fails) */}
-      {isLoading && (
+      {/* Loading Spinner */}
+      {(isLoading || loadingBarcode) && (
         <div
           className="flex-1 flex items-center justify-center"
           style={{ height: "calc(100dvh - 170px)" }}
@@ -81,14 +190,23 @@ export default function Home() {
         </div>
       )}
 
+      {/* Error message from barcode scan */}
+      {barcodeScanError && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong className="font-bold">{t("error")}! </strong>
+          <span className="block sm:inline">{barcodeScanError}</span>
+          <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <svg onClick={() => setBarcodeScanError(null)} className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>{t("close")}</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.697l-2.651 2.652a1.2 1.2 0 1 1-1.697-1.697L8.303 10 5.651 7.348a1.2 1.2 0 1 1 1.697-1.697L10 8.303l2.651-2.652a1.2 1.2 0 1 1 1.697 1.697L11.697 10l2.651 2.651a1.2 1.2 0 0 1 0 1.698z"/></svg>
+          </span>
+        </div>
+      )}
+
       {/* No Results */}
-      {!isLoading && currentItems.length === 0 && (
+      {!isLoading && !loadingBarcode && currentItems.length === 0 && (
         <div
           className="w-full flex flex-col items-center justify-center"
           style={{ height: "calc(100dvh - 170px)" }}
         >
-
-          
           <div className="relative w-[300px] h-[300px] flex flex-col justify-end items-center">
             <Image
               src="/noitemsfound.svg"
@@ -98,14 +216,14 @@ export default function Home() {
               className="object-contain"
             />
             <p className="text-gray-500 text-md font-bold absolute bottom-7 animate-pulse">
-              No items found
+              {t("noItemsFound")}
             </p>
           </div>
         </div>
       )}
 
       {/* Product Grid */}
-      {!isLoading && currentItems.length > 0 && (
+      {!isLoading && !loadingBarcode && currentItems.length > 0 && (
         <div className="px-1 py-1 rounded-sm bg-white">
           <div
             className="flex-1 overflow-y-auto custom-scrollbar"
@@ -130,6 +248,56 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Manual Barcode Scanner Modal */}
+      {openManualScanner && (
+        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-90">
+          <div className="relative flex flex-col gap-4 p-6 bg-white shadow-xl border border-gray-200 rounded-lg max-w-sm w-full">
+            <h3 className="text-lg font-semibold">{t("manualBarcodeEntry")}</h3>
+            <button
+              onClick={() => {
+                setOpenManualScanner(false);
+                setManualBarcodeInput(""); // Clear input on close
+                setBarcodeScanError(null); // Clear any error
+              }}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+            >
+              <CloseIcon className="w-6 h-6" />
+            </button>
+            <form onSubmit={handleManualBarcodeSubmit} className="flex flex-col gap-3">
+              <input
+                ref={manualInputRef}
+                type="text"
+                value={manualBarcodeInput}
+                onChange={(e) => setManualBarcodeInput(e.target.value)}
+                placeholder={t("enterBarcode")}
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                autoFocus // Auto-focus when modal opens
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors"
+              >
+                {t("addManually")}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+
+       {/* Fixed Scan Barcode Button */}
+       <div className="fixed right-0 top-1/2 -translate-y-1/2 transform flex flex-col gap-2 p-2 bg-white shadow-xl border border-gray-200 rounded-l-full z-40">
+            <button
+              title={t("openManualScanner")} // Use translation for title
+              onClick={handleOpenScanner}
+              className="bg-gradient-to-br from-blue-500 to-red-400 hover:from-blue-700 hover:to-red-500
+              text-white p-2 rounded-full shadow-lg transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 cursor-pointer"
+            >
+              <ScanBarcode className="w-5 h-5" />
+            </button>
+        </div>
+
     </section>
   );
 }

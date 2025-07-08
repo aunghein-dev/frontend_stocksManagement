@@ -7,10 +7,10 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useParams, useRouter } from "next/navigation";
 import { useInfo } from "@/hooks/useInfo";
-import ImageUploadComponent from "@/components/common/ImageUploadComponent"; // Import the reusable component
-import { XMarkIcon } from '@heroicons/react/24/outline'; // For remove item button
+import ImageUploadComponent from "@/components/common/ImageUploadComponent";
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useModalStore } from "@/store/modalStore";
-import ColorThief from 'colorthief'; // IMPORT COLOR THIEF
+import ColorThief from 'colorthief';
 import { useTranslation } from "@/hooks/useTranslation";
 
 // --- Type Definitions ---
@@ -19,15 +19,16 @@ type StockItem = {
   itemImage: string | null; // Data URL or external URL for preview
   itemColorHex: string;
   itemQuantity: number;
+  barcodeNo: string; // <--- NEW: Barcode number for each variant
   _tempFile?: File | null; // Holds the actual File object for new uploads
   _imageError?: string | null; // Client-side image specific error
   _isExistingImage: boolean; // True if itemImage is a URL from the server
-  _detectedPalette?: string[] | null; // NEW: To store HEX colors of the detected palette
+  _detectedPalette?: string[] | null; // To store HEX colors of the detected palette
 };
 
 type Stock = {
   groupId: number;
-  groupImage: string | null; // Data URL or external URL for preview
+  groupImage: string | null;
   groupName: string;
   groupUnitPrice: number;
   releasedDate: string;
@@ -36,13 +37,13 @@ type Stock = {
 
 // Form state type, with groupId added back to track fetched ID
 type FormState = Omit<Stock, "groupId"> & {
-  groupId: number | null; // ADDED: To track the groupId of the currently loaded data
+  groupId: number | null; // To track the groupId of the currently loaded data
   _groupTempFile: File | null;
   _groupImageError: string | null;
 };
 
 const getInitialFormState = (): FormState => ({
-  groupId: null, // Initialized to null
+  groupId: null,
   groupImage: null,
   groupName: "",
   groupUnitPrice: 0,
@@ -67,7 +68,6 @@ export default function StockEditForm() {
   const router = useRouter();
   const params = useParams();
 
-  // Ensure groupId is always a string for API calls
   const groupIdParam = Array.isArray(params.groupId) ? params.groupId[0] : (params.groupId as string);
 
   // --- State Management ---
@@ -76,8 +76,7 @@ export default function StockEditForm() {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
-  // NEW STATE: To track if initial data for the current group has been loaded
-  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false); // HIGHLIGHT: NEW STATE ADDED
+  const [hasFetchedInitialData, setHasFetchedInitialData] = useState(false);
 
   const { business, isLoading: isBusinessInfoLoading, error: businessInfoError } = useInfo();
   const bizId = business?.businessId;
@@ -87,7 +86,6 @@ export default function StockEditForm() {
 
   // --- Initial Data Fetch Effect ---
   useEffect(() => {
-    // Ensure bizId and groupId from params are available
     if (!bizId || !groupIdParam) {
       if (!bizId) {
         setFetchError("Business ID not available. Please ensure you are logged in.");
@@ -97,25 +95,18 @@ export default function StockEditForm() {
       return;
     }
 
-    // Convert groupIdParam to a number for comparison
     const currentNumericGroupId = parseInt(groupIdParam);
 
-    // HIGHLIGHT: REVISED CONDITION FOR INITIAL FETCH
-    // Prevents re-fetching if data has already been successfully loaded for this specific groupId
-    // unless there was a previous fetchError that needs a retry.
     if (hasFetchedInitialData && !fetchError && form.groupId === currentNumericGroupId) {
       return;
     }
 
     const fetchGroupData = async () => {
-      setSubmittingForm(false); // Ensure submission state is off during initial fetch
-      setFetchError(null); // Clear any previous fetch errors
-      // Only reset form completely if it's a new groupId or failed previous fetch
-      // Otherwise, keep current form state to avoid flicker while refetching if needed
+      setSubmittingForm(false);
+      setFetchError(null);
       if (form.groupId !== currentNumericGroupId || !hasFetchedInitialData) {
-         setForm(getInitialFormState()); // Reset form state before fetching new data for a different group
+         setForm(getInitialFormState());
       }
-
 
       try {
         const response = await axios.get<Stock>(`${API_BASE_URL}/biz/${bizId}/stkG/${groupIdParam}`, {
@@ -126,7 +117,7 @@ export default function StockEditForm() {
         if (selectedGroupData && selectedGroupData.groupName) {
           setForm((prevForm) => ({
             ...prevForm,
-            groupId: selectedGroupData.groupId, // HIGHLIGHT: Store fetched groupId in form state
+            groupId: selectedGroupData.groupId,
             groupImage: selectedGroupData.groupImage || null,
             groupName: selectedGroupData.groupName || "",
             groupUnitPrice: selectedGroupData.groupUnitPrice || 0,
@@ -134,17 +125,18 @@ export default function StockEditForm() {
             items: selectedGroupData.items.map(item => ({
               ...item,
               itemImage: item.itemImage || null,
+              barcodeNo: item.barcodeNo || "", // <--- Initialize barcodeNo from fetched data
               _tempFile: null,
               _imageError: null,
               _isExistingImage: true,
-              _detectedPalette: null, // Initialize palette for existing items
+              _detectedPalette: null,
             })),
           }));
-          setHasFetchedInitialData(true); // HIGHLIGHT: Set to true on successful fetch
+          setHasFetchedInitialData(true);
         } else {
           setFetchError("Stock group data is empty or invalid.");
           router.push("/stocks");
-          setHasFetchedInitialData(true); // HIGHLIGHT: Still set to true if data is invalid/empty to stop loading
+          setHasFetchedInitialData(true);
         }
       } catch (error) {
         console.error("Error fetching stock group data:", error);
@@ -154,12 +146,12 @@ export default function StockEditForm() {
           setFetchError("Failed to load stock data. Please try again.");
         }
         router.push("/stocks");
-        setHasFetchedInitialData(true); // HIGHLIGHT: Set to true even on fetch error to stop indefinite loading
+        setHasFetchedInitialData(true);
       }
     };
 
     fetchGroupData();
-  }, [groupIdParam, API_BASE_URL, bizId, router, fetchError, hasFetchedInitialData, form.groupId]); // HIGHLIGHT: REMOVED form.groupName, ADDED hasFetchedInitialData, form.groupId
+  }, [groupIdParam, API_BASE_URL, bizId, router, fetchError, hasFetchedInitialData, form.groupId]);
 
   // --- Alert Visibility Effect ---
   useEffect(() => {
@@ -186,20 +178,22 @@ export default function StockEditForm() {
           itemImage: null,
           itemColorHex: "#000000",
           itemQuantity: 0,
+          barcodeNo: "", // <--- Initialize barcodeNo for new items
           _tempFile: null,
           _imageError: null,
           _isExistingImage: false,
-          _detectedPalette: null, // Initialize palette for new items
+          _detectedPalette: null,
         },
       ],
     }));
   }, []);
 
   // Handles updating a specific field of an item variant
+  // Now includes 'barcodeNo' as a possible key
   const updateItem = useCallback((index: number, key: keyof StockItem, value: string | number | string[] | null) => {
     setForm((prev) => {
       const updatedItems = [...prev.items];
-      (updatedItems[index] as any)[key] = value; // Type assertion
+      (updatedItems[index] as any)[key] = value;
       return { ...prev, items: updatedItems };
     });
   }, []);
@@ -228,31 +222,29 @@ export default function StockEditForm() {
   const handleItemImageSelected = useCallback((index: number, file: File | null) => {
     setForm((prev) => {
       const updatedItems = [...prev.items];
-      const itemToUpdate: StockItem = { ...updatedItems[index], _imageError: null, _tempFile: null, _detectedPalette: null }; // Reset palette on new image
+      const itemToUpdate: StockItem = { ...updatedItems[index], _imageError: null, _tempFile: null, _detectedPalette: null };
       itemToUpdate._isExistingImage = false;
 
       if (file) {
-        if (file.size > 10 * 1024 * 1024) {
-          itemToUpdate._imageError = `Image too large (max 10MB).`;
+        if (file.size > 1 * 1024 * 1024) { // 1MB limit for item images
+          itemToUpdate._imageError = `Image too large (max 1MB).`;
           itemToUpdate._tempFile = null;
           itemToUpdate.itemImage = null;
-          itemToUpdate.itemColorHex = "#000000"; // Reset color if error
-          itemToUpdate._detectedPalette = null; // Clear palette if error
+          itemToUpdate.itemColorHex = "#000000";
+          itemToUpdate._detectedPalette = null;
         } else {
           itemToUpdate._tempFile = file;
           const reader = new FileReader();
           reader.onloadend = () => {
             const imageDataUrl = reader.result as string;
-            // Temporarily set itemImage for preview and then detect colors
             setForm(current => {
               const nextItems = [...current.items];
               nextItems[index] = { ...nextItems[index], itemImage: imageDataUrl } as StockItem;
               return { ...current, items: nextItems };
             });
 
-            // --- ColorThief Integration ---
             const img = new Image();
-            img.crossOrigin = 'Anonymous'; // Needed for cross-origin images, though local files usually don't need it
+            img.crossOrigin = 'Anonymous';
             img.src = imageDataUrl;
             img.onload = () => {
               try {
@@ -260,18 +252,16 @@ export default function StockEditForm() {
                 const dominantColor = colorThief.getColor(img);
                 const hexColor = rgbToHex(dominantColor[0], dominantColor[1], dominantColor[2]);
 
-                // Get a palette of dominant colors (e.g., top 5)
-                const palette = colorThief.getPalette(img, 5); // Get 5 colors
+                const palette = colorThief.getPalette(img, 5);
                 const hexPalette = palette.map((rgb: number[]) => rgbToHex(rgb[0], rgb[1], rgb[2]));
 
                 setForm(current => {
                   const nextItems = [...current.items];
-                  // Update image, detected dominant color, and the palette
                   nextItems[index] = {
                     ...nextItems[index],
                     itemImage: imageDataUrl,
-                    itemColorHex: hexColor, // Set dominant color as default
-                    _detectedPalette: hexPalette, // Store the palette
+                    itemColorHex: hexColor,
+                    _detectedPalette: hexPalette,
                   } as StockItem;
                   return { ...current, items: nextItems };
                 });
@@ -306,12 +296,15 @@ export default function StockEditForm() {
         itemToUpdate._tempFile = null;
         itemToUpdate.itemImage = null;
         itemToUpdate._isExistingImage = false;
-        itemToUpdate._detectedPalette = null; // Clear palette if no file
+        itemToUpdate.itemColorHex = "#000000"; // Reset color
+        itemToUpdate.itemQuantity = 0; // Reset quantity
+        itemToUpdate.barcodeNo = ""; // <--- Clear barcode if image removed
+        itemToUpdate._detectedPalette = null;
       }
       updatedItems[index] = itemToUpdate;
       return { ...prev, items: updatedItems };
     });
-  }, [updateItem]); // Dependency added for updateItem
+  }, []);
 
   // --- Form Submission Handler ---
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -357,21 +350,28 @@ export default function StockEditForm() {
         return;
     }
 
-    const invalidItem = form.items.find(item =>
-        item.itemQuantity < 0 || item._imageError || (!item.itemImage && !item._tempFile)
-    );
-    if (invalidItem) {
-      setSubmittingForm(false);
-      setSubmissionError(
-        invalidItem._imageError ||
-        (!invalidItem.itemImage && !invalidItem._tempFile ? t("lbl_limitImg") : "All variants must have a quantity greater than zero.")
-      );
-      return;
-    }
     if (form.items.length === 0) {
         setSubmittingForm(false);
         setSubmissionError(t("lbl_atLeastVarient"));
         return;
+    }
+
+    // Validate individual items
+    const invalidItem = form.items.find(item =>
+        item.itemQuantity < 0 || item._imageError || (!item.itemImage && !item._tempFile) || !item.barcodeNo.trim()
+    );
+    if (invalidItem) {
+      setSubmittingForm(false);
+      if (invalidItem._imageError) {
+          setSubmissionError(invalidItem._imageError);
+      } else if (!invalidItem.itemImage && !invalidItem._tempFile) {
+          setSubmissionError(t("lbl_limitImg")); // Image missing
+      } else if (invalidItem.itemQuantity <= 0) {
+          setSubmissionError(t("lbl_qtyGtZero")); // Quantity invalid
+      } else if (!invalidItem.barcodeNo.trim()) {
+          setSubmissionError(t("lbl_barcodeRequired")); // Barcode missing
+      }
+      return;
     }
 
     try {
@@ -383,20 +383,25 @@ export default function StockEditForm() {
 
       const itemsPayload = await Promise.all(
         form.items.map(async (item, index) => {
+          // Determine if image is new, existing, or removed
           let itemImageNameForBackend = '';
-
           if (item._tempFile) {
-            itemImageNameForBackend = `itemImage_${item.itemId || 'new_' + index}.jpg`;
+            // New image file being uploaded
+            itemImageNameForBackend = `itemImage_${item.itemId || 'new_' + index}.jpg`; // Unique name for new files
             formData.append("itemImages", item._tempFile, itemImageNameForBackend);
           } else if (item._isExistingImage && item.itemImage) {
+            // Existing image, keep its original URL/path
             itemImageNameForBackend = item.itemImage;
           }
+          // If neither, it means image was removed or never existed, so itemImageNameForBackend remains empty
 
           return {
             itemId: item.itemId,
             itemColorHex: item.itemColorHex,
             itemQuantity: item.itemQuantity,
-            itemImage: item._isExistingImage && item.itemImage ? item.itemImage : undefined,
+            barcodeNo: item.barcodeNo.trim(), // <--- Include barcodeNo here
+            // Only send itemImage if it's an existing URL or a new file was provided
+            itemImage: itemImageNameForBackend || null, // Send null if image was removed
           };
         })
       );
@@ -414,7 +419,7 @@ export default function StockEditForm() {
       );
 
       const response = await axios.put(
-        `${API_BASE_URL}/edit/stkG/${groupIdParam}`,
+        `${API_BASE_URL}/edit/stkG/${groupIdParam}`, // Corrected API endpoint for PUT
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -422,8 +427,14 @@ export default function StockEditForm() {
         }
       );
 
-      if (response.status === 200  || response.status === 201) {
+      if (response.status === 200 || response.status === 201) {
         setShowSuccessAlert(true);
+        // Optionally, re-fetch data to reflect server changes or reset form state relevant to fetched data
+        // For edit, usually you'd just show success and let the user continue editing or navigate away.
+        // setHasFetchedInitialData(false); // If you want to force a re-fetch on success
+      } else {
+        console.warn("Unexpected response status:", response.status, response.data);
+        setSubmissionError(`${t("msg_submtErr")}: ${response.status}`);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -435,15 +446,10 @@ export default function StockEditForm() {
     } finally {
       setSubmittingForm(false);
     }
-  }, [API_BASE_URL, bizId, groupIdParam, form, router]);
+  }, [API_BASE_URL, bizId, groupIdParam, form, t]); // Added t to dependencies
 
-  // --- Modal Visibility Effect (Revised) ---
+  // --- Modal Visibility Effect ---
   useEffect(() => {
-    // HIGHLIGHT: REVISED MODAL LOADING LOGIC
-    // Show loading if:
-    // 1. Business info is still loading, OR
-    // 2. Initial group data hasn't been fetched yet AND there's no fetch error (meaning it's actively trying or waiting to fetch), OR
-    // 3. The form is currently submitting.
     if (isBusinessInfoLoading || (!hasFetchedInitialData && fetchError === null) || submittingForm) {
       openModal("loading");
     } else {
@@ -611,19 +617,38 @@ export default function StockEditForm() {
                         />
                     </div>
 
-                    {/* Color and Quantity */}
-                    <div className="flex gap-4 mt-2 sm:mt-0 items-end"> {/* Added items-end to align */}
-                      <div className="flex flex-col">
+                    {/* Color, Quantity, and Barcode */}
+                    <div className="flex flex-col gap-2 mt-2 sm:mt-0 flex-grow"> {/* Adjusted to flex-col */}
+                      <div>
                         <label htmlFor={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">{t("lbl_color")}</label>
                         <input
                           id={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`}
                           type="color"
                           value={item.itemColorHex}
                           onChange={(e) => updateItem(index, "itemColorHex", e.target.value)}
-                          className="w-10 h-10 border-[0.5px] border-gray-200 rounded-sm"
+                          className="w-full h-10 border-[0.5px] border-gray-200 rounded-sm cursor-pointer"
+                          title="Click to manually choose color"
                         />
+                        {/* Display Detected Palette */}
+                        {item._detectedPalette && item._detectedPalette.length > 0 && (
+                          <div className="mt-2 text-xs">
+                            <p className="font-medium text-gray-700 mb-1">Palette:</p>
+                            <div className="flex gap-1.5">
+                              {item._detectedPalette.map((color, colorIdx) => (
+                                <button
+                                  key={colorIdx}
+                                  type="button"
+                                  className="w-6 h-6 rounded-full border-[0.5px] border-gray-300 hover:border-blue-500"
+                                  style={{ backgroundColor: color }}
+                                  title={color}
+                                  onClick={() => updateItem(index, "itemColorHex", color)}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex flex-col">
+                      <div>
                         <label htmlFor={`itemQuantity-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">{t("lbl_qty")}</label>
                         <input
                           id={`itemQuantity-${item.itemId === null ? `new-${index}` : item.itemId}`}
@@ -636,31 +661,24 @@ export default function StockEditForm() {
                             const onlyDigits = e.target.value.replace(/\D/g, "");
                             updateItem(index, "itemQuantity", onlyDigits === "" ? 0 : parseInt(onlyDigits));
                           }}
-                          className="w-20 rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
+                          className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
                         />
-
+                      </div>
+                      {/* --- NEW: Barcode Input Field --- */}
+                      <div>
+                        <label htmlFor={`barcodeNo-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">Barcode Number</label>
+                        <input
+                          id={`barcodeNo-${item.itemId === null ? `new-${index}` : item.itemId}`}
+                          type="text"
+                          value={item.barcodeNo}
+                          onChange={(e) => updateItem(index, "barcodeNo", e.target.value)}
+                          required
+                          className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
+                          placeholder="Enter barcode"
+                        />
                       </div>
                     </div>
                   </div>
-
-                  {/* Detected Color Palette (NEW) */}
-                  {item._detectedPalette && item._detectedPalette.length > 0 && (
-                    <div className="w-full md:w-auto mt-2 md:mt-0 flex flex-col items-center">
-                        <span className="text-xs font-medium text-gray-600 mb-1">Detected Colors:</span>
-                        <div className="flex flex-wrap gap-1 justify-center">
-                            {item._detectedPalette.map((color, colorIdx) => (
-                                <button
-                                    key={colorIdx}
-                                    type="button"
-                                    className="w-6 h-6 rounded-full border-2 border-gray-300 hover:border-blue-500"
-                                    style={{ backgroundColor: color }}
-                                    title={color}
-                                    onClick={() => updateItem(index, "itemColorHex", color)}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                  )}
 
                   {/* Remove Button */}
                   <div className="w-full flex justify-end md:w-auto md:ml-auto mt-2 md:mt-0">
@@ -681,7 +699,7 @@ export default function StockEditForm() {
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500 min-h-30 p-4 text-center">No color variants added yet. Click "+ Add Variant" to begin.</p>
+              <p className="text-sm text-gray-500 min-h-30 p-4 text-center">{t("msg_noVarient")}</p>
             )}
           </div>
         </div>
