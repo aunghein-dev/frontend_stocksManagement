@@ -17,53 +17,44 @@ interface CartState {
   // Internal helper action to sync Zustand's state with the Cart instance
   _syncCartState: () => void;
 }
-
 export const useCartStore = create<CartState>((set, get) => {
-  const cartInstance = new Cart(); // Create the single instance of your Cart class
+  const cartInstance = new Cart();
 
-  // Helper function to update Zustand's `cart`, `total`, `totalQty`
-  // after any operation on `cartInstance`.
-  const _syncCartState = () => {
-    set({
-      cart: cartInstance.getCart(),
-      total: cartInstance.getTotal(),
-      totalQty: cartInstance.getTotalQty(),
-    });
-  };
+const _syncCartState = () => {
+  set({
+    cart: [...cartInstance.getCart()], // <-- force new array reference
+    total: cartInstance.getTotal(),
+    totalQty: cartInstance.getTotalQty(),
+  });
+};
 
-  // Initial state setup: Load cart and sync Zustand state
-  cartInstance.loadCart(); // Load cart from localStorage
-  _syncCartState();        // Initialize Zustand state with loaded cart data
 
   return {
     cartInstance,
+    cart: cartInstance.getCart(),
+    total: cartInstance.getTotal(),
+    totalQty: cartInstance.getTotalQty(),
 
-    // Expose mirrored state properties for direct consumption by components
-    cart: cartInstance.getCart(), // Initial cart state
-    total: cartInstance.getTotal(), // Initial total
-    totalQty: cartInstance.getTotalQty(), // Initial total quantity
-
-    // Define actions that delegate to the cartInstance and then sync Zustand state
     addItem: (groupId, groupName, newItem) => {
       cartInstance.addItem(groupId, groupName, newItem);
-      get()._syncCartState(); // <--- CRUCIAL: Update Zustand state
+      _syncCartState();
     },
-    addItemByBarcode: (barcode, allAvailableStocks) => {
-      const success = cartInstance.addItemByBarcode(barcode, allAvailableStocks);
-      get()._syncCartState(); // <--- CRUCIAL: Update Zustand state
+    addItemByBarcode: (barcode, allStocks) => {
+      const success = cartInstance.addItemByBarcode(barcode, allStocks);
+      _syncCartState();
       return success;
     },
     removeItem: (groupId, itemId) => {
       cartInstance.removeItem(groupId, itemId);
-      get()._syncCartState(); // <--- CRUCIAL: Update Zustand state
+      _syncCartState();
     },
     deleteItem: (groupId, itemId) => {
       cartInstance.deleteItem(groupId, itemId);
-      get()._syncCartState(); // <--- CRUCIAL: Update Zustand state
+      _syncCartState();
     },
     clearCart: () => {
       cartInstance.clearCart();
-      get()._syncCartState(); // <--- CRUCIAL: Update Zustand state
+      _syncCartState();
     },
 
     _syncCartState,

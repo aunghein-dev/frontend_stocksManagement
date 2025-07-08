@@ -13,6 +13,7 @@ import PopupVouncher from "./voucherPopup";
 import formatMoney from "@/components/utils/formatMoney";
 import { motion, AnimatePresence } from "framer-motion"; 
 import { useTranslation } from "@/hooks/useTranslation";
+import cartData from "@/cookie/cart.data";
 
 type SalesProps = {
   tranDate: string;
@@ -101,8 +102,10 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
         setVoucherUUID(newUUID);
         setVoucherData(voucher);
-        clearCart();
+        clearCart(); 
         refresh();
+        console.log(cartData);
+        
         setShowVouncher(true);
       }
     } catch (error) {
