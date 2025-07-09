@@ -7,6 +7,7 @@ import { Save, ArrowLeftCircle } from "lucide-react";
 import axios from "axios";
 import useSales from "@/hooks/useSales";
 import { useInfo } from "@/hooks/useInfo";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function RefundModal() {
   const API = process.env.NEXT_PUBLIC_API_URL;
@@ -32,6 +33,7 @@ export default function RefundModal() {
   const [loading, setLoading] = useState(false);
   const { refresh } = useSales();
   const { business } = useInfo();
+  const { t } = useTranslation();
 
   // Use useEffect to update the form state when modalData changes
   // This is crucial because `useState`'s initial value is only set once.
@@ -115,7 +117,7 @@ export default function RefundModal() {
           <div className="flex gap-2 items-center"> {/* Adjusted gap and removed redundant justify-between */}
               <Save className="text-green-600 w-7 h-7" /> {/* Increased icon size */}
               <h2 className="text-xl font-semibold text-gray-800">
-                Refund Item Quantity
+                {t("hd_refundQty")}
               </h2>
           </div>
           {loading && (
@@ -124,12 +126,13 @@ export default function RefundModal() {
 
         {currentModalData ? (
             <div className="text-gray-700 text-sm space-y-1">
-                <p>Refunding quantity for:</p>
-                <ul className="text-sm list-disc list-inside pl-4 text-gray-600 space-y-0.5"> {/* Increased left padding for list */}
-                    <li><strong>Group:</strong> {currentModalData.groupName}</li>
-                    <li><strong>Item ID:</strong> {currentModalData.itemId}</li>
-                    <li><strong>Original Quantity:</strong> {currentModalData.oldQty}</li> {/* Show original quantity */}
-                </ul>
+                <p>{t("msg_rfQtyFor")}</p>
+              <ul className="text-sm list-none pl-4 text-gray-600 space-y-1 mt-4">
+                <li><strong>{t("lbl_groupLbl")}:</strong> {currentModalData.groupName}</li>
+                <li><strong>{t("lbl_relateSubItemId")}:</strong> {currentModalData.itemId}</li>
+                <li><strong>{t("lbl_soldQty")}:</strong> {currentModalData.oldQty}</li>
+              </ul>
+
             </div>
         ) : (
             <div className="text-gray-700 text-sm">Loading refund details...</div>
@@ -137,7 +140,7 @@ export default function RefundModal() {
 
         <div>
           <label htmlFor="oldQty" className="block text-sm font-medium text-gray-700 mb-1">
-            Quantity to Refund (Max: {currentModalData?.oldQty || 0})
+            {t("lbl_qtyToRefund")} ({t("lbl_max")}: {currentModalData?.oldQty || 0})
           </label>
           <input
             type="number"
@@ -159,7 +162,7 @@ export default function RefundModal() {
             className="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 text-sm transition-all duration-200 ease-in-out shadow-sm hover:shadow-md" /* Added rounded-md, shadow */
           >
             <ArrowLeftCircle className="w-4 h-4" />
-            Cancel
+            {t("btnTxt_cancel")}
           </button>
           <button
             onClick={handleSubmit}
@@ -173,7 +176,7 @@ export default function RefundModal() {
             className="flex items-center gap-2 px-4 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white text-sm transition-all duration-200 ease-in-out shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" 
           >
             <Save className="w-4 h-4" />
-            {loading ? "Saving..." : "Confirm Refund"}
+            {loading ? t("btnTxt_saving") : t("btnTxt_conRefund")}
           </button>
         </div>
       </div>

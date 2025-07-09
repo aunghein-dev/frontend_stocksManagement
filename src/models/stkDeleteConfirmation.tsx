@@ -81,7 +81,7 @@ export default function DeleteStockConfirmation() {
           <p>
             {t("msg_stkDltConfirm")}
           </p>
-          <ul className="text-sm list-disc list-inside pl-2 text-gray-600 mt-4 space-y-1">
+          <ul className="text-sm list-inside pl-2 text-gray-600 mt-4 space-y-1 list-none">
             <li><strong>{t("lbl_groupLbl")}:</strong> {modalData?.groupName}</li>
             <li><strong>{t("lbl_relateSubItemId")}:</strong> {(modalData?.itemId as string)?.replace('I-', '')}</li>
           </ul>

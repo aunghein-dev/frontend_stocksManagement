@@ -353,7 +353,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
             disabled={grandTotal === 0 && loading}
             onClick={() => handleCheckout()}
           >
-            {loading ? t("bntTxt_chking") : t("btnTxt_chkout")}
+            {loading ? t("btnTxt_chking") : t("btnTxt_chkout")}
           </button>
         </div>
       </div>

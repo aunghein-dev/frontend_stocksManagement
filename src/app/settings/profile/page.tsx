@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast'; // For notifications: npm install react-hot-toast
+import { useTranslation } from '@/hooks/useTranslation';
 
 // Heroicons for UI: npm install @heroicons/react
 import {
@@ -59,6 +60,8 @@ const AccountProfileSettingsPage: React.FC = () => {
   const [imageUploadSuccess, setImageUploadSuccess] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { t } = useTranslation();
 
   // --- 1. Fetch User Profile Data on Component Mount ---
   useEffect(() => {
@@ -293,7 +296,7 @@ const AccountProfileSettingsPage: React.FC = () => {
 
     <div className="p-1 w-full bg-white rounded-sm h-[calc(100dvh-110px)] overflow-auto custom-scrollbar">
       <div className='overflow-auto h-full custom-scrollbar px-4 py-4'>
-      <h1 className="text-xl font-bold text-gray-800 text-center mb-8">Your Profile Settings</h1>
+      <h1 className="text-xl font-bold text-gray-800 text-center mb-8">{t("hd_profileSettings")}</h1>
 
       <div className="space-y-6">
         {/* Profile Image Section */}
@@ -329,13 +332,13 @@ const AccountProfileSettingsPage: React.FC = () => {
               className="hidden"
             />
           </label>
-          <p className="mt-2 text-sm text-gray-600 font-medium">
+          <p className="mt-3 text-sm text-gray-600 font-medium">
             {selectedProfileImageFile
               ? `${selectedProfileImageFile.name.slice(0, 14)}...${selectedProfileImageFile.name.slice(-6)}`
-              : 'Change Profile Picture'}
+              : t("lbl_changeProfilePics")}
           </p>
 
-          <p className="text-xs text-gray-500 mb-4">PNG, JPG, JPEG, GIF up to 10MB</p>
+          <p className="text-xs text-gray-500 mb-4 mt-2">PNG, JPG, JPEG, GIF up to 10MB</p>
           
           <button
             type="button"
@@ -375,7 +378,7 @@ const AccountProfileSettingsPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Username (Email) - Read-only */}
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">Username (Email)</label>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">{t("lbl_username")}</label>
             <input
               type="email"
               id="username"
@@ -386,13 +389,13 @@ const AccountProfileSettingsPage: React.FC = () => {
               aria-describedby="username-help"
             />
             <p id="username-help" className="mt-1 text-xs text-gray-500">
-              Your username is your email and cannot be changed from here.
+              {t("msg_cantChangeName")}
             </p>
           </div>
 
           {/* Full Name */}
           <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">{t("lbl_fullName")}</label>
             <input
               type="text"
               id="fullName"
@@ -406,7 +409,7 @@ const AccountProfileSettingsPage: React.FC = () => {
 
           {/* Role (Display only) */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t("lbl_role")}</label>
             <p className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-gray-100 text-gray-500 cursor-not-allowed">
               {userProfile.role}
             </p>
@@ -415,27 +418,43 @@ const AccountProfileSettingsPage: React.FC = () => {
           {/* Business Information Section (Display Only) */}
           {userProfile.business && (
             <div className="border-t border-gray-200 pt-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Associated Business Information</h2>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4"> {t("kw_associated") + " " + t("hd_bizInfo")}</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
-                  <p className="mt-1 text-sm text-gray-900">{userProfile.business.businessName}</p>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_bizNn")}</label>
+                  <p className="text-sm text-gray-900 
+                                border-[0.5px] border-gray-300 
+                                rounded-sm py-2.5 pl-2 mt-3">
+                   {userProfile.business.businessName}
+                  </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Short Form</label>
-                  <p className="mt-1 text-sm text-gray-900">{userProfile.business.businessNameShortForm}</p>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_bizShortNn")}</label>
+                  <p className="text-sm text-gray-900 
+                                border-[0.5px] border-gray-300 
+                                rounded-sm py-2.5 pl-2 mt-3">
+                    {userProfile.business.businessNameShortForm}
+                  </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Default Currency</label>
-                  <p className="mt-1 text-sm text-gray-900">{userProfile.business.defaultCurrency}</p>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_dfCurrency")}</label>
+                  <p className="text-sm text-gray-900 
+                                border-[0.5px] border-gray-300 
+                                rounded-sm py-2.5 pl-2 mt-3">
+                    {userProfile.business.defaultCurrency}
+                  </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Tax Rate</label>
-                  <p className="mt-1 text-sm text-gray-900">{userProfile.business.taxRate * 100}%</p>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_taxRate")}</label>
+                  <p className="text-sm text-gray-900 
+                                border-[0.5px] border-gray-300 
+                                rounded-sm py-2.5 pl-2 mt-3">
+                    {userProfile.business.taxRate * 100}%
+                  </p>
                 </div>
                 {userProfile.business.businessLogo && (
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Business Logo</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t("lbl_bizLogo")}</label>
                     <div className="relative w-[80px] h-[80px]"> {/* Parent container with defined dimensions */}
                     <Image
                       src={userProfile.business.businessLogo || '/man.png'}
@@ -454,7 +473,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                 )}
               </div>
               <p className="mt-4 text-sm text-gray-600">
-                Business settings are managed separately and cannot be changed from your personal profile.
+                {t("msg_cantChangeBiz")}
               </p>
             </div>
           )}

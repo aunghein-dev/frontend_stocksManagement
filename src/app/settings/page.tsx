@@ -344,7 +344,7 @@ export default function Settings() {
                   className="hidden"
                 />
               </label>
-             <p className="mt-3 text-sm text-gray-600 font-medium">
+             <p className="mt-2 text-sm text-gray-600 font-medium">
                 {selectedLogoFile
                   ? `${selectedLogoFile.name.slice(0, 10)}...${selectedLogoFile.name.slice(-6)}`
                   : t("io_logoClick")}
@@ -566,7 +566,7 @@ export default function Settings() {
               className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-2 rounded-sm text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
               disabled={isSaving || !hasChanges}
             >
-              {t("btTxt_reset")}
+              {t("btnTxt_reset")}
             </button>
             <button
               type="submit"
@@ -576,10 +576,10 @@ export default function Settings() {
               {isSaving ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  {t("btTxt_saving")}
+                  {t("btnTxt_saving")}
                 </>
               ) : (
-                t("btTxt_saveSettings")
+                t("btnTxt_saveSettings")
               )}
             </button>
           </div>

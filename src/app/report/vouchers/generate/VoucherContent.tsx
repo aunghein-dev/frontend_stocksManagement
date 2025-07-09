@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useSearchParams, useRouter } from 'next/navigation'; // <-- These are here
 import axios from "axios";
 import { useInfo } from "@/hooks/useInfo";
+import PageLost404 from "@/components/error/pageLost404";
 
 // Type Definitions (can be kept here or in a global types file)
 type VoucherItem = {
@@ -107,14 +108,11 @@ export default function VoucherContent() {
   if (businessInfoError) {
     return (
       <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)] text-red-600">
-        <p className="text-lg font-semibold">Error Loading Business Information</p>
-        <p className="text-sm text-center px-4">{businessInfoError.message}</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Retry
-        </button>
+           <PageLost404 
+          header="Something went wrong."
+          message={businessInfoError || "An unknown error occurred."}
+          reload={() => window.location.reload()}
+          />
       </div>
     );
   }
@@ -122,14 +120,11 @@ export default function VoucherContent() {
   if (voucherFetchError) {
     return (
       <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)] text-red-600">
-        <p className="text-lg font-semibold">Voucher Generation Error</p>
-        <p className="text-sm text-center px-4">{voucherFetchError}</p>
-        <button
-          onClick={() => router.back()}
-          className="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-        >
-          Go Back
-        </button>
+        <PageLost404 
+          header="Voucher Generation Error"
+          message={voucherFetchError || "An unknown error occurred in fetching voucher data."}
+          reload={() => window.location.reload()}
+        />
       </div>
     );
   }

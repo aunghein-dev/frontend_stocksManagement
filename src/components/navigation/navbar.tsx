@@ -189,7 +189,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                              text-gray-700 hover:bg-blue-200
                                cursor-pointer"
                   >
-                    {t("btTxt_signOut")}
+                    {t("btnTxt_signOut")}
                   </a>
                 </li>
               </ul>

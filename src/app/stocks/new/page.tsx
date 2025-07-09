@@ -530,7 +530,7 @@ export default function StockEntryForm() {
                   d="M5 12h14M5 12l4-4m-4 4 4 4"
                 />
               </svg>
-              {t("btTxt_back")}
+              {t("btnTxt_back")}
             </button>
           
           <h2 className="text-xl font-semibold text-gray-600 mr-3">{t("hd_stockentry")}</h2>
@@ -752,7 +752,7 @@ export default function StockEntryForm() {
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {submitting ? t("btTxt_saving") : t("btnTxt_saveEntry")}
+            {submitting ? t("btnTxt_saving") : t("btnTxt_saveEntry")}
           </button>
         </div>
       </form>

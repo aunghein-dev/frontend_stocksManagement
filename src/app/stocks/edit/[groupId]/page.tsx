@@ -515,7 +515,7 @@ export default function StockEditForm() {
                   d="M5 12h14M5 12l4-4m-4 4 4 4"
                 />
               </svg>
-              {t("btTxt_back")}
+              {t("btnTxt_back")}
             </button>
           <h2 className="text-xl font-semibold text-gray-600 mr-3">{t("hd_stkEdit")}</h2>
         </div>
