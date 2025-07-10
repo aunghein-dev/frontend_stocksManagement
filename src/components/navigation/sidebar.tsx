@@ -158,16 +158,18 @@ function SidebarComponent(props: { sidebarOpen: boolean; setSidebarOpen: (open: 
           <LanguageSwitcher />
       </div>
       <footer className="px-4 py-6 text-center text-xs border-t border-gray-100 text-gray-500">
-        <p className="font-semibold text-gray-700">
+        <a className="font-semibold text-gray-700"
+          href="https://openwaremyanmar.com"
+          target="_blank">
           {t("lbl_dvlpBy")}{" "}
-          <span className="text-blue-500 font-bold">Aung Hein</span>
-        </p>
+          <span className="text-blue-500 font-bold">Openware</span>
+        </a>
         <p className="mt-1 text-[11px] text-gray-400">
           © {new Date().getFullYear()} {t("allRightsReserved")}
         </p>
         <p className="mt-1 text-[11px] text-gray-400">
           <a href="mailto:aunghein.mm@hotmail.com" className="text-blue-500 hover:underline">
-            aunghein.mm@hotmail.com
+            openwaremyanmar@gmail.com
           </a>
         </p>
       </footer>

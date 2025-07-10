@@ -253,7 +253,7 @@ export default function Home() {
       {openManualScanner && (
         <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-90">
           <div className="relative flex flex-col gap-4 p-6 bg-white shadow-xl border border-gray-200 rounded-lg max-w-sm w-full">
-            <h3 className="text-lg font-semibold">{t("manualBarcodeEntry")}</h3>
+            <h3 className="text-lg font-semibold">{t("lbl_manualBarcodeEntry")}</h3>
             <button
               onClick={() => {
                 setOpenManualScanner(false);
@@ -270,15 +270,15 @@ export default function Home() {
                 type="text"
                 value={manualBarcodeInput}
                 onChange={(e) => setManualBarcodeInput(e.target.value)}
-                placeholder={t("enterBarcode")}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder={t("lbl_enterBarcode")}
+                className="w-full py-3 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 autoFocus // Auto-focus when modal opens
               />
               <button
                 type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors"
+                className="py-3 px-4 bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold rounded-sm transition duration-200 cursor-pointer"
               >
-                {t("addManually")}
+                {t("btnTxt_addManually")}
               </button>
             </form>
           </div>

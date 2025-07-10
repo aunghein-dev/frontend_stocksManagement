@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import DataTable from '@/components/data-display/table/DataTable';
 import { useModalStore } from '@/store/modalStore';
 import formatMoney from '@/components/utils/formatMoney';
+import { useTranslation } from '@/hooks/useTranslation';
 
 // Type for the flattened Stock data
 interface FlattenedStockRow {
@@ -55,6 +56,7 @@ const flattenStocks = (stocks: Stock[]): FlattenedStockRow[] => {
 const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; refresh: () => void }> = ({ items, isLoading, error, refresh }) => {
   const router = useRouter();
 
+  const { t } = useTranslation();
   const openModal = useModalStore((s) => s.openModal);
 
   const handleDelete = React.useCallback(( itemId: string,
@@ -288,11 +290,11 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; ref
       searchTextLabel="Search by Group Name..."
       rowHeight={75} // Specific row height for StockTable
     >
-      <Link
+    <Link
       href="/stocks/new"
-      className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 w-13 h-13 flex justify-center items-center rounded-full border-1 border-blue-600 ease-in-out duration-300 text-4xl font-semibold z-50 hover:scale-105"
+      className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-full border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md "
     >
-      +
+      + {t("btnTxt_newStk")}
     </Link>
 
     </DataTable>

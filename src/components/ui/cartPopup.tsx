@@ -14,6 +14,7 @@ import formatMoney from "@/components/utils/formatMoney";
 import { motion, AnimatePresence } from "framer-motion"; 
 import { useTranslation } from "@/hooks/useTranslation";
 import cartData from "@/cookie/cart.data";
+import { X as CloseIcon } from "lucide-react";
 
 type SalesProps = {
   tranDate: string;
@@ -152,7 +153,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
   const itemElements = cart.map((group, index) => (
     <section
       key={group.groupId}
-      className="relative p-1 border border-gray-200 rounded-2xl shadow-xs "
+      className="relative p-1 border border-gray-200 rounded-2xl shadow-xs"
     >
       <h3 className="text-md font-semibold text-gray-700 mb-3 mx-3 mt-1">
         <span>#{index + 1}. {" "}{group.groupName}</span>
@@ -271,15 +272,12 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}>
 
-      <div className="relative h-[90dvh] w-full sm:w-[600px] rounded-sm shadow-2xl flex flex-col border border-gray-200 animate-slide-up bg-white">
+      <div className="relative h-[90dvh] w-full sm:w-[600px] rounded-lg shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white">
         {/* Close Button */}
         <button
-          onClick={props.handleToggle}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-900
-                     text-2xl cursor-pointer hover:bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center ease-in-out duration-300"
-          aria-label="Close"
-        >
-          &times;
+            onClick={props.handleToggle}
+            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+            <CloseIcon className="w-6 h-6" />
         </button>
 
         {loading && (
@@ -290,8 +288,8 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
         {/* Header */}
         <div className="p-5 border-b border-gray-200 
-                      bg-gray-100 text-lg font-semibold 
-                      text-gray-800 flex">
+                      bg-transparent text-lg font-bold 
+                      text-gray-800 flex ">
            {t("hd_shoppingCart")}
         </div>
 
@@ -340,7 +338,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         </div>
 
         {/* Footer */}
-        <div className="p-5 border-t border-gray-200 bg-gray-100">
+        <div className="p-5 border-t border-gray-200 bg-transparent">
           <div className="flex justify-between mb-4 items-center">
             <span className="text-md text-gray-600 font-bold">{t("lbl_subTotal")}</span>
             <span className="text-lg font-bold text-gray-900">
@@ -349,7 +347,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
             </span>
           </div>
           <button
-            className="w-full py-3 bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold rounded-sm transition duration-200 cursor-pointer"
+            className="py-3 px-4 bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold rounded-sm transition duration-200 cursor-pointer flex justify-self-end"
             disabled={grandTotal === 0 && loading}
             onClick={() => handleCheckout()}
           >

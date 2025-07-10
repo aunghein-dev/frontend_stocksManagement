@@ -15,7 +15,7 @@ import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
 import RemoveShoppingCartOutlinedIcon from '@mui/icons-material/RemoveShoppingCartOutlined';
 import formatMoney from '@/components/utils/formatMoney';
 import DataTable from '@/components/data-display/table/DataTable'; // <--- Import the reusable DataTable
-
+import { useTranslation } from '@/hooks/useTranslation';
 // Type for the flattened Sales data
 interface FlattenedSalesRow {
   id: number; // tranID
@@ -53,7 +53,7 @@ time: sale.tranDate ? dayjs(sale.tranDate).format('hh:mm:ss A') : 'Invalid Time'
 // SalesTable component will now just define its specific columns and props for DataTable
 const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; refresh: () => void }> = ({ sales, isLoading, error, refresh }) => {
   const openModal = useModalStore((s) => s.openModal);
-
+  const { t } = useTranslation();
   const handleCancel = React.useCallback((oldTranId: number, oldQty: number, itemId: number, groupName: string) => {
     openModal("cancelBatch", { oldTranId, oldQty, itemId, groupName });
   }, [openModal]); // openModal is stable from zustand, but good practice to include
@@ -259,9 +259,12 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
       rowHeight={60}
     >
       {/* Plus button for sales table, if applicable, otherwise remove */}
-      <Link href="/" className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 w-13 h-13 flex justify-center items-center rounded-full border-1 border-blue-600 ease-in-out duration-300 text-4xl font-semibold z-50 hover:scale-105">
-        +
-      </Link>
+    <Link
+        href="/"
+        className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-full border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md "
+      >
+        + {t("btnTxt_newSale")}
+    </Link>
     </DataTable>
   );
 };
