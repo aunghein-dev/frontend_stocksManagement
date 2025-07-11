@@ -5,7 +5,6 @@ import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import dayjs from 'dayjs';
-import Link from 'next/link'; // Keep Link if needed for the + button, but it's not used in this specific table
 import { useRouter } from 'next/navigation';
 import {
   IconButton
@@ -53,7 +52,7 @@ const flattenBatchReport = (reports: Reports[]): FlattenedBatchReportRow[] => {
   }));
 };
 
-const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: any; refresh: () => void }> = ({ items, isLoading, error, refresh }) => {
+const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: unknown; refresh: () => void }> = ({ items, isLoading, error }) => {
   const router = useRouter();
 
   const columns: GridColDef<FlattenedBatchReportRow>[] = React.useMemo(() => [
@@ -109,8 +108,8 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
       headerName: 'Total Amount',
       flex: 1,
       minWidth: 120,
-      align: 'center',
-      headerAlign: 'center',
+      align: 'left',
+      headerAlign: 'left',
        renderCell: (params: GridRenderCellParams<FlattenedBatchReportRow>) => (
                           <div
                             className={`text-blue-500 hover:text-blue-700 cursor-pointer

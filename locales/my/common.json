@@ -132,5 +132,17 @@
   "title_select": "ရွေးပါ",                      
   "lbl_quantity": "အရေအတွက်",                  
   "title_removeVariant": "ရွေးချယ်စရာဖယ်ရှားရန်",
-  "kw_associated": "ချိတ်ဆက်ထားသော"
+  "kw_associated": "ချိတ်ဆက်ထားသော",
+  "tb_batch": "စာရင်းကုဒ်",
+  "tb_time": "အချိန်",
+  "tb_date": "ရက်စွဲ",
+  "tb_groupId": "ဂရုအိုင်ဒီ",
+  "tb_itemId": "ကုန်အိုင်ဒီ",
+  "tb_groupName": "အမည်",
+  "tb_qty": "အရေအတွက်",
+  "tb_price": "တန်ဖိုး",
+  "tb_subAmt": "Subစုစုပေါင်း",
+  "tb_teller": "စာရင်းသွင်းသူ",
+  "tb_actions": "အပြောင်းအလဲ",
+  "tb_barcodeNo": "#ဘားကုဒ်နံပါတ်"
 }

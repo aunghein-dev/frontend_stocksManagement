@@ -33,6 +33,7 @@ interface FlattenedStockRow {
   groupUnitPrice: number;
   releasedDate: string;
   itemQuantity: number;
+  barcodeNo: string;
 }
 
 // Data Mapper for Stocks
@@ -48,12 +49,13 @@ const flattenStocks = (stocks: Stock[]): FlattenedStockRow[] => {
       groupName: stock.groupName,
       groupUnitPrice: stock.groupUnitPrice,
       releasedDate: dayjs(stock.releasedDate).format('DD-MMM-YYYY'),
-      itemQuantity: item.itemQuantity
+      itemQuantity: item.itemQuantity,
+      barcodeNo: item.barcodeNo,
     }))
   );
 };
 
-const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; refresh: () => void }> = ({ items, isLoading, error, refresh }) => {
+const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown; refresh: () => void }> = ({ items, isLoading, error }) => {
   const router = useRouter();
 
   const { t } = useTranslation();
@@ -63,7 +65,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; ref
                                            groupName: string,
                                            groupId: number,) => {
     openModal("stkDeleteConfirmation", {  itemId, groupName, groupId });
-  }, []); // Added openModal to dependency array for useCallback
+  }, [openModal]); // Added openModal to dependency array for useCallback
 
   const handleEdit = React.useCallback((groupId: number) => {
     router.push(`/stocks/edit/${groupId}`); // Assuming edit is by groupId
@@ -97,6 +99,21 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; ref
                             `}
               >
                 {params.row.itemId}
+              </div>
+            ),
+    },
+        {
+      field: 'barcodeNo',
+      headerName: 'Barcode',
+      width: 90,
+      align: 'center',
+      headerAlign: 'center',
+       renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
+              <div
+                className={`text-red-600 hover:text-red-700 cursor-pointer
+                            `}
+              >
+                {params.row.barcodeNo}
               </div>
             ),
     },
@@ -185,8 +202,8 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: any; ref
       type: 'number',
       width: 100,
       editable: false,
-      align: 'center',
-      headerAlign: 'center',
+      align: 'left',
+      headerAlign: 'left',
         renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
               <div
                 className={`text-blue-500 hover:text-blue-700 cursor-pointer

@@ -50,8 +50,12 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
         withCredentials: true,
         headers: { 'Content-Type': 'application/json' }
       });
-    } catch (error: any) {
-      console.error("Logout failed:", error.response?.data?.message || error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Logout error:', error.message);
+      } else {
+        console.error('Logout error with unknown error:', error);
+      }
     } finally {
       closeModal();
       router.push('/login');

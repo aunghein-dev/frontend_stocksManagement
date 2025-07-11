@@ -15,7 +15,7 @@ import {
 import Image from 'next/image';
 import { useModalStore } from "@/store/modalStore"; 
 import { useTranslation } from '@/hooks/useTranslation';
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+
 interface BusinessSettings {
   businessId: number;
   businessLogo: string;

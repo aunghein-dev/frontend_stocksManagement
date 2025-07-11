@@ -28,4 +28,5 @@ export type Sales = {
   subCheckout: number;
   tranUserEmail: string;
   bizId: string;
+  barcodeNo: string;
 };

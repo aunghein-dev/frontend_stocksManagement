@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
-import Link from 'next/link';
 
-type BarsDatasetProps = {
-  series: {
-    dataKey: string; // Changed from datakey to dataKey (MUI uses dataKey)
-    label: string;
-  }[];
-  dataset: Record<string, any>[];
+
+type BarChartRow = {
+  [key: string]: string | number | null; // still allows flexibility
 };
+
+interface BarsDatasetProps {
+  series: { dataKey: string; label: string }[];
+  dataset: BarChartRow[];
+  xAxisKey?: string; // default to 'month'
+}
+
+
 
 function valueFormatter(value: number | null) {
   return `${value?.toLocaleString() || 0}`;
@@ -28,12 +32,17 @@ export default function BarsDataset({ series, dataset }: BarsDatasetProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [chartWidth, setChartWidth] = React.useState(250);
 
+    function truncateLabel(label: string, maxLength = 15) {
+    if (label.length <= maxLength) return label;
+    return label.slice(0, maxLength) + '...';
+  }
+
   React.useEffect(() => {
     const currentContainer = containerRef.current;
     if (!currentContainer) return;
 
     const observer = new ResizeObserver(entries => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         setChartWidth(entry.contentRect.width);
       }
     });
@@ -65,7 +74,7 @@ export default function BarsDataset({ series, dataset }: BarsDatasetProps) {
   // Transform series to MUI expected format
   const muiSeries = series.map(s => ({
     dataKey: s.dataKey,
-    label: s.label,
+    label: truncateLabel(s.label, 15),
     valueFormatter,
   }));
 
@@ -86,10 +95,14 @@ export default function BarsDataset({ series, dataset }: BarsDatasetProps) {
   if (!dataset[0].month) {
     return (
       <div className="w-full h-full flex justify-center items-center text-gray-400">
-        Dataset is missing 'month' field
+        Dataset is missing &#39;month&#39; field
       </div>
+
     );
   }
+
+
+
 
   return (
     <div ref={containerRef} className="w-full h-auto relative ">

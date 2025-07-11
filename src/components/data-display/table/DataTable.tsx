@@ -6,7 +6,8 @@ import {
   GridColDef,
   GridRowsProp,
   GridRowId,
-  GridPaginationModel
+  GridPaginationModel,
+  GridCellEditStopParams
 } from '@mui/x-data-grid';
 import {  Paper } from '@mui/material';
 
@@ -19,7 +20,7 @@ interface DataTableProps<V, R extends { id: GridRowId }> {
   dataMapper: (data: V[]) => R[]; // Function to flatten/map raw data to GridRows
   columns: GridColDef[]; // Columns specific to the data type
   isLoading: boolean;
-  error: any; // Consider a more specific error type if possible
+  error: unknown; // Consider a more specific error type if possible
   filterField: keyof R; // The field to use for text filtering (e.g., 'groupName', 'batchId')
   searchTextLabel: string; // Label for the search input (e.g., "Search by Group Name...")
   rowHeight?: number; // Optional row height for specific tables
@@ -32,19 +33,15 @@ function DataTable<V, R extends { id: GridRowId }>({
   dataMapper,
   columns,
   isLoading,
-  error,
   filterField,
-  searchTextLabel,
   rowHeight = 55, // Default row height
   children,
 }: DataTableProps<V, R>) {
-  const [searchText, setSearchText] = React.useState('');
+  const [searchText] = React.useState('');
   const [rows, setRows] = React.useState<GridRowsProp>([]);
   const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({ page: 0, pageSize: 10 });
 
-  // Update rows whenever the incoming data changes
-  // This replaces the setTimeout simulation
-  React.useEffect(() => {
+    React.useEffect(() => {
     if (Array.isArray(data)) {
       setRows(dataMapper(data));
     } else {
@@ -52,22 +49,22 @@ function DataTable<V, R extends { id: GridRowId }>({
     }
     // Reset pagination to first page when data changes (e.g., on search or refresh)
     setPaginationModel({ page: 0, pageSize: paginationModel.pageSize });
-  }, [data, dataMapper]); // dataMapper added as dependency as it's passed from parent
+  }, [data, dataMapper, paginationModel.pageSize]); // <--- Added paginationModel.pageSize here
 
-  // Filter rows based on searchText and filterField
-    const filteredRows = React.useMemo(() => {
-      if (!searchText) {
-        return rows;
-      }
-      const lowercasedSearchText = searchText.toLowerCase();
-      return rows.filter((row) => {
-        const fieldValue = String(row[filterField]).toLowerCase();
-        return fieldValue.includes(lowercasedSearchText);
-      });
-    }, [rows, searchText, filterField]);
+
+  const filteredRows = React.useMemo(() => {
+    if (!searchText) {
+      return rows;
+    }
+    const lowercasedSearchText = searchText.toLowerCase();
+    return rows.filter((row) => {
+      const fieldValue = String(row[filterField]).toLowerCase();
+      return fieldValue.includes(lowercasedSearchText);
+    });
+  }, [rows, searchText, filterField]);
 
   // Handle cell edit committed (if enabled for some columns)
-  const handleEditCellChangeCommitted = React.useCallback((params: any) => {
+  const handleEditCellChangeCommitted = React.useCallback((params: GridCellEditStopParams) => {
     // In a real application, you would send this update to your backend here
     // For now, we update the local state immediately
     setRows((prev) =>
@@ -77,9 +74,10 @@ function DataTable<V, R extends { id: GridRowId }>({
     );
   }, []);
 
+
   // Determine if the table should show a loading indicator
   // If `isLoading` from the hook is true OR `rows` are still empty and initial loading is not yet done
-  const showLoadingOverlay = isLoading || (rows.length === 0 && !isLoading && !error);
+  //const showLoadingOverlay = isLoading || (rows.length === 0 && !isLoading && !error);
    // Note: `rows.length === 0 && !isLoading && !error` attempts to show loading while rows are still empty post-load.
    // This might conflict with the `noRowsOverlay` if you intend to show "No Results" specifically.
    // For strict "loading spinner" only, use just `isLoading`.

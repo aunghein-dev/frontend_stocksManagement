@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useLocale } from "../context/LocaleContext";
-import type { Locale } from "../lib/getTranslation";
 import { getTranslations } from "../lib/getTranslation";
 
 export function useTranslation() {

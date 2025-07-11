@@ -17,7 +17,7 @@ interface CartState {
   // Internal helper action to sync Zustand's state with the Cart instance
   _syncCartState: () => void;
 }
-export const useCartStore = create<CartState>((set, get) => {
+export const useCartStore = create<CartState>((set) => {
   const cartInstance = new Cart();
 
 const _syncCartState = () => {

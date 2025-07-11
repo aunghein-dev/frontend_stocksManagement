@@ -81,7 +81,7 @@ export default function PopupVoucher({
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
   });
-  const { business, isLoading } = useInfo();
+  const { business } = useInfo();
 
 const handleSavePhoto = async () => {
   const node = componentRef.current;

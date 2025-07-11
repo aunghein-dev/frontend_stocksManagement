@@ -43,10 +43,9 @@ export default function CancelConfirmationModal() {
       setError(null);
       refresh();
     }
-  } catch (err) {
-    setError("Something went wrong.");
-  } finally {
-
+  } catch {
+      setError("Something went wrong.");
+  }finally {
     setLoading(false);
     closeModal();
   }

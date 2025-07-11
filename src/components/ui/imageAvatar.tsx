@@ -8,32 +8,25 @@ interface ImageAvatarProps {
   src?: string;
   alt?: string;
   size?: number;
-  priority?: boolean; // This prop receives the conditional value (e.g., from DataGrid)
+  priority?: boolean;
 }
 
-const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', size = 65, priority }) => { // Receives 'priority' prop
-  // Fallback placeholder and error images. Make sure these exist in your `public` folder.
-  const placeholderSrc = '/Box.png';
+const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', size = 65, priority }) => {
   const errorSrc = '/Box.png';
 
-  // State to handle image loading errors
   const [imgError, setImgError] = React.useState(false);
 
-  // Reset error state if the image source changes
   React.useEffect(() => {
     setImgError(false);
   }, [src]);
 
-  // Handle image loading errors by setting the error state
   const handleError = () => {
     setImgError(true);
   };
 
-  // Determine the actual image source to use
   const isValidSrc = typeof src === 'string' && src.trim() !== '' && src.trim().toUpperCase() !== 'NULL';
-  const isDataUrl = isValidSrc && src.startsWith('data:');
+  const isDataUrl = isValidSrc && src.startsWith('https:');
   const currentImageSrc = imgError || !isValidSrc ? errorSrc : src!;
-
 
   return (
     <div
@@ -51,12 +44,13 @@ const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', s
       }}
     >
       {isDataUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={currentImageSrc}
           alt={alt}
           style={{ objectFit: 'cover', width: '100%', height: '100%' }}
           onError={handleError}
-          fetchPriority="high" // This is for <img> tag, not next/image. Good to keep if needed.
+          fetchPriority="high"
         />
       ) : (
         <Image
@@ -66,7 +60,7 @@ const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', s
           sizes={`${size}px`}
           className="object-cover"
           onError={handleError}
-          priority={priority} // <--- CORRECTED: PASS THE PROP HERE!
+          priority={priority}
           style={{ objectFit: 'cover' }}
         />
       )}

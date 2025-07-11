@@ -169,10 +169,11 @@ export function SignupForm() {
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     try {
       await handleRegister(data);
-    } catch (error) {
+    } catch {
       throw new Error("An error occurred during signup.");
     }
   };
+
 
 
   return (

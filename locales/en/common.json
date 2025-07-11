@@ -132,5 +132,17 @@
   "title_select": "Select",                                
   "lbl_quantity": "Quantity",                              
   "title_removeVariant": "Remove variant",
-  "kw_associated": "Associated"
+  "kw_associated": "Associated",
+  "tb_batch": "#Batch",
+  "tb_time": "Time",
+  "tb_date": "Date",
+  "tb_groupId": "GroupID",
+  "tb_itemId": "ItemID",
+  "tb_groupName": "Name",
+  "tb_qty": "Quantity",
+  "tb_price": "Price",
+  "tb_subAmt": "SubAmount",
+  "tb_teller": "Teller",
+  "tb_actions": "Actions",
+  "tb_barcodeNo": "#BCOD"
 }

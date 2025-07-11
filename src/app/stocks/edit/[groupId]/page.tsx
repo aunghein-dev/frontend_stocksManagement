@@ -1,7 +1,7 @@
 // src/app/stocks/edit/[groupId]/page.tsx
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -41,6 +41,8 @@ type FormState = Omit<Stock, "groupId"> & {
   _groupTempFile: File | null;
   _groupImageError: string | null;
 };
+
+
 
 const getInitialFormState = (): FormState => ({
   groupId: null,
@@ -188,15 +190,21 @@ export default function StockEditForm() {
     }));
   }, []);
 
-  // Handles updating a specific field of an item variant
-  // Now includes 'barcodeNo' as a possible key
-  const updateItem = useCallback((index: number, key: keyof StockItem, value: string | number | string[] | null) => {
-    setForm((prev) => {
-      const updatedItems = [...prev.items];
-      (updatedItems[index] as any)[key] = value;
-      return { ...prev, items: updatedItems };
-    });
-  }, []);
+
+    const updateItem = useCallback(
+      <K extends keyof StockItem>(index: number, key: K, value: StockItem[K]) => {
+        setForm((prev) => {
+          const updatedItems = [...prev.items];
+          updatedItems[index] = {
+            ...updatedItems[index],
+            [key]: value,
+          };
+          return { ...prev, items: updatedItems };
+        });
+      },
+      []
+    );
+
 
   // Handles image selection for the main group image
   const handleGroupImageSelected = useCallback((file: File | null) => {

@@ -1,5 +1,3 @@
-// src/data/navbar.data.ts
-import { IconType } from "react-icons"; // Import IconType if you plan to extend this with icons directly
 
 export interface NavbarItem {
   id: number;

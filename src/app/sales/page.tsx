@@ -62,6 +62,7 @@ export default function Sales() {
     );
   }
 
+  
   // The SalesTable component itself will handle displaying data or internal loading skeletons
   // based on its `isLoading` prop, *after* the global modal has closed.
   return (

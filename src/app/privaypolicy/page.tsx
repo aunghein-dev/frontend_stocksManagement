@@ -49,7 +49,7 @@ const PrivacyPolicy: React.FC = () => {
     <div className="overflow-hidden h-full rounded-sm bg-white p-1">
       <div className=" overflow-auto custom-scrollbar pt-0 h-[calc(100dvh-118px)] custom-scrollbar">
         <div className="markdown-content text-gray-800 w-full px-3 sm:px-4 md:px-8 py-6">
-          
+           Last updated: {lastUpdatedDate}
           <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
         </div>
       </div>

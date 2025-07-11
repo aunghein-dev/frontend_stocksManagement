@@ -19,7 +19,7 @@ const BARCODE_SCAN_DEBOUNCE_MS = 50; // Max time between characters in a barcode
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const { items, isLoading, error } = useFilteredStocks();
+  const { items, isLoading } = useFilteredStocks();
   const { openModal, closeModal } = useModalStore();
   const { t } = useTranslation();
 
@@ -91,9 +91,16 @@ export default function Home() {
       } else {
         setBarcodeScanError(`Barcode "${barcode}" not found or item out of stock.`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error processing barcode:", error);
-      setBarcodeScanError(`An unexpected error occurred: ${error.message || 'Unknown error'}. Barcode: ${barcode}`);
+
+      const message =
+        error && typeof error === "object" && "message" in error && typeof (error as Record<string, unknown>).message === "string"
+          ? (error as { message: string }).message
+          : "Unknown error";
+
+      setBarcodeScanError(`An unexpected error occurred: ${message}. Barcode: ${barcode}`);
+
     } finally {
       setLoadingBarcode(false);
     }

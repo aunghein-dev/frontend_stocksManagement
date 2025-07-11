@@ -72,9 +72,13 @@ export default function LoginPage() {
         }
         router.push('/');
       }
-    } catch (error: any) {
-      console.error('Login error:', error);
-
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Login error:', error.message);
+      } else {
+        console.error('Login error:', error);
+      }
+      
       rememberLoginInstance.clearRememberLogin();
       setLoginForm(prevForm => ({ ...prevForm, rememberMe: false })); // Uncheck the box
 
@@ -213,7 +217,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-gray-500 text-sm">
-          Don't have an account?{' '}
+          <span>{"Don't have an account?"}</span>
           <button onClick={() => router.push('/signup')} className="text-blue-600 hover:text-blue-800 font-medium">
             Sign up
           </button>

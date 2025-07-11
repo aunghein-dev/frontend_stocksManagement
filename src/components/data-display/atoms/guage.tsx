@@ -7,7 +7,7 @@ export default function GaugeResponsive(props: { number: number }) {
 
   React.useEffect(() => {
     const observer = new ResizeObserver((entries) => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         const { width, height } = entry.contentRect;
         setSize({ width, height });
       }

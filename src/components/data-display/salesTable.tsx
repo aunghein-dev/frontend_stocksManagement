@@ -30,6 +30,7 @@ interface FlattenedSalesRow {
   subCheckout: number;
   tranUserEmail: string;
   bizId: number;
+  barcodeNo: string;
 }
 
 // Data Mapper for Sales
@@ -47,11 +48,12 @@ time: sale.tranDate ? dayjs(sale.tranDate).format('hh:mm:ss A') : 'Invalid Time'
     subCheckout: sale.subCheckout,
     tranUserEmail: sale.tranUserEmail,
     bizId: sale.bizId,
+    barcodeNo: sale.barcodeNo
   }));
 };
 
 // SalesTable component will now just define its specific columns and props for DataTable
-const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; refresh: () => void }> = ({ sales, isLoading, error, refresh }) => {
+const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: unknown; refresh: () => void }> = ({ sales, isLoading, error }) => {
   const openModal = useModalStore((s) => s.openModal);
   const { t } = useTranslation();
   const handleCancel = React.useCallback((oldTranId: number, oldQty: number, itemId: number, groupName: string) => {
@@ -65,7 +67,7 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
   const columns: GridColDef[] = React.useMemo(() => [
     {
       field: 'batchId',
-      headerName: '#Batch',
+      headerName: t("tb_batch"),
       width: 130,
       align: 'center',
       headerAlign: 'center',
@@ -79,21 +81,21 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
     },
     {
       field: 'time',
-      headerName: 'Time',
+      headerName: t("tb_time"),
       width: 100,
       align: 'center',
       headerAlign: 'center'
     },
     {
       field: 'tranDate',
-      headerName: 'Date',
+      headerName: t("tb_date"),
       width: 100,
       align: 'center',
       headerAlign: 'center'
     },
     {
       field: 'groupId',
-      headerName: 'Group ID',
+      headerName: t("tb_groupId"),
       width: 90,
       align: 'center',
       headerAlign: 'center',
@@ -107,7 +109,7 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
     },
       {
       field: 'itemId',
-      headerName: 'Item ID',
+      headerName: t("tb_itemId"),
       width: 90,
       align: 'center',
       headerAlign: 'center',
@@ -119,19 +121,20 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
                     </div>
                   ),
     },
+
     {
       field: 'groupName',
-      headerName: 'Group Name',
+      headerName: t("tb_groupName"),
       flex: 1,
-      minWidth: 180,
+      minWidth: 170,
       align: 'left',
       headerAlign: 'center',
     },
   
     {
       field: 'checkoutQty',
-      headerName: 'Quantity',
-      width: 90,
+      headerName: t("tb_qty"),
+      width: 100,
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<FlattenedSalesRow>) => (
@@ -145,18 +148,18 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
     },
     {
       field: 'itemUnitPrice',
-      headerName: 'Price',
+      headerName: t("tb_price"),
       type: 'number',
-      width: 80,
-      align: 'center',
-      headerAlign: 'center',
+      width: 100,
+      align: 'left',
+      headerAlign: 'left',
     },
     {
       field: 'subCheckout',
-      headerName: 'Sub-Amount',
-      width: 140,
-      align: 'center',
-      headerAlign: 'center',
+      headerName: t("tb_subAmt"),
+      width: 120,
+      align: 'left',
+      headerAlign: 'left',
       renderCell: (params: GridRenderCellParams<FlattenedSalesRow>) => (
                     <div
                       className={`text-blue-500 hover:text-blue-700 cursor-pointer
@@ -171,15 +174,15 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
   
     {
       field: 'tranUserEmail',
-      headerName: 'Teller',
-      width: 70,
+      headerName: t("tb_teller"),
+      width: 180,
       align: 'left',
       headerAlign: 'center',
     },
     {
       field: 'actions',
-      headerName: 'Actions',
-      width: 100,
+      headerName: t("tb_actions"),
+      width: 130,
       sortable: false,
       align: 'center',
       headerAlign: 'center',
@@ -245,7 +248,7 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: any; ref
         </Stack>
       )
     }
-  ], [handleRefund, handleCancel]); // Dependencies for useCallback functions
+  ], [t, handleRefund, handleCancel]); // Dependencies for useCallback functions
 
   return (
     <DataTable

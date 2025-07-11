@@ -2,16 +2,19 @@ import * as React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { valueFormatter } from '@/data/pie.data';
 
-
 type PieChartData = {
   label: string;
   value: number;
 };
 
-export default function PieActiveArc(props: { data: PieChartData[] })  {
-  // transform to the format PieChart expects
+function truncateLabel(label: string, maxLength = 15) {
+  if (label.length <= maxLength) return label;
+  return label.slice(0, maxLength) + '...';
+}
+
+export default function PieActiveArc(props: { data: PieChartData[] }) {
   const transformedData = props.data.map((item) => ({
-    label: item.label,
+    label: truncateLabel(item.label, 15),
     value: item.value,
   }));
 
@@ -28,7 +31,6 @@ export default function PieActiveArc(props: { data: PieChartData[] })  {
         ]}
         height={170}
       />
-     
     </div>
   );
 }

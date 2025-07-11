@@ -2,12 +2,6 @@
 
 import React from "react";
 
-// Define props for the modal to control its visibility
-interface LoadingModalProps {
-  isOpen: boolean; // Controls whether the modal is rendered
-  message?: string; // Optional custom message for the loader
-}
-
 export default function LoadingModal() {
  
   return (

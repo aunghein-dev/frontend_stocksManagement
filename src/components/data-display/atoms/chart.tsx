@@ -1,5 +1,10 @@
 'use client';
 
+import * as React from 'react';
+import { LineChart } from '@mui/x-charts/LineChart';
+import type { LineChartProps } from '@mui/x-charts/LineChart';
+import { useTranslation } from '@/hooks/useTranslation';
+
 type SalesChartProps = {
   series: {
     data: number[];
@@ -9,56 +14,49 @@ type SalesChartProps = {
   }[];
 };
 
-
-import * as React from 'react';
-import { LineChart } from '@mui/x-charts/LineChart';
-import { useTranslation } from '@/hooks/useTranslation';
-
-
 export default function SalesChart({ series }: SalesChartProps) {
   const { t } = useTranslation();
-  const chartYAxis = [
-  {
-    label: t('lbl_amount'),
-    sx: {
-      '& .MuiChartsAxis-tickLabel': {
-        fontSize: 13,
-        fill: '#4b5563',
-      },
-      '& .MuiChartsAxis-label': {
-        fontSize: 14,
-        fontWeight: 600,
-        fill: '#1f2937',
+
+  const chartYAxis: LineChartProps['yAxis'] = [
+    {
+      label: t('lbl_amount'),
+      sx: {
+        '& .MuiChartsAxis-tickLabel': {
+          fontSize: 13,
+          fill: '#4b5563',
+        },
+        '& .MuiChartsAxis-label': {
+          fontSize: 14,
+          fontWeight: 600,
+          fill: '#1f2937',
+        },
       },
     },
-  },
-];
+  ];
 
-const chartXAxis = [
-  {
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    scaleType: 'point',
-    label: t("lbl_weeksOfCurMonth"),
-    sx: {
-      '& .MuiChartsAxis-tickLabel': {
-        fontSize: 12,
-        fill: '#4b5563',
-      },
-      '& .MuiChartsAxis-label': {
-        fontSize: 12,
-        fontWeight: 600,
-        fill: '#1f2937',
+  const chartXAxis: LineChartProps['xAxis'] = [
+    {
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      scaleType: 'point',
+      label: t('lbl_weeksOfCurMonth'),
+      sx: {
+        '& .MuiChartsAxis-tickLabel': {
+          fontSize: 12,
+          fill: '#4b5563',
+        },
+        '& .MuiChartsAxis-label': {
+          fontSize: 12,
+          fontWeight: 600,
+          fill: '#1f2937',
+        },
       },
     },
-  },
-];
-
-
+  ];
 
   return (
     <div className="w-full px-1 pt-10 pb-2 flex justify-center items-center relative">
       <LineChart
-        xAxis={chartXAxis as any}
+        xAxis={chartXAxis}
         yAxis={chartYAxis}
         series={series}
         height={170}

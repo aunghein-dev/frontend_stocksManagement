@@ -4,6 +4,7 @@ export interface CartItem {
   colorHex: string;
   boughtQty: number;
   unitPrice: number;
+  barcodeNo: string;
 }
 
 export interface CartGroup {
@@ -100,6 +101,7 @@ class Cart {
           colorHex: foundItem.itemColorHex,
           unitPrice: stockGroup.groupUnitPrice,
           boughtQty: 1,
+          barcodeNo: foundItem.barcodeNo
         };
         foundGroupName = stockGroup.groupName;
         foundGroupId = stockGroup.groupId;

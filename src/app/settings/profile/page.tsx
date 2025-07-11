@@ -110,7 +110,7 @@ const AccountProfileSettingsPage: React.FC = () => {
     };
 
     fetchUserProfile();
-  }, []); // Empty dependency array means this runs once on mount
+  }, [openModal, closeModal]); // Empty dependency array means this runs once on mount
 
 
   const handleFullNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,7 +218,7 @@ const AccountProfileSettingsPage: React.FC = () => {
         fileInputRef.current.value = ''; // Clear the file input
       }
     }
-  }, [selectedProfileImageFile, userProfile, API_BASE_URL, displayProfileImageUrl]);
+  }, [selectedProfileImageFile, userProfile, displayProfileImageUrl]);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -265,7 +265,7 @@ const AccountProfileSettingsPage: React.FC = () => {
     } finally {
       setSaving(false);
     }
-  }, [formFullName, userProfile, API_BASE_URL]);
+  }, [formFullName, userProfile]);
 
   const hasFormChanges = initialUserProfile?.fullName !== formFullName;
 

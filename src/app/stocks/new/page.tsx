@@ -1,7 +1,7 @@
 // src/app/stocks/page.tsx
 "use client";
 
-import React, { useState, ChangeEvent, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -215,14 +215,20 @@ export default function StockEntryForm() {
 
   // Handles updating a specific field of an item variant
   // Added 'barcodeNo' as a possible key
-  const updateItem = useCallback((index: number, key: keyof NewStockItem, value: string | number | string[] | null) => {
-    setForm((prev) => {
-      const updatedItems = [...prev.items];
-      // Type assertion for dynamically setting properties
-      (updatedItems[index] as any)[key] = value;
-      return { ...prev, items: updatedItems };
-    });
-  }, []);
+  const updateItem = useCallback(
+    <K extends keyof NewStockItem>(index: number, key: K, value: NewStockItem[K]) => {
+      setForm((prev) => {
+        const updatedItems = [...prev.items];
+        updatedItems[index] = {
+          ...updatedItems[index],
+          [key]: value,
+        };
+        return { ...prev, items: updatedItems };
+      });
+    },
+    []
+  );
+
 
   // Handles image selection for the main group image
   const handleGroupImageSelected = useCallback((file: File | null) => {
@@ -411,7 +417,7 @@ export default function StockEntryForm() {
       formData.append("groupImage", selectedGroupFile);
 
       const itemFiles: File[] = [];
-      const itemDataForJson = form.items.map((item, index) => {
+      const itemDataForJson = form.items.map((item) => {
         if (item._tempFile) {
           itemFiles.push(item._tempFile);
         }

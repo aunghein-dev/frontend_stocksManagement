@@ -11,7 +11,6 @@ import { useModalStore } from "@/store/modalStore";
 import Link from 'next/link';
 import { useTranslation } from "@/hooks/useTranslation";
 
-
 // --- Type Definitions ---
 type PieChartData = {
   label: string;
@@ -33,6 +32,30 @@ type BarsetSeriesItem = {
   label: string;
 };
 
+interface BarsetData {
+  groupName: string;
+  value: (string | number)[];
+}
+
+
+type RadarDataType = {
+  metrics: string,
+  summerPoints: number,
+  rainyPoints: number,
+  winterPoints: number,
+}
+
+type MiniCardDataType = {
+  revenue: number;
+  growth: number;
+  orders: string;
+  products: string;
+}
+
+type Storage = {
+  usagePercentage: number | null;
+};
+
 // --- Dynamic Imports (keep ssr: false if charts don't support SSR) ---
 const BarsDataset = dynamic(() => import('@/components/data-display/atoms/barset'), { ssr: false });
 const PieChart = dynamic(() => import('@/components/data-display/atoms/pie'), { ssr: false });
@@ -49,9 +72,9 @@ export default function Dashboard() {
   // --- State for Dashboard Data ---
   const [dashboardData, setDashboardData] = useState<{
     barset: { series: BarsetSeriesItem[]; data: BarsetMonthlyData[] } | null;
-    radar: any[] | null;
-    minicard: any | null;
-    storage: any | null;
+    radar: RadarDataType[] | null;
+    minicard: MiniCardDataType | null;
+    storage: Storage | null;
     pie: PieChartData[] | null;
     line: number[] | null;
   }>({
@@ -61,7 +84,7 @@ export default function Dashboard() {
   const [isLoadingDashboardData, setIsLoadingDashboardData] = useState(false);
   const [dashboardDataError, setDashboardDataError] = useState<Error | null>(null);
 
-  const { business, isLoading: isBusinessInfoLoading, error: businessInfoError } = useInfo();
+  const { business, isLoading: isBusinessInfoLoading, error: businessInfoError, refresh: refreshBusiness } = useInfo();
   const { openModal, closeModal } = useModalStore();
   const { t } = useTranslation();
   // --- Memoized Data Transformations ---
@@ -132,7 +155,7 @@ export default function Dashboard() {
       ]);
 
       const uniqueSeriesMap = new Map<string, BarsetSeriesItem>();
-      barsetRes.data.forEach((item: any) => {
+      barsetRes.data.forEach((item: BarsetData) => {
         const trimmedKey = item.groupName.trim();
         if (!uniqueSeriesMap.has(trimmedKey)) {
           uniqueSeriesMap.set(trimmedKey, { dataKey: trimmedKey, label: item.groupName.trim() });
@@ -148,14 +171,18 @@ export default function Dashboard() {
         return monthData;
       });
 
-      barsetRes.data.forEach((group: any) => {
+      barsetRes.data.forEach((group: BarsetData) => {
         const groupName = group.groupName.trim();
-        group.value.forEach((val: number, monthIdx: number) => {
+        group.value.forEach((val: string | number, monthIdx: number) => {
+          // Convert val to number safely
+          const numericVal = typeof val === "string" ? parseFloat(val) : val;
+
           if (monthIdx < initialTransformedBarsetData.length) {
-            initialTransformedBarsetData[monthIdx][groupName] = val || 0;
+            initialTransformedBarsetData[monthIdx][groupName] = numericVal || 0;
           }
         });
       });
+
 
       const validSeries = Array.from(uniqueSeriesMap.values())
         .filter(series => initialTransformedBarsetData.some(month => series.dataKey in month));
@@ -175,10 +202,14 @@ export default function Dashboard() {
         line: formattedLine,
       });
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error loading dashboard data:", err);
-      setDashboardDataError(new Error(`Failed to load dashboard data: ${err.message || 'Please check your connection.'}`));
+
+      const message = isErrorWithMessage(err) ? err.message : "Please check your connection.";
+
+      setDashboardDataError(new Error(`Failed to load dashboard data: ${message}`));
       setDashboardData({ barset: null, radar: null, minicard: null, storage: null, pie: null, line: null });
+
     } finally {
       setIsLoadingDashboardData(false);
     }
@@ -204,6 +235,11 @@ export default function Dashboard() {
       if (timer) clearTimeout(timer);
     };
   }, [isBusinessInfoLoading, isLoadingDashboardData, openModal, closeModal]);
+
+  function isErrorWithMessage(err: unknown): err is { message: string } {
+    return typeof err === "object" && err !== null && "message" in err && typeof (err as Record<string, unknown>).message === "string";
+  }
+
 
   // Effect to trigger dashboard data fetch when business info is ready
   useEffect(() => {
@@ -242,7 +278,7 @@ export default function Dashboard() {
       <div className='flex justify-center items-center min-h-[calc(100dvh-169px)] p-4'>
         <p className="text-red-600 text-lg font-medium text-center p-6 rounded-lg bg-red-50 shadow-xs">
           Error loading business information: {businessInfoError.message || "An unknown error occurred."}
-          <button onClick={useInfo().refresh} className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">
+          <button onClick={refreshBusiness} className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">
             Retry
           </button>
         </p>

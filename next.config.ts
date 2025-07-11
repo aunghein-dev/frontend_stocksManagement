@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     domains: ['svmeynesalueoxzhtdqp.supabase.co'],
   },
   eslint: {
-    ignoreDuringBuilds: true, // ✅ This line disables ESLint blocking builds
+    ignoreDuringBuilds: false, // ✅ enable ESLint blocking builds
   },
 };
 

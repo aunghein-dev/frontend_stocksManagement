@@ -24,12 +24,6 @@ const addItem = useCartStore(state => state.addItem);
   const [alert, setAlert] = useState<{ type: "success" | "warning"; show: boolean }>({ type: "success", show: false });
 
   const selectedItem = useMemo(() => props.items.find(item => item.itemColorHex === selectedColor) || null, [selectedColor, props.items]);
-  const selectedImage = 
-    selectedItem?.itemImage && selectedItem.itemImage.trim().toUpperCase() !== "NULL"
-      ? selectedItem.itemImage
-      : props.groupImage && props.groupImage.trim().toUpperCase() !== "NULL"
-        ? props.groupImage
-        : "/Box.png"; 
 
   // availableQty now represents remaining *display* quantity, not the check for adding one more
   const availableQtyDisplay = useMemo(() => {
@@ -40,8 +34,17 @@ const addItem = useCartStore(state => state.addItem);
 
   const totalStockQty = useMemo(() => props.items.reduce((sum, i) => sum + i.itemQuantity, 0), [props.items]);
   // colorQty now represents the total stock for the selected color, regardless of cart
-  const colorQtyTotalInStock = useMemo(() => props.items.filter(i => i.itemColorHex === selectedColor).reduce((sum, i) => sum + i.itemQuantity, 0), [selectedColor, props.items]);
+ // const colorQtyTotalInStock = useMemo(() => props.items.filter(i => i.itemColorHex === selectedColor).reduce((sum, i) => sum + i.itemQuantity, 0), [selectedColor, props.items]);
 
+  const selectedImage = useMemo(() => {
+    if (selectedItem?.itemImage && selectedItem.itemImage.trim().toUpperCase() !== "NULL") {
+      return selectedItem.itemImage;
+    } else if (props.groupImage && props.groupImage.trim().toUpperCase() !== "NULL") {
+      return props.groupImage;
+    } else {
+      return "/Box.png";
+    }
+  }, [selectedItem, props.groupImage]);
 
   const displayBarcode = useMemo(() => {
     if (selectedItem?.barcodeNo) {
@@ -99,6 +102,7 @@ const addItem = useCartStore(state => state.addItem);
       colorHex: selectedItem.itemColorHex,
       unitPrice: props.groupUnitPrice,
       boughtQty: 1, // Always adding 1
+      barcodeNo: selectedItem.barcodeNo
     };
 
     addItem(props.groupId, props.groupName, cartItem);

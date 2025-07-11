@@ -9,7 +9,7 @@ import RefundModal from "@/models/refundModal";
 import LoadingModal from "@/models/loadingModal"; // Using alias for LoadingModal as well
 
 export default function Modal() {
-  const { modalType, modalData } = useModalStore(); // Destructure modalData as well
+  const { modalType } = useModalStore(); // Destructure modalData as well
 
   if (!modalType) return null;
 

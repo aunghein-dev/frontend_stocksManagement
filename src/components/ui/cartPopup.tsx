@@ -13,8 +13,8 @@ import PopupVouncher from "./voucherPopup";
 import formatMoney from "@/components/utils/formatMoney";
 import { motion, AnimatePresence } from "framer-motion"; 
 import { useTranslation } from "@/hooks/useTranslation";
-import cartData from "@/cookie/cart.data";
 import { X as CloseIcon } from "lucide-react";
+import { Stock } from "@/data/table.data";
 
 type SalesProps = {
   tranDate: string;
@@ -29,12 +29,19 @@ type SalesProps = {
   bizId: number;
 };
 
+type VoucherData = {
+  groupId: number;
+  name: string;
+  price: number;
+  quantity: number;
+  subTotal: number;
+};
+
 export default function CartPopup(props: { handleToggle: () => void }) {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const { cart, addItem, removeItem, deleteItem, clearCart, total, totalQty } = useCartStore();
   const grandTotal = total;
   const grandTotalQty = totalQty;
-  const [error, setError] = useState<string | null>(null);
   const [outOfStockItemId, setOutOfStockItemId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { items: stocks, refresh } = useStocks();
@@ -59,7 +66,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
     });
   }
 
-  const [voucherData, setVoucherData] = useState<any[]>([]);
+  const [voucherData, setVoucherData] = useState<VoucherData[]>([]);
   const [voucherUUID, setVoucherUUID] = useState<string>("");
   const [imageLoaded, setImageLoaded] = useState(false); // This state is for the cart item images, not the empty cart SVG
   const vouncherGrand = voucherData.reduce((acc, item) => acc + item.subTotal, 0);
@@ -105,8 +112,6 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         setVoucherData(voucher);
         clearCart(); 
         refresh();
-        console.log(cartData);
-        
         setShowVouncher(true);
       }
     } catch (error) {
@@ -132,8 +137,8 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
     const availableQty =
       stocks
-        .find((s: any) => s.groupId === group.groupId)
-        ?.items.find((i: any) => i.itemId === item.itemId)?.itemQuantity || 0;
+        .find((s: Stock) => s.groupId === group.groupId)
+        ?.items.find((i: { itemId: number; itemQuantity: number }) => i.itemId === item.itemId)?.itemQuantity || 0;
 
     return availableQty - existingCountInCart <= 0;
   };

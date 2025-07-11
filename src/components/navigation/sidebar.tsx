@@ -32,7 +32,7 @@ const iconMap: { [key: string]: IconType } = {
 
 function SidebarComponent(props: { sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) {
   const pathname = usePathname();
-  const { business, isLoading, error, refresh } = useInfo();
+  const { business, isLoading } = useInfo();
   const [imgLoaded, setImgLoaded] = useState(false);
   const { t } = useTranslation(); // <--- Call useTranslation hook here
 
@@ -86,7 +86,7 @@ function SidebarComponent(props: { sidebarOpen: boolean; setSidebarOpen: (open: 
             >
               <div className="relative w-12 h-12">
                 <Image
-                  src={business?.businessId === 1 ? business?.businessLogo || "/Box.png" : "/applogo.png"}
+                  src={business?.businessId === 1 ? business?.businessLogo || "/Box.png" : "/onlylogo.png"}
                   alt="Openware Logo"
                   fill
                   sizes="(max-width: 640px) 50px, 50px"
