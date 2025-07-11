@@ -45,14 +45,6 @@ Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) in
 
 <img src="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/mobilePreview.png" alt="Mobile UI Preview" width="300" />
 
-<p>
-  <a href="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview.MOV">
-    <img src="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/preview_thumb.gif" 
-         alt="Watch a video preview of Openware Stock Manager" 
-         width="400" />
-  </a><br />
-  <em>Click to watch the full video preview!</em>
-</p>
 
 ---
 
