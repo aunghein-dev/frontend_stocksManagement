@@ -18,7 +18,7 @@ import { BusinessDetailsForm } from './BusinessDetailsForm'; // Assuming this co
 import axios from 'axios';
 
 // Environment variable for API URL - ensure it's properly configured
-// Make sure NEXT_PUBLIC_API_URL is set in your .env.local file
+// Make sure NEXT_PUBLIC_API_URL is set in  .env.local file
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -134,7 +134,7 @@ export function SignupForm() {
           } else if (status === 403) {
             errorMessage = backendMessage || 'Username already exists. Please choose a different username.';
           } else if (status === 400) {
-            errorMessage = backendMessage || 'Invalid input. Please check your details.';
+            errorMessage = backendMessage || 'Invalid input. Please check  details.';
           } else {
             // Fallback for other non-2xx statuses
             errorMessage = backendMessage || `Server error: ${status}. Please try again later.`;
@@ -147,7 +147,7 @@ export function SignupForm() {
         } else {
           // Network error (no response received from server at all)
           
-          toast.error("Network error or server unreachable. Please check your internet connection.");
+          toast.error("Network error or server unreachable. Please check  internet connection.");
           setError("root.serverError", { type: "manual", message: "Network error or server unreachable." });
           throw error;
         }

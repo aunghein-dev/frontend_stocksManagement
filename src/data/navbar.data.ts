@@ -1,19 +1,39 @@
+// src/data/navbar.data.ts
 
 export interface NavbarItem {
   id: number;
-  key: string; // This will be the translation key (e.g., "home", "dashboard")
-  path: string;
-  // You might optionally add: iconKey?: string; if your icon keys differ from translation keys
+  key: string; // This will be the translation key (e.g., "home", "dashboard", "inventory")
+  path?: string; // path is now optional for group headers (they don't navigate directly)
+  isGroup?: boolean; // New property to indicate if it's a group header
+  children?: NavbarItem[]; // New property for nested items
 }
 
 const navbarData: NavbarItem[] = [
   { id: 1, key: "home", path: "/" },
   { id: 2, key: "dashboard", path: "/dashboard" },
-  { id: 3, key: "sales", path: "/sales" },
-  { id: 4, key: "stocks", path: "/stocks" },
-  { id: 5, key: "report", path: "/report" },
+  {
+    id: 3,
+    key: "sales",
+    isGroup: true,
+    children: [
+      { id: 31, key: "salesTransactions", path: "/sales/transaction" },
+      { id: 32, key: "salesReports", path: "/sales/report" },
+    ],
+  },
+  { id: 4, key: "procurement", path: "/procurement" },
+  {
+    id: 5,
+    key: "inventory",
+    isGroup: true,
+    children: [
+      { id: 51, key: "stocks", path: "/inventory/stocks" },
+      { id: 52, key: "customers", path: "/inventory/customers" }, 
+      //{ id: 53, key: "suppliers", path: "/inventory/suppliers" }, 
+    ],
+  },
+
   { id: 6, key: "settings", path: "/settings" },
-  { id: 7, key: "privacyPolicy", path: "/privaypolicy" }, // Corrected key to match common convention
+  { id: 7, key: "privacyPolicy", path: "/privacyPolicy" }, 
 ];
 
 export default navbarData;

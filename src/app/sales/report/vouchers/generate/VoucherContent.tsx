@@ -49,7 +49,7 @@ export default function VoucherContent() {
     setVoucherFetchError(null);
     try {
       if (!API_BASE_URL) {
-        throw new Error("API_BASE_URL is not defined in environment variables. Please check your .env.local file.");
+        throw new Error("API_BASE_URL is not defined in environment variables. Please check  .env.local file.");
       }
       const response = await axios.get<VoucherItem[]>(
         `${API_BASE_URL}/checkout/generate/${currentBatchId}/${currentBizId}`,
@@ -150,9 +150,9 @@ export default function VoucherContent() {
   return (
     <div
       className="relative w-full flex flex-col animate-slide-up 
-                p-1 overflow-hidden rounded-sm bg-white h-[calc(100dvh-108px)]"
+                p-1 overflow-hidden rounded-sm bg-white h-[calc(100dvh-111px)]"
     >
-      {/* ... (Your existing JSX content for the voucher) ... */}
+      {/* ... ( existing JSX content for the voucher) ... */}
       <div className="min-h-[40px] w-[40px] absolute top-2 left-2 print:hidden">
         <button
           className="cursor-pointer bg-blue-100 px-3 py-1 rounded-sm text-sm hover:bg-blue-200 text-blue-500 border-[0.5px] border-blue-500"
@@ -163,7 +163,7 @@ export default function VoucherContent() {
         </button>
       </div>
 
-      <div className="overflow-auto custom-scrollbar px-1 md:px-10 lg:px-20 xl:px-30"
+      <div className="overflow-auto custom-scrollbar px-1 md:px-10 lg:px-30 xl:px-40"
            ref={componentRef}>
         <div className="flex flex-col items-center mt-4">
           <Image
@@ -181,7 +181,7 @@ export default function VoucherContent() {
           <p className="text-xs font-mono text-gray-700">
             {business?.phoneNum1}၊  {business?.phoneNum2}</p>
         </div>
-
+        
         <ul className="mt-6">
           <div className="text-[rgba(56,57,60,0.75)]">
             <div className="flex justify-between px-1.5 text-sm font-bold">
@@ -190,18 +190,18 @@ export default function VoucherContent() {
                 {voucherData[0]?.date ? dayjs(voucherData[0].date).format("DD-MMM-YYYY") : 'N/A'}
               </span>
             </div>
-            <div className="flex justify-between px-1.5 border-b border-gray-400 text-sm border-dashed font-bold -mt-4">
+            <div className="flex justify-between px-1.5 text-sm font-bold -mt-4">
               <span className="p-2">Ordered</span>
               <span className="p-2">Delivery</span>
             </div>
           </div>
-
+          <div className="border-1 border-dotted border-gray-400">
           {/* Table Header */}
-          <li className="grid grid-cols-[12%_38%_20%_10%_20%] p-1 border-b border-gray-400 font-bold text-center text-sm border-dashed text-gray-700">
-            <span className="p-2">No</span>
-            <span className="p-2 text-left">Item</span>
-            <span className="p-2">Unit</span>
-            <span className="p-2">Qty.</span>
+          <li className="grid grid-cols-[12%_38%_20%_10%_20%] border-b border-gray-300 font-bold text-center text-sm text-gray-700 bg-gray-200">
+            <span className="p-2 border-r border-dotted border-gray-400 py-2">No</span>
+            <span className="p-2 text-left border-r border-dotted border-gray-400 py-2">Item</span>
+            <span className="p-2 border-r border-dotted border-gray-400 py-2">Unit</span>
+            <span className="p-2 border-r border-dotted border-gray-400 py-2">Qty.</span>
             <span className="p-2 text-right">Amount</span>
           </li>
 
@@ -209,26 +209,52 @@ export default function VoucherContent() {
           {voucherData.map((item, index) => (
             <li
               key={item.id || index}
-              className="grid grid-cols-[12%_38%_20%_10%_20%] p-2 border-b border-gray-400 border-dotted text-center items-center text-sm px-3 text-gray-700"
+              className="grid grid-cols-[12%_38%_20%_10%_20%] border-b border-gray-400 border-dotted text-center items-center text-sm text-gray-700 "
             >
-              <span>{index + 1}</span>
-              <span className="text-left break-words">{item.name}</span>
-              <span>{item.price.toLocaleString()}</span>
-              <span>{item.quantity.toLocaleString()}</span>
-              <span className="text-right">{item.subTotal.toLocaleString()}</span>
+              <span className="border-r border-dotted border-gray-400 py-2">{index + 1}</span>
+              <span className="text-left break-words pl-2 border-r border-dotted border-gray-400 py-2">{item.name}</span>
+              <span className="border-r border-dotted border-gray-400 py-2">{item.price.toLocaleString()}</span>
+              <span className="border-r border-dotted border-gray-400 py-2">{item.quantity.toLocaleString()}</span>
+              <span className="text-right pr-3">{item.subTotal.toLocaleString()}</span>
             </li>
           ))}
+          
+
+          <li className="grid grid-cols-[20%_20%_20%_20%_20%] py-[0.5px] border-b border-gray-400 font-bold text-center text-[0.95rem] border-dotted text-gray-700">
+            <span className="p-1"></span>
+            <span className="p-1"></span>
+            <span className="p-1"></span>
+            <span className="p-1 border-r border-dotted border-gray-400 text-right pr-2">Grand Total</span>
+            <span className="p-1 text-right">{grandTotal.toLocaleString()} {business?.defaultCurrency}</span>
+          </li>
+
+          <li className="grid grid-cols-[20%_20%_20%_20%_20%] py-[0.5px] border-b border-gray-400 font-bold text-center text-[0.95rem] border-dotted text-gray-700">
+            <span className="p-1"></span>
+            <span className="p-1"></span>
+            <span className="p-1"></span>
+            <span className="p-1 border-r border-dotted border-gray-400 text-right pr-2">Paid</span>
+            <span className="p-1 text-right">{grandTotal.toLocaleString()} {business?.defaultCurrency}</span>
+          </li>
+
+          <li className="grid grid-cols-[20%_20%_20%_20%_20%] py-[0.5px] border-b border-gray-400 font-bold text-center text-[0.95rem] border-dotted text-gray-700">
+            <span className="p-1"></span>
+            <span className="p-1"></span>
+            <span className="p-1"></span>
+            <span className="p-1 border-r border-dotted border-gray-400 text-right pr-2">Change</span>
+            <span className="p-1 text-right">{grandTotal.toLocaleString()} {business?.defaultCurrency}</span>
+          </li>
 
           {/* Grand Total */}
-          <li className="grid grid-cols-[30%_10%_20%_10%_30%] p-1 border-b border-gray-400 font-bold text-center text-sm border-dashed text-gray-700">
-            <span className="p-2">Grand Total</span>
-            <span className="p-2"></span>
-            <span className="p-2"></span>
-            <span className="p-2"></span>
-            <span className="p-2 text-right">{grandTotal.toLocaleString()} {business?.defaultCurrency}</span>
+          <li className="grid grid-cols-[20%_20%_20%_20%_20%] py-[0.5px] font-bold text-center text-[0.95rem] border-dotted text-gray-700">
+            <span className="p-1"></span>
+            <span className="p-1"></span>
+            <span className="p-1"></span>
+            <span className="p-1 border-r border-dotted border-gray-400 text-right pr-2">Balance</span>
+            <span className="p-1 text-right">{grandTotal.toLocaleString()} {business?.defaultCurrency}</span>
           </li>
+          </div>
         </ul>
-
+       
         <p className="text-sm mt-8 flex justify-center mb-10 text-gray-600">
           {business?.invoiceFooterMessage || ''}
         </p>

@@ -31,7 +31,7 @@ interface Business {
   invoiceFooterMessage: string;
 }
 
-// --- DTO for User Profile (matches your provided JSON structure) ---
+// --- DTO for User Profile (matches  provided JSON structure) ---
 interface UserProfile {
   id: number;
   username: string;
@@ -70,7 +70,7 @@ const AccountProfileSettingsPage: React.FC = () => {
       setError(null);
       try {
         if (!API_BASE_URL) {
-          setError("API_BASE_URL is not configured. Please set NEXT_PUBLIC_API_URL in your .env.local file.");
+          setError("API_BASE_URL is not configured. Please set NEXT_PUBLIC_API_URL in  .env.local file.");
           closeModal();
           return;
         }

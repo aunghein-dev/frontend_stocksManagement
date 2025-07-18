@@ -94,7 +94,7 @@ export default function LoginPage() {
           setErrorMsg(message || 'Login failed. Please try again.');
         }
       } else {
-        setErrorMsg('Network error. Check your connection.');
+        setErrorMsg('Network error. Check  connection.');
       }
     } finally {
       closeModal();

@@ -205,7 +205,7 @@ export default function Dashboard() {
     } catch (err: unknown) {
       console.error("Error loading dashboard data:", err);
 
-      const message = isErrorWithMessage(err) ? err.message : "Please check your connection.";
+      const message = isErrorWithMessage(err) ? err.message : "Please check  connection.";
 
       setDashboardDataError(new Error(`Failed to load dashboard data: ${message}`));
       setDashboardData({ barset: null, radar: null, minicard: null, storage: null, pie: null, line: null });
@@ -275,8 +275,8 @@ export default function Dashboard() {
 
   if (businessInfoError) {
     return (
-      <div className='flex justify-center items-center min-h-[calc(100dvh-169px)] p-4'>
-        <p className="text-red-600 text-lg font-medium text-center p-6 rounded-lg bg-red-50 shadow-xs">
+      <div className='flex justify-center items-center min-h-[calc(100dvh - 127px)] p-4'>
+        <p className="text-red-600 text-lg font-medium text-center p-6 rounded-md bg-red-50 shadow-xs">
           Error loading business information: {businessInfoError.message || "An unknown error occurred."}
           <button onClick={refreshBusiness} className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">
             Retry
@@ -311,18 +311,17 @@ export default function Dashboard() {
   }
 
 
-  
 
   // --- Main Dashboard Content (renders only if data is available) ---
   return (
     <section className="h-full overflow-hidden">
-      <div className="bg-white rounded-sm p-2 md:p-1 shadow-xs">
+      <div className="bg-white rounded-sm py-2 shadow-xs">
         <div
-          className="overflow-y-auto overflow-x-hidden custom-scrollbar pt-2 px-1"
-          style={{ height: "calc(100dvh - 117.5px)" }}
+          className="overflow-y-auto overflow-x-hidden custom-scrollbar px-2"
+          style={{ height: "calc(100dvh - 127px)" }}
         >
           {/* Mini cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 justify-between pb-4 md:pb-6 border-b border-gray-200 pl-3 pr-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 justify-between pb-4 md:pb-6 border-b border-gray-200">
             {dashboardData.minicard ? (
               <>
                 <MiniDataCard title={t("dash_revenue")} value={`${dashboardData.minicard.revenue?.toLocaleString() ?? '0'}`} icon={<FaDollarSign />} />
@@ -336,7 +335,7 @@ export default function Dashboard() {
           </div>
 
           {/* Bars and Radar charts */}
-          <div className="grid grid-cols-1 md:[grid-template-columns:60%_40%] gap-2 pt-4 md:pt-6 pb-4 md:pb-6 border-b border-gray-200 w-full md:pr-4 px-3">
+          <div className="grid grid-cols-1 md:[grid-template-columns:60%_40%] gap-2 pt-4 md:pt-6 pb-4 md:pb-6 border-b border-gray-200 w-full pr-2">
             <div className="flex items-center min-h-[250px] md:min-h-[300px] justify-center bg-gray-50 rounded-lg p-2 pt-10 border-[0.5px] border-gray-100 shadow-xs relative">
               {dashboardData.barset?.data.length && dashboardData.barset?.series.length ? (
                   <div className='w-full'>

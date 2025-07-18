@@ -252,6 +252,7 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: unknown;
 
   return (
     <DataTable
+      className='sm:w-[calc(100vw-225px)] w-[calc(100vw-25px)]'
       data={sales}
       dataMapper={flattenSales}
       columns={columns}
@@ -259,7 +260,7 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: unknown;
       error={error}
       filterField="groupName" // Field to filter by
       searchTextLabel="Search by Group Name..."
-      rowHeight={60}
+      rowHeight={50}
     >
       {/* Plus button for sales table, if applicable, otherwise remove */}
     <Link

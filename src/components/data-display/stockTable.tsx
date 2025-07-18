@@ -68,7 +68,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
   }, [openModal]); // Added openModal to dependency array for useCallback
 
   const handleEdit = React.useCallback((groupId: number) => {
-    router.push(`/stocks/edit/${groupId}`); // Assuming edit is by groupId
+    router.push(`/inventory/stocks/edit/${groupId}`); // Assuming edit is by groupId
   }, [router]);
 
   const columns: GridColDef<FlattenedStockRow>[] = React.useMemo(() => [
@@ -298,6 +298,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
 
   return (
     <DataTable
+      className='sm:w-[calc(100vw-225px)] w-[calc(100vw-25px)]'
       data={items}
       dataMapper={flattenStocks}
       columns={columns}
@@ -308,7 +309,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
       rowHeight={75} // Specific row height for StockTable
     >
     <Link
-      href="/stocks/new"
+      href="/inventory/stocks/new"
       className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-full border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md "
     >
       + {t("btnTxt_newStk")}

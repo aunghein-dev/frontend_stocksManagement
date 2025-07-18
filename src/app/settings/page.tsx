@@ -90,7 +90,7 @@ export default function Settings() {
       setDisplayLogoUrl(loadedSettings.businessLogo || null);
     } else if (!isLoadingBusinessInfo && !businessInfoError && !business) {
       // Case where no business info is found
-      setSaveError("No business information found. Please ensure your account is set up correctly.");
+      setSaveError("No business information found. Please ensure  account is set up correctly.");
       setInitialSettings(null);
       setDisplayLogoUrl(null); // Clear logo preview if no business info
     }
@@ -396,7 +396,7 @@ export default function Settings() {
                   type="text"
                   id="businessName"
                   className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
-                  placeholder="Your Store Name"
+                  placeholder=" Store Name"
                   value={settings.businessName}
                   onChange={handleChange}
                   required
@@ -507,7 +507,7 @@ export default function Settings() {
                   onChange={handleChange}
                   maxLength={255}
                 />
-                <p className="text-xs text-gray-500 mt-2.5">This message will appear at the bottom of your customer invoices.</p>
+                <p className="text-xs text-gray-500 mt-2.5">This message will appear at the bottom of  customer invoices.</p>
               </div>
             </div>
           </div>

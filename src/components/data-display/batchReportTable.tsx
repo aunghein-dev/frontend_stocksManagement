@@ -13,7 +13,7 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import formatMoney from '@/components/utils/formatMoney';
 import DataTable from '@/components/data-display/table/DataTable';
 
-// Type for the raw Reports data (as provided in your code)
+// Type for the raw Reports data (as provided in  code)
 export interface Reports {
   batchId: string;
   totalQty: number;
@@ -159,7 +159,7 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
           <Tooltip title="Generate Voucher" arrow>
             <IconButton
               size="small"
-              onClick={() => router.push(`/report/vouchers/generate?batchId=${row.id}`)}
+              onClick={() => router.push(`/sales/report/vouchers/generate?batchId=${row.id}`)}
               sx={{
                 color: '#2563eb',
                 backgroundColor: '#dbeafe',
@@ -177,6 +177,7 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
 
   return (
     <DataTable
+      className='sm:w-[calc(100vw-225px)] w-[calc(100vw-25px)]'
       data={items}
       dataMapper={flattenBatchReport}
       columns={columns}
@@ -184,9 +185,9 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
       error={error}
       filterField="batchId"
       searchTextLabel="Search by Batch ID..."
-      rowHeight={55}
+      rowHeight={50}
     >
-      {/* No specific '+' button for BatchReportTable in your original code,
+      {/* No specific '+' button for BatchReportTable in  original code,
           so this can be empty or removed if not needed */}
     </DataTable>
   );

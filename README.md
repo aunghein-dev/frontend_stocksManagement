@@ -45,7 +45,6 @@ Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) in
 
 <img src="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/mobilePreview.png" alt="Mobile UI Preview" width="300" />
 
-
 ---
 
 ## Features
@@ -101,7 +100,7 @@ Each customer account has a unique `account_id` embedded within the JWT upon suc
 
 ## Getting Started
 
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing.
+Follow these instructions to get a copy of the project up and running on local machine for development and testing.
 
 ### Prerequisites
 
@@ -154,8 +153,8 @@ CREATE DATABASE openware_stock_manager;
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/openware_stock_manager
-spring.datasource.username=your_pg_username
-spring.datasource.password=your_pg_password
+spring.datasource.username=_pg_username
+spring.datasource.password=_pg_password
 spring.jpa.hibernate.ddl-auto=update
 ```
 
@@ -163,18 +162,18 @@ spring.jpa.hibernate.ddl-auto=update
 
 1. Create a new project in Supabase.
 2. Configure authentication settings (e.g., enable email/password login).
-3. Get your Supabase Project URL and Anon Key.
+3. Get Supabase Project URL and Anon Key.
 4. Update the frontend `.env.local`:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_URL=_SUPABASE_PROJECT_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=_SUPABASE_ANON_KEY
 ```
 
 5. Add Supabase JWT secret to backend config:
 
 ```properties
-app.jwt.supabase-secret=YOUR_SUPABASE_JWT_SECRET
+app.jwt.supabase-secret=_SUPABASE_JWT_SECRET
 ```
 
 #### Environment Variables (General)
@@ -201,7 +200,7 @@ npm run dev # or yarn dev
 
 ## Usage
 
-Open `http://localhost:3000` in your browser.
+Open `http://localhost:3000` in browser.
 
 - **Sign Up / Log In:** Auth via Supabase.
 - **Manage Products:** Create/edit products.
@@ -227,10 +226,10 @@ Open `http://localhost:3000` in your browser.
 ## Contributing
 
 1. Fork the repo
-2. Create a branch: `git checkout -b feature/your-feature`
+2. Create a branch: `git checkout -b feature/-feature`
 3. Make and test changes
-4. Commit: `git commit -m "feat: your change"`
-5. Push: `git push origin feature/your-feature`
+4. Commit: `git commit -m "feat:  change"`
+5. Push: `git push origin feature/-feature`
 6. Open a Pull Request
 
 ---

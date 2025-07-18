@@ -9,8 +9,8 @@ import {
   GridPaginationModel,
   GridCellEditStopParams
 } from '@mui/x-data-grid';
-import {  Paper } from '@mui/material';
-
+import {  Paper, Box, TextField, InputAdornment } from '@mui/material'; // Make sure to import these if you use them for the search input
+import SearchIcon from '@mui/icons-material/Search'; // And this if you use it for the search input
 
 // Define a generic type for the data rows
 // V will be the specific data type (e.g., Sales, Stock, Reports)
@@ -21,11 +21,12 @@ interface DataTableProps<V, R extends { id: GridRowId }> {
   columns: GridColDef[]; // Columns specific to the data type
   isLoading: boolean;
   error: unknown; // Consider a more specific error type if possible
-  filterField: keyof R; // The field to use for text filtering (e.g., 'groupName', 'batchId')
+  filterField: keyof R | Array<keyof R>; // FIXED: The field(s) to use for text filtering
   searchTextLabel: string; // Label for the search input (e.g., "Search by Group Name...")
   rowHeight?: number; // Optional row height for specific tables
   // Optional props for custom actions/buttons below the table, like the '+' link
   children?: React.ReactNode;
+  className?: string; // Prop for external classes
 }
 
 function DataTable<V, R extends { id: GridRowId }>({
@@ -34,39 +35,46 @@ function DataTable<V, R extends { id: GridRowId }>({
   columns,
   isLoading,
   filterField,
+  searchTextLabel, // Destructure searchTextLabel
   rowHeight = 55, // Default row height
   children,
+  className = '', // Default empty string for className
 }: DataTableProps<V, R>) {
-  const [searchText] = React.useState('');
+  const [searchText, setSearchText] = React.useState(''); // Assuming an input updates this
   const [rows, setRows] = React.useState<GridRowsProp>([]);
   const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({ page: 0, pageSize: 10 });
 
-    React.useEffect(() => {
+  React.useEffect(() => {
     if (Array.isArray(data)) {
       setRows(dataMapper(data));
     } else {
       setRows([]); // Fallback to empty if data is undefined/null
     }
-    // Reset pagination to first page when data changes (e.g., on search or refresh)
     setPaginationModel({ page: 0, pageSize: paginationModel.pageSize });
-  }, [data, dataMapper, paginationModel.pageSize]); // <--- Added paginationModel.pageSize here
-
+  }, [data, dataMapper, paginationModel.pageSize]);
 
   const filteredRows = React.useMemo(() => {
     if (!searchText) {
       return rows;
     }
     const lowercasedSearchText = searchText.toLowerCase();
-    return rows.filter((row) => {
-      const fieldValue = String(row[filterField]).toLowerCase();
-      return fieldValue.includes(lowercasedSearchText);
-    });
+
+    if (Array.isArray(filterField)) {
+      return rows.filter((row) => {
+        return filterField.some((field) => {
+          const fieldValue = String(row[field as keyof typeof row]).toLowerCase();
+          return fieldValue.includes(lowercasedSearchText);
+        });
+      });
+    } else {
+      return rows.filter((row) => {
+        const fieldValue = String(row[filterField as keyof typeof row]).toLowerCase();
+        return fieldValue.includes(lowercasedSearchText);
+      });
+    }
   }, [rows, searchText, filterField]);
 
-  // Handle cell edit committed (if enabled for some columns)
   const handleEditCellChangeCommitted = React.useCallback((params: GridCellEditStopParams) => {
-    // In a real application, you would send this update to your backend here
-    // For now, we update the local state immediately
     setRows((prev) =>
       prev.map((row) =>
         row.id === params.id ? { ...row, [params.field]: params.value } : row
@@ -74,38 +82,60 @@ function DataTable<V, R extends { id: GridRowId }>({
     );
   }, []);
 
-
-  // Determine if the table should show a loading indicator
-  // If `isLoading` from the hook is true OR `rows` are still empty and initial loading is not yet done
-  //const showLoadingOverlay = isLoading || (rows.length === 0 && !isLoading && !error);
-   // Note: `rows.length === 0 && !isLoading && !error` attempts to show loading while rows are still empty post-load.
-   // This might conflict with the `noRowsOverlay` if you intend to show "No Results" specifically.
-   // For strict "loading spinner" only, use just `isLoading`.
-   // If `isLoading` from hook also includes the time for `dataMapper` to run, then `isLoading` is sufficient.
-   // The current implementation of `loading={isLoading || rows.length === 0}` in your original code
-   // would show a spinner if there are no rows, even after loading is complete, which can be confusing.
-   // We'll stick to `isLoading` for the MuiXDataGrid's `loading` prop for clarity.
-
-  return (
-    <div className='relative'>
-      <Paper elevation={0} sx={{
-        height: "calc(100dvh - 110px)",
-        width: '100%', // Adjust width as needed based on parent
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: 1,
-        overflow: 'hidden', // Ensures inner elements don't overflow rounded corners
-      }}>
-       
+ return (
+    // Outer div for general layout/positioning, but NOT for scrolling.
+    // It should contain the Paper component.
+    <div className={`relative ${className}`}>
+      <Paper
+        elevation={0}
+        sx={{
+          // Set a fixed height for the Paper. This is the container that will hold the scrollable DataGrid.
+          height: 'calc(100dvh - 110.5px)', // This calculates height relative to viewport
+          width: '100%',
+          display: 'flex',       // Make Paper a flex container
+          flexDirection: 'column', // Stack children vertically
+          borderRadius: 1,
+          px: 1,
+          overflow: 'hidden',    // IMPORTANT: Prevents Paper itself from showing a scrollbar
+                                 // and clips any overflow from its direct children if they
+                                 // somehow exceed Paper's dimensions.
+          // Optional: If you want the Paper's background to be explicitly transparent
+          // to see content behind it, add this. Otherwise, it will default to white.
+          // backgroundColor: 'transparent',
+        }}
+      >
+        {/* Optional Search Input - Uncomment and connect props if needed */}
+        {/*
+        <Box sx={{ p: 1 }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            size="small"
+            placeholder={searchTextLabel}
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+              sx: {
+                borderRadius: '10px',
+                fontSize: '0.9rem',
+                '& input': { fontSize: '0.9rem' },
+                '& input::placeholder': { fontSize: '0.9rem' },
+              }
+            }}
+          />
+        </Box>
+        */}
 
         <DataGrid
-          // The DataGrid `loading` prop from MUI should ideally only reflect `isLoading` from your hook.
-          // If you want a specific "No results found" overlay, you'd use `slots` and `slotProps`.
-          style={{ 
-          height: "calc(100dvh - 110px)",
-         }}
-          className='p-1 sm:w-[calc(100vw-225px)] w-[calc(100vw-25px)]'
-          loading={isLoading} // Only show MUI's built-in spinner if data is being fetched
+          // DataGrid will now take its height from `flexGrow: 1` within the Paper flex container.
+          // `className` here can be used for tailwind padding/margin, or you can use sx prop.
+          // Removed `className={`p-1`}` from here as it's common to control spacing via Box/sx props around DataGrid if needed.
+          loading={isLoading}
           rows={filteredRows}
           columns={columns}
           pageSizeOptions={[5, 10, 25]}
@@ -119,91 +149,116 @@ function DataTable<V, R extends { id: GridRowId }>({
           slotProps={{
             toolbar: {
               csvOptions: {
-                utf8WithBom: true, // Apply UTF-8 
+                utf8WithBom: true,
               },
            },
           }}
-          // The style prop can be simplified by using `sx` prop which is more idiomatic for MUI
           sx={{
-          border: 0,
-          borderRadius: 1,
-          '& .MuiDataGrid-scrollbarFiller--header':{
-            backgroundColor: '#f8f8f8',
-          },
-          '& .MuiDataGrid-columnHeader': {
-            backgroundColor: '#f8f8f8',
-          },
-         
-          '& .MuiDataGrid-columnHeaderTitle ': {
-            fontSize: '0.9rem',
-            color: '#4b5563',
-            fontWeight: 600,
-          },
-          '& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer': {
-            fontSize: '0.9rem'
-          },
-          '& .MuiDataGrid-scrollbarContent': {
-            backgroundColor: 'red',
-            width: '0px',
-            height: '0px',
-          },
+            flexGrow: 1, // Allows DataGrid to fill remaining vertical space within its flex parent (Paper)
+            width: '100%', // Ensure DataGrid takes 100% of its parent's width
+            border: 0,
+            borderRadius: 1,
 
-          '& .MuiDataGrid-scrollbar': {
-            overflow: 'auto', // enable both x and y
-             backgroundColor: 'white',
-            // ✅ Custom scrollbar (WebKit)
-            '&::-webkit-scrollbar': {
-              width: '8px',
-              height: '8px',
+            // Ensure the main DataGrid background is transparent for the scrollbar track to show through
+            '&.MuiDataGrid-root': {
+                border: 'none',
+                backgroundColor: 'transparent', // Crucial for track transparency
             },
-            '&::-webkit-scrollbar-track': {
-              background: 'white',
+            // The MuiDataGrid-main div usually wraps the scroller and other parts.
+            // Make sure its background doesn't block transparency.
+            '& .MuiDataGrid-main': {
+                backgroundColor: 'transparent',
             },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: 'rgba(19, 19, 19, 0.1)',
-              borderRadius: '6px',
-            },
-            '&::-webkit-scrollbar-corner': {
-              background: 'transparent', // ⬅️ This removes the bottom-right corner block
-            },
-          },
 
-          '& .MuiDataGrid-cell': {
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: '0.9rem',
+            // Header specific styles
+            '& .MuiDataGrid-scrollbarFiller--header':{
+              backgroundColor: '#f8f8f8', // Kept this background for the header filler
+            },
+            '& .MuiDataGrid-columnHeader': {
+              backgroundColor: '#f8f8f8', 
+             
+            },
+            '& .MuiDataGrid-columnHeaderTitle ': {
+              fontSize: '0.85rem',
+              color: '#4b5563',
+              fontWeight: 600,
+            },
+            '& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer': {
+              fontSize: '0.9rem'
+            },
+            //  toolbar/quick filter styles
+            '& .MuiDataGrid-toolbarQuickFilter': {
+              fontSize: '0.9rem',
+              '& input': {
+                fontSize: '0.9rem !important',
+                borderRadius: '10px',
+              },
+              '& input::placeholder': {
+                fontSize: '0.9rem !important',
+              },
+            },
 
-          },
-          '& .MuiDataGrid-toolbarQuickFilter': {
-            fontSize: '0.9rem',
-            
-            '& input': {
-              fontSize: '0.9rem !important',
-              borderRadius: '10px',
+            // --- PRO LEVEL MINIMALIST BLUE-300 SCROLLBAR STYLES (Even Lower Opacity) ---
+            // These values now match the last custom-scrollbar CSS provided.
+            '& .MuiDataGrid-virtualScroller': {
+              backgroundColor: 'transparent', // Ensure the scroller itself is transparent
+              scrollbarWidth: 'thin', /* Firefox */
+              scrollbarColor: 'rgba(147, 197, 253, 0.2) transparent', /* Firefox: thumb (very low opacity) */
+
+              '&::-webkit-scrollbar': {
+                width: '8px',   /* Standard width */
+                height: '8px',  /* For horizontal scrollbars */
+              },
+              '&::-webkit-scrollbar-track': {
+                background: 'transparent', /* Fully transparent track */
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'rgba(147, 197, 253, 0.3)', /* Very faint blue thumb */
+                borderRadius: '4px', /* Slightly more rounded */
+                border: '0.5px solid rgba(147, 197, 253, 0.05)', /* Barely visible border */
+                transition: 'background-color 0.2s ease-in-out, border-color 0.2s ease-in-out',
+              },
+              '&::-webkit-scrollbar-thumb:hover': {
+                backgroundColor: 'rgba(147, 197, 253, 0.5)', /* Softer blue on hover */
+                borderColor: 'rgba(147, 197, 253, 0.2)', /* Very subtle border on hover */
+              },
+              '&::-webkit-scrollbar-corner': {
+                background: 'transparent',
+              },
             },
-            '& input::placeholder': {
-              fontSize: '0.9rem !important',
+
+            // --- HIDE THE DEFAULT MUI SCROLLBAR (Crucial for avoiding duplicates) ---
+            '& .MuiDataGrid-scrollbar': {
+              display: 'none !important',
+              width: '0px !important',
+              height: '0px !important',
+              overflow: 'hidden !important',
             },
-          },
-           '.MuiDataGrid-columnSeparator': {
-              display: 'none',
-          },
-          '&.MuiDataGrid-root': {
-              border: 'none',
-          },
-          "& .MuiDataGrid-cell:focus-within": {
-              outline: 'none !important'
-          },
-         
-        }}
-        
+
+            // Other general DataGrid cell/border styles
+            '& .MuiDataGrid-cell': {
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: '0.9rem',
+            },
+             '.MuiDataGrid-columnSeparator': {
+                display: 'none',
+            },
+            // '&.MuiDataGrid-root' border: 'none' moved above
+            "& .MuiDataGrid-cell:focus-within": {
+                outline: 'none !important'
+            },
+                        // Example if you find MuiDataGrid-overlay is the culprit
+            '& .MuiDataGrid-overlay': {
+                backgroundColor: 'transparent !important',
+            },
+          }}
         />
       </Paper>
-      {/* Any children passed to DataTable (e.g., the '+' link) */}
-      {children}
+      {children} {/* Renders any children passed to MyDataTable outside the Paper */}
     </div>
   );
-}
+};
 
-// Use React.memo for performance optimization
+
 export default React.memo(DataTable) as typeof DataTable;

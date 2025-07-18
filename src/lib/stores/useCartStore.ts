@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import Cart, { CartGroup, CartItem, Stock } from '@/lib/classes/Cart';
 
 interface CartState {
-  cartInstance: Cart; // This holds the single instance of your Cart class
+  cartInstance: Cart; // This holds the single instance of  Cart class
   cart: CartGroup[]; // Mirrored cart state for reactivity
   total: number;     // Mirrored total for reactivity
   totalQty: number;  // Mirrored total quantity for reactivity

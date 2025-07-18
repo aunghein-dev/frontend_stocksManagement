@@ -22,7 +22,7 @@ export default function SignupPage() {
                 />
               </div>
               <span className="text-blue-600 mr-1">Register</span>
-              <span>your FREE account</span>
+              <span> FREE account</span>
               <span className="text-blue-600 text-2xl">&#46;</span>
             </h1>
             <SignupForm />

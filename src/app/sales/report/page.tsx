@@ -64,6 +64,7 @@ const { openModal, closeModal } = useModalStore();
         isLoading={isLoading} // Pass the data loading state to the table component
         error={error}       // Pass any data fetching errors
         refresh={refresh}   // Pass the refresh function
+
       />
     </section>
   );

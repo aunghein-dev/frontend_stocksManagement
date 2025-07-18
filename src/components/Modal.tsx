@@ -1,7 +1,7 @@
 "use client";
 
 // Reverting to alias imports as commonly used in Next.js projects.
-// These paths are expected to be resolved by your Next.js build configuration.
+// These paths are expected to be resolved by  Next.js build configuration.
 import { useModalStore } from "@/store/modalStore";
 import ConfirmationModal from "@/models/stkDeleteConfirmation";
 import CancelModal from "@/models/cancelModal";

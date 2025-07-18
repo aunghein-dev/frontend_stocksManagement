@@ -42,7 +42,7 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
        <Controller
-  name="phoneNum1" // The name of your field in the form data
+  name="phoneNum1" // The name of  field in the form data
   control={control} // Pass the control object from useForm
   render={({ field }) => (
     <TextField
@@ -86,7 +86,7 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
   )}
 />
       <Controller
-        name="phoneNum2" // The name of your field in the form data
+        name="phoneNum2" // The name of  field in the form data
         control={control} // Pass the control object from useForm
         render={({ field }) => (
           <TextField

@@ -14,7 +14,7 @@ import formatMoney from "@/components/utils/formatMoney";
 // Define the interface for the original item structure
 type CartItemInput = {
   groupId: number;
-  name: string; // This 'name' is the item name in your flat data
+  name: string; // This 'name' is the item name in  flat data
   price: number;
   quantity: number;
   subTotal: number;
@@ -139,7 +139,7 @@ const handleSavePhoto = async () => {
 
         {/* Logo & Header */}
         <div className="exclude-from-image">
-          {/* Ensure this image path is correct relative to your public folder */}
+          {/* Ensure this image path is correct relative to  public folder */}
           <Image
             className="absolute top-4 left-4 w-[75px] "
             src="/Box.png" // This should be /Box.png if it's in public folder

@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
     // If logged in, redirect to /dashboard
     if (token) {
       // Corrected: Redirect to home ('/') or a specific dashboard, not just '/'.
-      // If your dashboard is at /dashboard, change '/' to '/dashboard'
+      // If  dashboard is at /dashboard, change '/' to '/dashboard'
       return NextResponse.redirect(new URL('/', request.url));
     }
     // Otherwise allow access to login/signup/terms pages

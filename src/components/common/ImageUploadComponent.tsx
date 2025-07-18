@@ -72,17 +72,18 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700 ml-1">
-        {label}
-      </label>
+      
       <div
-        className={`relative border-[0.5px] border-dashed rounded-sm p-4 text-center flex flex-col items-center justify-center min-h-[120px] transition-colors duration-200
-          ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'}
+        className={`relative border-[0.5px] border-dashed rounded-lg p-4 text-center flex flex-col items-center justify-center min-h-[120px] transition-colors duration-200 sm:py-6
+          ${isDragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-500 bg-white'}
           ${error ? 'border-red-500' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
+        <label htmlFor={id} className="absolute -top-2.5 left-2 text-[0.78rem] font-medium text-black/60 ml-1 px-1 bg-white">
+        {label}
+      </label>
         {/* Loading Overlay */}
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10 rounded-sm">
@@ -92,7 +93,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
 
         {/* Image Preview or Upload Prompt */}
         {currentImageUrl ? (
-          <div className="relative w-24 h-24 mb-2 rounded-sm overflow-hidden border border-gray-200">
+          <div className="relative w-24 h-24 mb-1 rounded-sm overflow-hidden border border-gray-200 ">
             <Image
               src={currentImageUrl}
               alt="Preview"
@@ -140,7 +141,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
           />
         </label>
         {/* File Type and Size Hint */}
-        <p className="mt-2 text-xs text-gray-500">PNG, JPG, JPEG, GIF up to 10MB</p>
+        <p className="mt-2 text-[0.68rem] text-gray-500 hidden sm:block">PNG, JPG, JPEG, GIF up to 10MB</p>
         {/* Error Message */}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </div>

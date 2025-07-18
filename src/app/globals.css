@@ -27,6 +27,18 @@ body {
   min-height: 100dvh;
 }
 
+@layer components {
+  .search {
+    @apply w-full px-4 py-[10px] ps-10 text-sm text-gray-900
+           rounded-sm bg-white focus:ring-1 focus:ring-blue-400 focus:outline-none hover:bg-gray-50 
+           flex flex-row items-center justify-center border-[0.5px] border-gray-300 shadow-2xs
+           transition-all ease-in-out duration-100;
+  }
+  .dropdown {
+    @apply inline-flex items-center px-2 py-2.5 rounded-sm bg-white font-medium text-gray-700 hover:bg-gray-50  text-sm justify-between focus:ring-1 focus:ring-blue-400 focus:outline-none border-[0.5px] border-gray-200 shadow-2xs transition-all ease-in-out duration-100;
+  }
+}
+
 /* styles/globals.css or tailwind.config.css */
 
 .MuiDataGrid-panelWrapper,
@@ -46,19 +58,59 @@ body {
   font-size: 0.875rem !important;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+/* Custom Scrollbar for a Professional, Minimalist Blue-300 Theme (Even Lower Opacity) */
+
+/* Apply to elements with the custom-scrollbar class */
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(147, 197, 253, 0.2) transparent; /* Firefox: thumb (very low opacity) */
 }
 
+/* Webkit (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Standard width */
+  height: 8px; /* For horizontal scrollbars */
+}
+
+/* Track */
 .custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Fully transparent track */
+}
+
+/* Thumb */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(
+    147,
+    197,
+    253,
+    0.3
+  ); /* Very faint blue thumb (Blue-300, much lower opacity) */
+  border-radius: 4px; /* Slightly more rounded */
+  border: 1px solid rgba(147, 197, 253, 0.05); /* Barely visible border (extremely low opacity) */
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* Thumb on Hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(
+    147,
+    197,
+    253,
+    0.5
+  ); /* Softer blue on hover (still low, but more visible than idle) */
+  border-color: rgba(
+    147,
+    197,
+    253,
+    0.2
+  ); /* Very subtle border on hover (low opacity) */
+}
+
+/* Corner (where vertical and horizontal scrollbars meet) */
+.custom-scrollbar::-webkit-scrollbar-corner {
   background: transparent;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(19, 19, 19, 0.1);
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-}
 .markdown-content h1 {
   font-weight: bold;
   margin-bottom: 0.75rem; /* mb-3 */
@@ -188,7 +240,7 @@ body {
   }
 }
 
-/* In your CSS file or a style block */
+/* In  CSS file or a style block */
 /* (Adjust Tailwind theme for consistency if you're using custom values) */
 .item-image-container {
   border: 1px solid #e5e7eb; /* border-gray-200 */

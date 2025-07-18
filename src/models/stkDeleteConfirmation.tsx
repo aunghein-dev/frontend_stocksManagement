@@ -8,7 +8,7 @@ import axios from "axios";
 import { useStocks } from "@/hooks/useStocks";
 import { Checkbox } from "@mui/material";
 import { useTranslation } from "@/hooks/useTranslation";
-
+import { isStockDeleteModelData } from "@/components/utils/typeGuard"; 
 export default function DeleteStockConfirmation() {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const { modalData, closeModal } = useModalStore();
@@ -81,10 +81,12 @@ export default function DeleteStockConfirmation() {
           <p>
             {t("msg_stkDltConfirm")}
           </p>
+          {isStockDeleteModelData(modalData) && (
           <ul className="text-sm list-inside pl-2 text-gray-600 mt-4 space-y-1 list-none">
             <li><strong>{t("lbl_groupLbl")}:</strong> {modalData?.groupName}</li>
             <li><strong>{t("lbl_relateSubItemId")}:</strong> {(modalData?.itemId as string)?.replace('I-', '')}</li>
           </ul>
+          )}
         </div>
 
         <div>

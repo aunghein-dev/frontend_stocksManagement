@@ -7,10 +7,11 @@ import Search from "@/components/form/search";
 import Image from "next/image";
 import { useModalStore } from "@/store/modalStore";
 import { useFilteredStocks } from "@/hooks/useStocks";
-import type { Stock } from "@/lib/classes/Cart"; // Correctly import Stock type from your Cart file
+import type { Stock } from "@/lib/classes/Cart"; // Correctly import Stock type from  Cart file
 import { useTranslation } from "@/hooks/useTranslation";
-import { useCartStore } from "@/lib/stores/useCartStore"; // Your Zustand store
+import { useCartStore } from "@/lib/stores/useCartStore"; //  Zustand store
 import { ScanBarcode, X as CloseIcon } from "lucide-react"; // Import X as CloseIcon for the modal close button
+
 
 
 const ITEMS_PER_PAGE = 24;
@@ -176,9 +177,11 @@ export default function Home() {
 
       {/* Top bar */}
       <div className="flex items-center mb-3 min-w-0 gap-2 justify-between">
+        
         <Search
           placeholder={t("searchPlaceholderProd")}
           onChange={handleSearch}
+          value={searchQuery}
         />
         <PaginationComponent
           currentPage={currentPage}
@@ -190,8 +193,7 @@ export default function Home() {
       {/* Loading Spinner */}
       {(isLoading || loadingBarcode) && (
         <div
-          className="flex-1 flex items-center justify-center"
-          style={{ height: "calc(100dvh - 170px)" }}
+          className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-transparent bg-opacity-50 z-50"
         >
           <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
         </div>
@@ -199,10 +201,10 @@ export default function Home() {
 
       {/* Error message from barcode scan */}
       {barcodeScanError && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-red-600 px-4 py-3 flex items-center justify-center bg-opacity-50 z-50 bg-red-100 border-[0.5px] border-red-400 rounded-md" role="alert">
           <strong className="font-bold">{t("error")}! </strong>
-          <span className="block sm:inline">{barcodeScanError}</span>
-          <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+          <span className="block sm:inline mr-20">{barcodeScanError}</span>
+          <span className="absolute -right-2 top-0 bottom-0 px-4 py-3">
             <svg onClick={() => setBarcodeScanError(null)} className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>{t("close")}</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.697l-2.651 2.652a1.2 1.2 0 1 1-1.697-1.697L8.303 10 5.651 7.348a1.2 1.2 0 1 1 1.697-1.697L10 8.303l2.651-2.652a1.2 1.2 0 1 1 1.697 1.697L11.697 10l2.651 2.651a1.2 1.2 0 0 1 0 1.698z"/></svg>
           </span>
         </div>
@@ -211,8 +213,8 @@ export default function Home() {
       {/* No Results */}
       {!isLoading && !loadingBarcode && currentItems.length === 0 && (
         <div
-          className="w-full flex flex-col items-center justify-center"
-          style={{ height: "calc(100dvh - 170px)" }}
+          className="w-full flex flex-col items-center justify-center py-2"
+          style={{ height: "calc(100dvh - 150px)" }}
         >
           <div className="relative w-[300px] h-[300px] flex flex-col justify-end items-center">
             <Image
@@ -231,10 +233,10 @@ export default function Home() {
 
       {/* Product Grid */}
       {!isLoading && !loadingBarcode && currentItems.length > 0 && (
-        <div className="px-1 py-1 rounded-sm bg-white">
+        <div className="rounded-sm bg-white py-2">
           <div
             className="flex-1 overflow-y-auto custom-scrollbar"
-            style={{ height: "calc(100dvh - 170px)" }}
+            style={{ height: "calc(100dvh - 180px)" }}
           >
             <div className="grid 
                             grid-cols-1 
@@ -247,7 +249,7 @@ export default function Home() {
                             min-[1480px]:grid-cols-5
                             min-[1800px]:grid-cols-6
                             min-[1900px]:grid-cols-7
-                            gap-4 py-3 pl-3 pr-1">
+                            gap-x-2 gap-y-3 px-2">
               {currentItems.map((stock: Stock) => (
                 <Product key={stock.groupId} {...stock} />
               ))}

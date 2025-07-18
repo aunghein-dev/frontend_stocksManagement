@@ -8,6 +8,7 @@ import useSales from "@/hooks/useSales";
 import { useInfo } from "@/hooks/useInfo";
 import { Checkbox } from "@mui/material"; 
 import { useTranslation } from "@/hooks/useTranslation";
+import { isCancelableModelData } from "@/components/utils/typeGuard";
 
 export default function CancelConfirmationModal() {
   const API = process.env.NEXT_PUBLIC_API_URL;
@@ -71,10 +72,12 @@ export default function CancelConfirmationModal() {
           <p>
             {t("msg_cancelSold")}
           </p>
+           {isCancelableModelData(modalData) && (
           <ul className="text-sm list-none list-inside pl-2 text-gray-600 space-y-1 mt-4">
             <li><strong>{t("lbl_groupLbl")}:</strong> {modalData?.groupName}</li>
             <li><strong>{t("lbl_relateSubItemId")}:</strong> {modalData?.itemId}</li>
           </ul>
+        )}
         </div>
 
         <div>
