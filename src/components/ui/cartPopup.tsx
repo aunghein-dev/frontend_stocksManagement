@@ -13,8 +13,10 @@ import PopupVouncher from "./voucherPopup";
 import formatMoney from "@/components/utils/formatMoney";
 import { motion, AnimatePresence } from "framer-motion"; 
 import { useTranslation } from "@/hooks/useTranslation";
-import { X as CloseIcon } from "lucide-react";
 import { Stock } from "@/data/table.data";
+import CartCusSelected from '@/components/ui/molecules/CartCusSelected';
+import CustomerSelector from "./modals/CustomerSelector";
+import { ModalHeader } from "./molecules/ModalHeader";
 
 type SalesProps = {
   tranDate: string;
@@ -37,7 +39,7 @@ type VoucherData = {
   subTotal: number;
 };
 
-export default function CartPopup(props: { handleToggle: () => void }) {
+export default function CartPopup(props: { handleToggle: () => void}) {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const { cart, addItem, removeItem, deleteItem, clearCart, total, totalQty } = useCartStore();
   const grandTotal = total;
@@ -48,6 +50,16 @@ export default function CartPopup(props: { handleToggle: () => void }) {
   const { business } = useInfo();
   const [showVouncher, setShowVouncher] = useState(false);
   const { t } = useTranslation();
+  const [showCustomerSelector, setCustomerSelector] = useState(false);
+
+  const handleCustomerSwitch = () => {
+    setCustomerSelector(true);
+  };
+
+  // New function to close the CustomerSelector
+  const handleCloseCustomerSelector = () => {
+    setCustomerSelector(false);
+  };
 
   useEffect(() => {
     if (outOfStockItemId !== null) {
@@ -167,7 +179,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
         {group.item.map((item) => (
           <li
             key={item.itemId}
-            className="relative flex items-center justify-between gap-2 px-1 py-5 
+            className="relative flex items-center justify-between gap-1 px-1 py-5 
                        rounded-xl border-[0.5px] border-gray-200 transition-all duration-300
                       cursor-pointer"
             style={{
@@ -224,7 +236,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
               >
                 –
               </button>
-              <span className="px-2 text-sm font-medium">{item.boughtQty}</span>
+              <span className="text-sm font-medium min-w-[40px] text-center">{item.boughtQty}</span>
               <button
                 className="w-6 h-6 rounded-full bg-gray-400 hover:bg-gray-500 text-white font-bold
                            flex items-center justify-center ease-in-out duration-300 cursor-pointer"
@@ -235,7 +247,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
             </div>
 
             {/* Price Info */}
-            <div className="flex flex-col text-left">
+            <div className="flex flex-col  min-w-[130px] text-right">
               <span className="text-xs sm:text-sm text-gray-500">
                 {item.boughtQty} x {item.unitPrice}
               </span>
@@ -248,7 +260,7 @@ export default function CartPopup(props: { handleToggle: () => void }) {
 
             {/* Delete */}
             <button
-              className="text-gray-500 hover:text-gray-900 text-2xl bg-gray-200 h-7 w-7 rounded-full cursor-pointer hover:bg-gray-300 ease-in-out duration-300 flex items-center justify-center"
+              className="text-gray-500 hover:text-gray-900 text-2xl bg-gray-200 h-7 w-7 rounded-full cursor-pointer hover:bg-gray-300 ease-in-out duration-300 flex items-center justify-center text-center"
               title="Remove Item"
               onClick={() => deleteItem(group.groupId, item.itemId)}
             >
@@ -271,94 +283,98 @@ export default function CartPopup(props: { handleToggle: () => void }) {
     )
   }
 
+
+if(showCustomerSelector){
+    return (
+     <CustomerSelector handleCloseSelector={handleCloseCustomerSelector}/> // Pass the new internal handler
+    )
+  }
   return (
     <div className="fixed inset-0 backdrop-blur-[1px] flex items-center justify-center px-2 z-60 overflow-hidden"
       style={{
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}>
 
-      <div className="relative h-[90dvh] w-full sm:w-[600px] rounded-lg shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white">
-        {/* Close Button */}
-        <button
-            onClick={props.handleToggle}
-            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
-            <CloseIcon className="w-6 h-6" />
-        </button>
+      <div className="relative h-[95dvh] w-full sm:w-[650px] rounded-lg shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white ">
+        <ModalHeader title={t("hd_shoppingCart")} onClick={props.handleToggle} />
 
-        {loading && (
-              <div className="absolute top-4 right-12">
-                <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <CartCusSelected handleCustomerSwitch={handleCustomerSwitch}/>
+        <div className="flex flex-row h-[calc(100%-60px)]">
+               <div className="flex flex-col h-full sm:min-w-[400px] min-w-0">
+              {loading && (
+                    <div className="absolute top-4 right-12">
+                      <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                    </div>
+              )}
+              {/* Cart Items */}
+              <div className="flex-1 overflow-auto p-1 space-y-4 custom-scrollbar mt-3">
+                {itemElements.length ? (
+                  itemElements
+                ) : (
+                  // Use AnimatePresence to handle mounting/unmounting animations
+                <AnimatePresence>
+                  {itemElements.length ? (
+                    itemElements
+                  ) : (
+                    <motion.div
+                      key="empty-cart"
+                      // Change 'y' in initial to a larger positive value to come from below
+                      initial={{ opacity: 0, scale: 0.9, y: 100 }} // Starts further down
+                      animate={{ opacity: 1, scale: 1, y: 0 }}   // Animates to its final centered position
+                      // Change 'y' in exit to move downwards as it disappears
+                      exit={{ opacity: 0, scale: 0.9, y: 100 }}   // Exits by moving back downwards
+                      transition={{ duration: 0.7, ease: "easeOut" }}
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    >
+                      <Image
+                        src="/noitemsincart.svg"
+                        alt="Empty Cart"
+                        aria-label="Empty Cart"
+                        width={250}
+                        height={250}
+                        className="mx-auto"
+                      />
+
+                      <motion.span
+                        // Keep text animation similar for a staggered effect, but also make it enter from below if desired
+                        initial={{ opacity: 0, y: 50 }} // Start text slightly lower than default
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+                        className="block text-center text-gray-500 font-bold text-md mt-1.5"
+                      >
+                        Cart is empty
+                      </motion.span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                )}
               </div>
-         )}
 
-        {/* Header */}
-        <div className="p-5 border-b border-gray-200 
-                      bg-transparent text-lg font-bold 
-                      text-gray-800 flex ">
-           {t("hd_shoppingCart")}
-        </div>
-
-        {/* Cart Items */}
-        <div className="flex-1 overflow-auto p-1 space-y-4 custom-scrollbar mt-3">
-          {itemElements.length ? (
-            itemElements
-          ) : (
-            // Use AnimatePresence to handle mounting/unmounting animations
-           <AnimatePresence>
-            {itemElements.length ? (
-              itemElements
-            ) : (
-              <motion.div
-                key="empty-cart"
-                // Change 'y' in initial to a larger positive value to come from below
-                initial={{ opacity: 0, scale: 0.9, y: 100 }} // Starts further down
-                animate={{ opacity: 1, scale: 1, y: 0 }}   // Animates to its final centered position
-                // Change 'y' in exit to move downwards as it disappears
-                exit={{ opacity: 0, scale: 0.9, y: 100 }}   // Exits by moving back downwards
-                transition={{ duration: 0.7, ease: "easeOut" }}
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-              >
-                <Image
-                  src="/noitemsincart.svg"
-                  alt="Empty Cart"
-                  aria-label="Empty Cart"
-                  width={250}
-                  height={250}
-                  className="mx-auto"
-                />
-
-                <motion.span
-                  // Keep text animation similar for a staggered effect, but also make it enter from below if desired
-                  initial={{ opacity: 0, y: 50 }} // Start text slightly lower than default
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
-                  className="block text-center text-gray-500 font-bold text-md mt-1.5"
+              {/* Footer */}
+              <div className="p-5 border-t border-gray-200 bg-transparent">
+                <div className="flex justify-between mb-4 items-center">
+                  <span className="text-md text-gray-600 font-bold">{t("lbl_subTotal")}</span>
+                  <span className="text-lg font-bold text-gray-900">
+                    <span className="text-gray-400 text-sm mr-3">(Qty. {grandTotalQty})</span>
+                    {formatMoney(grandTotal)} MMK
+                  </span>
+                </div>
+                <button
+                  className="py-3 px-4 bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold rounded-sm transition duration-200 cursor-pointer flex justify-self-end"
+                  disabled={grandTotal === 0 && loading}
+                  onClick={() => handleCheckout()}
                 >
-                  Cart is empty
-                </motion.span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          )}
+                  {loading ? t("btnTxt_chking") : t("btnTxt_chkout")}
+                </button>
+              </div>
         </div>
+        <div className="bg-red-500">
+           TEST
+        </div>
+      
 
-        {/* Footer */}
-        <div className="p-5 border-t border-gray-200 bg-transparent">
-          <div className="flex justify-between mb-4 items-center">
-            <span className="text-md text-gray-600 font-bold">{t("lbl_subTotal")}</span>
-            <span className="text-lg font-bold text-gray-900">
-               <span className="text-gray-400 text-sm mr-3">(Qty. {grandTotalQty})</span>
-               {formatMoney(grandTotal)} MMK
-            </span>
-          </div>
-          <button
-            className="py-3 px-4 bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold rounded-sm transition duration-200 cursor-pointer flex justify-self-end"
-            disabled={grandTotal === 0 && loading}
-            onClick={() => handleCheckout()}
-          >
-            {loading ? t("btnTxt_chking") : t("btnTxt_chkout")}
-          </button>
         </div>
+   
       </div>
     </div>
   );

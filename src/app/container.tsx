@@ -21,6 +21,10 @@ export default function Container({ children }: { children: React.ReactNode }) {
     setSidebarOpen((prev) => !prev);
   }
 
+  const handleModalSwitch = () => {
+    
+  };
+
   return (
     <div className="flex h-full">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />

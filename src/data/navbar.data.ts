@@ -20,20 +20,19 @@ const navbarData: NavbarItem[] = [
       { id: 32, key: "salesReports", path: "/sales/report" },
     ],
   },
-  { id: 4, key: "procurement", path: "/procurement" },
   {
-    id: 5,
+    id: 4,
     key: "inventory",
     isGroup: true,
     children: [
-      { id: 51, key: "stocks", path: "/inventory/stocks" },
-      { id: 52, key: "customers", path: "/inventory/customers" }, 
+      { id: 41, key: "stocks", path: "/inventory/stocks" },
+      { id: 42, key: "customers", path: "/inventory/customers" }, 
       //{ id: 53, key: "suppliers", path: "/inventory/suppliers" }, 
     ],
   },
 
-  { id: 6, key: "settings", path: "/settings" },
-  { id: 7, key: "privacyPolicy", path: "/privacyPolicy" }, 
+  { id: 5, key: "settings", path: "/settings" },
+  { id: 6, key: "privacyPolicy", path: "/privacyPolicy" }, 
 ];
 
 export default navbarData;

@@ -6,7 +6,7 @@ import { FaUsers, FaUserPlus, FaBuilding, FaStore, FaMoneyBillWave } from "react
 import MiniDataCard from "@/components/data-display/atoms/miniDataCard";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useModalStore } from "@/store/modalStore";
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import NewCustomer from "@/components/ui/newCustomerPopUp"; // Your NewCustomer form component
 import CustomerCard, {type Customer} from "@/components/data-display/customerCard";
 import Search from "@/components/form/search";
@@ -16,9 +16,44 @@ import EditCustomer from "@/models/editCustomer";
 // No need to import ConfirmDeleteDialog here if it's only rendered via useModalStore
 
 export default function Customers() {
-  const { customers, isLoading, error, refresh } = useCustomer();
+  const { customers: data, isLoading, error, refresh } = useCustomer();
   const { openModal, closeModal, modalType } = useModalStore(); // Get modalType to decide which modal to render
   const [ newCustomerPopup, setNewCustomerPopup ] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+  };
+
+
+
+
+  const filteredCustomers = useMemo(() => {
+    if (!data) return [];
+    if (!searchQuery) return data;
+    
+    const lowerCaseSearchQuery = searchQuery.toLowerCase();
+
+    return data.filter((customer: Customer) => {
+      return (
+        customer.name.toLowerCase().includes(lowerCaseSearchQuery) || 
+        customer.typeOfCustomer.toLowerCase().includes(lowerCaseSearchQuery) ||
+        customer.address1.toLowerCase().includes(lowerCaseSearchQuery) ||
+        customer.cid.includes(lowerCaseSearchQuery) 
+      );
+    });
+
+  }, [data, searchQuery]);
+
+
+  const customers = useMemo(() => {
+    // This `useMemo` should now depend on `filteredCustomers`, not `data`.
+    // Otherwise, the `customers` variable will always hold all data regardless of the search.
+    if (!filteredCustomers) return []; 
+    return filteredCustomers;
+  }, [filteredCustomers]);
 
   // The handleDelete function now directly calls openModal with the customer data
   const handleDelete = React.useCallback((customer: Customer) => {
@@ -106,9 +141,9 @@ export default function Customers() {
                         border-b border-gray-100 px-3">
           <Search
             placeholder="Search Customers"
-            onChange={(value) => console.log(value)}
-            value=""
-            />
+             onChange={handleSearch}
+             value={searchQuery}
+          />
         </div>
         <div className="flex flex-col h-full">
            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 justify-between pb-4 md:pb-6 border-b border-gray-200 pt-4 px-3">

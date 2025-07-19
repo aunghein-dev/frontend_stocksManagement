@@ -312,7 +312,8 @@ export default function EditCustomer() {
   // Render the form only if customer data is valid
   return (
     <section
-      className='fixed inset-0 bg-black/20 flex items-center justify-center animate-fade-in z-[9999]'
+      className='fixed inset-0 bg-black/20 flex items-center justify-center animate-fade-in z-[9999]
+                 px-2'
     >
       <div className='flex flex-col h-[600px] w-full sm:w-[800px] rounded-lg shadow-xl border border-gray-200 bg-white animate-slide-up relative overflow-hidden'>
         {/* Header */}
