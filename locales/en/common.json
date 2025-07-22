@@ -213,5 +213,6 @@
     "lbl_cartEmpty": "Cart is empty",
     "noItemsFound": "No items found",
     "noCusFound": "No customers found",
-    "msg_wrong": "Something went wrong. Please try again."
+    "msg_wrong": "Something went wrong. Please try again.",
+    "msg_CusAdded": "Customer added successfully"
 }

@@ -163,7 +163,7 @@ export default function NewCustomer( props: {
         await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate network delay
         if(response.status === 200 || response.status === 201) {
           
-          setSnackbarMessage('Customer added successfully!');
+          setSnackbarMessage(t("msg_CusAdded"));
           props.refresh();
           setSnackbarSeverity('success');
           setSnackbarOpen(true);
@@ -183,7 +183,7 @@ export default function NewCustomer( props: {
         setLoading(false);
       }
     } else {
-      setSnackbarMessage('Please correct the errors in the form.');
+      setSnackbarMessage(t("msg_correctFormErrors"));
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }

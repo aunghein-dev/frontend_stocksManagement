@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useModalStore } from "@/store/modalStore";
 import RememberLogin from '@/lib/classes/RememberLogin';
 import Image from 'next/image';
+import { Checkbox } from '@mui/material';
 
 // Instantiate RememberLogin outside the component to avoid re-creation on every render
 const rememberLoginInstance = new RememberLogin();
@@ -107,7 +108,7 @@ export default function LoginPage() {
           
     <div className="flex items-center justify-center p-4 w-full">
       
-      <div className="bg-white shadow-lg rounded-sm max-w-md w-full p-8">
+      <div className="bg-white shadow-lg rounded-xl max-w-md w-full p-8">
        <h1 className="text-2xl font-extrabold mb-5 text-center flex flex-row items-center justify-center"> {/* Changed justify-self-center to justify-center */}
           <div className='w-10 h-10 mr-1'> {/* Removed mx-auto */}
             <Image  
@@ -189,14 +190,16 @@ export default function LoginPage() {
           </div>
 
           <div className="flex items-center justify-between text-sm sm:text-base">
-            <label className="flex items-center space-x-2 text-gray-700">
-              <input
-                type="checkbox"
-                name="rememberMe" // Add name attribute
+            <label className="flex items-center space-x-1 text-gray-700">
+              <Checkbox
+                id="rememberMe"
+                name="rememberMe" 
                 checked={loginForm.rememberMe}
                 onChange={handleInputChange}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
+                color="primary"
+                size="small"
+              /> 
+             
               <span className="select-none text-sm">Remember me</span>
             </label>
 
@@ -210,16 +213,18 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-semibold rounded-4xl py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm sm:text-base"
+            className="w-full bg-blue-500 text-white font-semibold rounded-4xl py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-sm sm:text-base duration-300 cursor-pointer"
           >
             Sign In
           </button>
         </form>
 
         <p className="mt-6 text-center text-gray-500 text-sm">
-          <span>{"Don't have an account?"}</span>
-          <button onClick={() => router.push('/signup')} className="text-blue-600 hover:text-blue-800 font-medium">
-            Sign up
+          <span className='mr-2'>{"Don't have an account?"}</span>
+          <button onClick={() => router.push('/signup')} 
+                  className="text-blue-600 hover:text-blue-800 font-medium
+                            cursor-pointer transition-colors duration-300">
+              Sign up
           </button>
         </p>
       </div>

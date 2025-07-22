@@ -6,7 +6,7 @@ import { useReactToPrint } from "react-to-print";
 import Image from "next/image";
 import { useInfo } from "@/hooks/useInfo";
 import { toJpeg } from 'html-to-image';
-
+import CloseIcon from '@mui/icons-material/Close';
 // Assuming formatMoney utility exists at this path
 // If not, you'll need to define it or import from where it actually is
 import formatMoney from "@/components/utils/formatMoney";
@@ -139,7 +139,7 @@ export default function PopupVoucher({
 
       <div
         ref={componentRef}
-        className="relative h-[90dvh] w-full sm:w-[600px] shadow-2xl flex flex-col animate-slide-up p-0.5 overflow-hidden bg-white rounded-sm
+        className="relative h-[90dvh] w-full sm:w-[600px] shadow-2xl flex flex-col animate-slide-up p-0.5 overflow-hidden bg-white rounded-xl
         print:h-auto print:overflow-visible print:shadow-none print:bg-transparent print:animate-none print:rounded-none"
       >
 
@@ -147,12 +147,12 @@ export default function PopupVoucher({
         <div className="min-h-[40px] w-[40px] absolute top-2 right-1 print:hidden exclude-from-image">
           <button
             className="text-gray-500 hover:text-gray-900
-                     text-2xl cursor-pointer hover:bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center ease-in-out duration-300"
+                     text-2xl cursor-pointer hover:bg-gray-50 rounded-full w-8 h-8 flex items-center justify-center ease-in-out duration-300"
             onClick={handleToggle}
             aria-label="Close Popup"
             title="Close" // Added title for hover tooltip
           >
-             &times;
+             <CloseIcon className="w-6 h-6" />
           </button>
         </div>
 
@@ -203,8 +203,8 @@ export default function PopupVoucher({
                 <span className="p-2">{dayjs().format("hh:mm A")}</span>
               </div>
                <div className="flex justify-between px-1.5 border-b border-gray-400 text-xs border-dashed font-bold -mt-3">
+                <span className="p-2">{checkoutCustomer.phoneNo1}</span>
                 <span className="p-2">Ordered</span>
-                <span className="p-2">Delivery</span>
               </div>
             </div>
 
@@ -242,9 +242,10 @@ export default function PopupVoucher({
                 <span className="p-1"></span>
                 <span className="p-1"></span>
                 <span className="p-1"></span>
-                <span className="p-1 text-right mr-[0.7px]">
+                <span className="p-1 text-right flex flex-row items-center
+                              justify-end">
                   {formatMoney(discountAmt)} 
-                    <span className="sm:block hidden">{business?.defaultCurrency}</span>
+                   <span className="sm:block sm:ml-1 hidden text-gray-400">{business?.defaultCurrency}</span>
                 </span>
               </li>
               )
@@ -257,8 +258,9 @@ export default function PopupVoucher({
               <span className="p-2"></span>
               <span className="p-2"></span>
               <span className="p-2"></span>
-              <span className="p-1 text-right mr-2">{grandTotal.toLocaleString()} 
-              <span className="sm:block hidden">{business?.defaultCurrency}</span>
+              <span className="p-1 text-right mr-2 flex flex-row items-center
+                              justify-end">{grandTotal.toLocaleString()} 
+              <span className="sm:block sm:ml-1 hidden text-gray-400">{business?.defaultCurrency}</span>
               </span>
             </li>
           </ul>

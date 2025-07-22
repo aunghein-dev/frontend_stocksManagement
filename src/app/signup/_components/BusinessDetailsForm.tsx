@@ -270,7 +270,7 @@ export function BusinessDetailsForm({ register, errors, control }: Props) {
       />
       </div>
       <TextField
-        label="Free License Secret Code"
+        label="License Secret Code"
         {...register("secretCode")}
         error={!!errors.secretCode}
         helperText={errors.secretCode?.message}

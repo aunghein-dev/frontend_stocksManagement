@@ -13,7 +13,7 @@ export default function CustomerInfoSelected({imgUrl, name, orderNo} : CustomerI
                     w-full sm:text-sm text-xs px-2 h-[76px]">
         
         <div className="flex flex-row items-center gap-2">
-          <Image src={imgUrl} alt="User" width={50} height={50}
+          <Image src={imgUrl || "/man.png"} alt="User" width={50} height={50}
               className="rounded-full ring-2 ring-blue-300"/>
           <div className="flex flex-col text-left gap-1">
             <span className="font-semibold text-sm">{name}</span>
