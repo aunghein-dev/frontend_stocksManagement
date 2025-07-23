@@ -16,6 +16,8 @@ import {
 import Image from 'next/image'; // For optimized image handling
 import { useModalStore } from "@/store/modalStore";
 import PageLost404 from '@/components/error/pageLost404';
+import { useUser } from '@/hooks/useUser';
+import { set } from 'zod';
 
 // --- DTO for Business (nested within UserProfile) ---
 interface Business {
@@ -59,6 +61,8 @@ const AccountProfileSettingsPage: React.FC = () => {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imageUploadError, setImageUploadError] = useState<string | null>(null);
   const [imageUploadSuccess, setImageUploadSuccess] = useState<boolean>(false);
+  const { refresh } = useUser();
+  const [instancePropic, setInstancePropic] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -133,6 +137,7 @@ const AccountProfileSettingsPage: React.FC = () => {
 
       // --- ADD THIS LINE FOR IMMEDIATE PREVIEW ---
       setDisplayProfileImageUrl(URL.createObjectURL(file)); 
+      setInstancePropic(URL.createObjectURL(file));
     } else {
       setSelectedProfileImageFile(null);
       // Revert to the original image or default if the selection is cleared
@@ -193,7 +198,9 @@ const AccountProfileSettingsPage: React.FC = () => {
       setImageUploadSuccess(true);
       toast.success("Profile image uploaded!");
       // Set displayProfileImageUrl to the newly uploaded URL
-      setDisplayProfileImageUrl(newImgUrl || '/man.png');
+      refresh();
+      setDisplayProfileImageUrl(`${instancePropic}` || '/man.png');
+      setInitialUserProfile(prev => prev ? { ...prev, userImgUrl: newImgUrl } : null);
 
     } catch (err) {
       console.error("Error uploading profile image:", err);

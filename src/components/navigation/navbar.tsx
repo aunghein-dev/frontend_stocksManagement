@@ -139,13 +139,14 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
               <div className="w-12 h-12 rounded-full bg-gray-100 animate-pulse"></div>
             ) : (
               <Image
-                className="rounded-full"
+                className="rounded-full object-cover w-12 h-12"
                 height={48}
                 width={48}
                 src={data?.userImgUrl || "/man.png"}
                 alt="user photo"
                 priority
               />
+
             )}
           </button>
 

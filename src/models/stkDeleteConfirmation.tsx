@@ -67,7 +67,7 @@ export default function DeleteStockConfirmation() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center animate-fade-in z-50"> {/* Added z-50 to ensure it's on top */}
-      <div className="bg-white rounded-sm shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in">
+      <div className="bg-white rounded-xl shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in">
         <div className="flex items-center justify-between"> {/* Adjusted for better alignment */}
             <div className="flex gap-2 items-center"> {/* Use gap for spacing */}
               <AlertTriangle className="text-yellow-500 w-6 h-6" />

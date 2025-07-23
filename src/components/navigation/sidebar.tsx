@@ -233,7 +233,7 @@ function SidebarComponent(props: {
     <aside
       className={`
         fixed top-0 left-0 w-[200px] sm:w-[200px] bg-white shadow-lg border-r-[0.5px] border-gray-200
-        flex flex-col justify-between rounded-r-sm
+        flex flex-col justify-between rounded-r-lg
         transition-opacity duration-100 ease-in-out 
         ${
           props.sidebarOpen

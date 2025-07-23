@@ -31,7 +31,7 @@ export const useFilteredStocks = () => {
 
   const { data, error, isLoading, mutate } = useSWR(shouldFetch, getter);
 
-  const refresh = () => mutate(); // manually trigger refresh
+  const refresh = () => mutate(true); // manually trigger refresh
 
   return {
     items: data,

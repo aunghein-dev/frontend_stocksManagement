@@ -4,7 +4,7 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image"; // Only needed for the empty cart SVG here
-
+import { mutate as globalMutate } from 'swr'; 
 import { useCartStore } from "@/lib/stores/useCartStore";
 import { useStocks } from "@/hooks/useStocks";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -28,6 +28,7 @@ import { usePaymentStore } from "@/lib/stores/usePaymentStore";
 import { useCheckoutPayment } from "@/lib/stores/useCheckoutPayment";
 import useOrderNo from "@/lib/stores/useOrderNo";
 import { CartGroup, CartItem } from "@/lib/classes/Cart";
+import { useUser } from "@/hooks/useUser";
 
 
 // --- Type Definitions ---
@@ -66,6 +67,7 @@ export default function CartPopup({ handleToggle }: CartPopupProps) {
   const [loading, setLoading] = useState(false); // Consider if this loading is still needed here
   const { items: stocks, refresh } = useStocks(); 
   const { business } = useInfo();
+  const { data } = useUser();
   const { t } = useTranslation();
   const {discountAmt } = useDiscountStore();
   const [showVouncher, setShowVouncher] = useState(false);
@@ -157,7 +159,7 @@ export default function CartPopup({ handleToggle }: CartPopupProps) {
             checkoutQty: item.boughtQty,
             itemUnitPrice: item.unitPrice,
             subCheckout: item.unitPrice * item.boughtQty,
-            tranUserEmail: business.registeredBy,
+            tranUserEmail: data?.username || "",
             bizId: business.id || 0,
           });
         });
@@ -175,9 +177,7 @@ export default function CartPopup({ handleToggle }: CartPopupProps) {
 
       formData.append("tempJson", new Blob([JSON.stringify(tempJson)], { type: "application/json" }));
       formData.append("paymentRelate", new Blob([JSON.stringify(paymentRelate)], { type: "application/json" }));
-      console.log(tempJson);
-      
-      
+     
       const response = await axios.post(`${API}/checkout/${business.businessId}`, formData, {
         withCredentials: true,
       });
@@ -191,14 +191,14 @@ export default function CartPopup({ handleToggle }: CartPopupProps) {
           subTotal: group.subCheckout,
         }));
 
-        console.log("Voucher Data:", voucher);
-        
         setVoucherData(voucher);
-       
         clearCart(); 
-        refresh();
         setShowVouncher(true);
+
+        const stocksFilteredKey = `${API}/stkG/biz/nonZero/${business.businessId}`;
+        globalMutate(stocksFilteredKey, undefined, true); 
       }
+      
 
     } catch (error) {
       console.error(error);
