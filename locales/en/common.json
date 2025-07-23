@@ -155,7 +155,7 @@
   "hdSelectCustomer": "Select Customer",
   "searchCustomer": "Search for customers...",
   "btnTxt_addedCus": "✓ Added",
-  "btnTxt_addCust": "+ Add",
+  "btnTxt_addCus": "+ Add",
   "hd_discount": "Discount",
   "msg_discount": "Here apply the discount amount for current cart values.",
   "lbl_enterAmount": "Enter discount amount",

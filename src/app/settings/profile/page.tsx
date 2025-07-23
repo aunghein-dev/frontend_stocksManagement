@@ -17,7 +17,7 @@ import Image from 'next/image'; // For optimized image handling
 import { useModalStore } from "@/store/modalStore";
 import PageLost404 from '@/components/error/pageLost404';
 import { useUser } from '@/hooks/useUser';
-import { set } from 'zod';
+
 
 // --- DTO for Business (nested within UserProfile) ---
 interface Business {
@@ -226,7 +226,7 @@ const AccountProfileSettingsPage: React.FC = () => {
         fileInputRef.current.value = ''; // Clear the file input
       }
     }
-  }, [selectedProfileImageFile, userProfile, displayProfileImageUrl]);
+  }, [selectedProfileImageFile, userProfile, displayProfileImageUrl, instancePropic, refresh]);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();

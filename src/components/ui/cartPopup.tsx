@@ -65,7 +65,7 @@ export default function CartPopup({ handleToggle }: CartPopupProps) {
   const grandTotalQty = totalQty;
   const [outOfStockItemId, setOutOfStockItemId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false); // Consider if this loading is still needed here
-  const { items: stocks, refresh } = useStocks(); 
+  const { items: stocks } = useStocks(); 
   const { business } = useInfo();
   const { data } = useUser();
   const { t } = useTranslation();
@@ -206,7 +206,7 @@ export default function CartPopup({ handleToggle }: CartPopupProps) {
       setLoading(false);
     }
 
-  }, [business.id, business.registeredBy ,API, business.businessId, cart, clearCart, refresh, checkoutCustomer.cid, grandTotal]);
+  }, [business.id ,API, business.businessId, cart, clearCart, checkoutCustomer.cid, grandTotal, data?.username]);
 
   // --- Effects ---
   useEffect(() => {
