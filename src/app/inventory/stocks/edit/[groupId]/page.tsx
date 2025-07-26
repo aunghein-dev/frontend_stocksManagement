@@ -468,7 +468,7 @@ export default function StockEditForm() {
 
   // --- Main Form Render ---
   return (
-    <div className="bg-white p-1 overflow-hidden rounded-sm shadow-sm">
+    <div className="bg-white p-1 overflow-hidden rounded-xs shadow-sm">
       <form
         onSubmit={handleSubmit}
         className="w-full mx-auto p-2.5 overflow-auto space-y-3 relative custom-scrollbar"
@@ -504,7 +504,7 @@ export default function StockEditForm() {
           <button
               onClick={() => router.back()}
               type="button"
-              className="flex items-center text-sm border-[0.5px] rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200"
+              className="flex items-center text-sm border-[0.5px] rounded-xs px-2 py-1 space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200"
             >
               <svg
                 className="w-4 h-4 text-blue-600"
@@ -550,7 +550,7 @@ export default function StockEditForm() {
               value={form.groupName}
               onChange={(e) => setForm({ ...form, groupName: e.target.value })}
               required
-              className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
+              className="w-full rounded-xs border-gray-300 focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px]"
               placeholder={t("lbl_groupNnInput")}
             />
           </div>
@@ -573,7 +573,7 @@ export default function StockEditForm() {
               }}
               required
               placeholder={t("lbl_unitPriceInput")}
-              className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
+              className="w-full rounded-xs border-gray-300 focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px]"
             />
           </div>
           <div>
@@ -585,7 +585,7 @@ export default function StockEditForm() {
               value={form.releasedDate}
               onChange={(e) => setForm({ ...form, releasedDate: e.target.value })}
               required
-              className="w-full rounded-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px] border-gray-300"
+              className="w-full rounded-xs focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px] border-gray-300"
             />
           </div>
         </div>
@@ -603,13 +603,13 @@ export default function StockEditForm() {
             </button>
           </div>
 
-          <div className="space-y-2 p-2 rounded-sm border-[0.5px] border-gray-300 min-h-[78px]">
+          <div className="space-y-2 p-2 rounded-xs border-[0.5px] border-gray-300 min-h-[78px]">
             {form.items.length > 0 ? (
               form.items.map((item, index) => (
                 <div
                   key={item.itemId === null ? `new-${index}` : item.itemId}
                   className="flex flex-col md:flex-row justify-between border-[0.5px]
-                           border-gray-300 p-2 rounded-sm shadow-xs text-sm items-center gap-2"
+                           border-gray-300 p-2 rounded-xs shadow-xs text-sm items-center gap-2"
                 >
                   <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
                     {/* Item Image Upload with ImageUploadComponent */}
@@ -634,7 +634,7 @@ export default function StockEditForm() {
                           type="color"
                           value={item.itemColorHex}
                           onChange={(e) => updateItem(index, "itemColorHex", e.target.value)}
-                          className="w-full h-10 border-[0.5px] border-gray-200 rounded-sm cursor-pointer"
+                          className="w-full h-10 border-[0.5px] border-gray-200 rounded-xs cursor-pointer"
                           title="Click to manually choose color"
                         />
                         {/* Display Detected Palette */}
@@ -646,7 +646,7 @@ export default function StockEditForm() {
                                 <button
                                   key={colorIdx}
                                   type="button"
-                                  className="w-6 h-6 rounded-full border-[0.5px] border-gray-300 hover:border-blue-500"
+                                  className="w-6 h-6 rounded-full border-[0.5px] border-gray-300 hover:border-blue-600"
                                   style={{ backgroundColor: color }}
                                   title={color}
                                   onClick={() => updateItem(index, "itemColorHex", color)}
@@ -669,7 +669,7 @@ export default function StockEditForm() {
                             const onlyDigits = e.target.value.replace(/\D/g, "");
                             updateItem(index, "itemQuantity", onlyDigits === "" ? 0 : parseInt(onlyDigits));
                           }}
-                          className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
+                          className="w-full rounded-xs border-gray-300 focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px]"
                         />
                       </div>
                       {/* --- NEW: Barcode Input Field --- */}
@@ -681,7 +681,7 @@ export default function StockEditForm() {
                           value={item.barcodeNo}
                           onChange={(e) => updateItem(index, "barcodeNo", e.target.value)}
                           required
-                          className="w-full rounded-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500 py-2 px-3 border-[0.5px]"
+                          className="w-full rounded-xs border-gray-300 focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px]"
                           placeholder="Enter barcode"
                         />
                       </div>
@@ -717,7 +717,7 @@ export default function StockEditForm() {
           <button
             type="submit"
             disabled={submittingForm || isBusinessInfoLoading || !!fetchError || !!businessInfoError}
-            className={`px-4 py-2 text-sm rounded-sm ${
+            className={`px-4 py-2 text-sm rounded-xs ${
               (submittingForm || isBusinessInfoLoading || !!fetchError || !!businessInfoError)
                 ? "bg-gray-400 text-white cursor-not-allowed"
                 : "bg-blue-600 text-white hover:bg-blue-700"

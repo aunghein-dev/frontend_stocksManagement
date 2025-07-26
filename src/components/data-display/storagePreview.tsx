@@ -32,7 +32,7 @@ const getStorageMessage = (kbUsed: number) => { // Renamed parameter to kbUsed f
 
             {/* Text Details */}
           <div className="flex flex-col">
-            <div className="w-full max-w-sm p-4 bg-white rounded-xl shadow-sm">
+            <div className="w-full max-w-sm p-4 bg-white rounded-xs shadow-sm">
               <div className="flex flex-wrap items-center mb-2">
                 <p className="text-[0.7rem] font-semibold text-gray-600 mr-1.5">Storage</p>
                 <p className="text-sm font-medium text-gray-800">{Math.floor(props.storage)} MB / {MAX_STORAGE_GB} GB</p>

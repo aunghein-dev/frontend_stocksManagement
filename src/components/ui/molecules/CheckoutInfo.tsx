@@ -23,7 +23,7 @@ export default function CheckoutInfo({
   };
 
   return (
-    <div className="relative w-full border-[1px] border-gray-200 rounded-xl flex flex-col px-3 py-4 text-gray-700">
+    <div className="relative w-full border-[1px] border-gray-200 rounded-xs flex flex-col px-3 py-4 text-gray-700">
       <div className="flex justify-between items-center mb-1">
         <span className="text-[0.9rem] font-semibold">{t("lbl_subTotal")}</span>
         <span className="text-[0.9rem] font-bold text-gray-900">

@@ -381,7 +381,7 @@ export default function EditCustomer() {
     if (!customer) {
         return (
             <section className='fixed inset-0 bg-black/20 flex items-center justify-center animate-fade-in z-[9999]'>
-                <div className='bg-white rounded-xl shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in'>
+                <div className='bg-white rounded-xs shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in'>
                     <div className="flex items-center justify-between">
                         <div className="flex gap-2 items-center text-red-600">
                             <AlertTriangle className="w-6 h-6" />
@@ -419,7 +419,7 @@ export default function EditCustomer() {
             className='fixed inset-0 bg-black/20 flex items-center justify-center animate-fade-in z-[9999]
 px-2'
         >
-            <div className='flex flex-col h-[600px] w-full sm:w-[800px] rounded-lg shadow-xl border border-gray-200 bg-white animate-slide-up relative overflow-hidden'>
+            <div className='flex flex-col h-[95dvh] sm:h-[80dvh] w-full sm:w-[800px] rounded-xs shadow-xl border border-gray-200 bg-white animate-slide-up relative overflow-hidden'>
                 {/* Header */}
                 <div className='flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0'>
                     <Typography
@@ -456,7 +456,7 @@ px-2'
                             onImageSelected={handleUploadImageSelected}
                             isLoading={false}
                             error={uploadImageError}
-                            className="rounded-sm mb-4 sm:mr-6 min-w-[220px]"
+                            className="rounded-xs mb-4 sm:mr-6 min-w-[220px]"
                         />
                         {/* Main Flex container for all form fields */}
                         <Box

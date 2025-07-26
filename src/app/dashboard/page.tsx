@@ -279,17 +279,17 @@ export default function Dashboard() {
       <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)] text-red-600">
        <PageLost404 
         header={t("msg_wrong")}
-        message={businessInfoError.message}
+        message={businessInfoError?.message || "Please check  connection."}
         reload={() => window.location.reload()}
         />
     </div>
     );
   }
 
-  if (!business?.businessId && !isBusinessInfoLoading) {
+  if(!business?.businessId && !isBusinessInfoLoading) {
     return (
-      <div className='flex justify-center items-center min-h-[calc(100dvh-169px)] p-4'>
-        <p className="text-gray-600 text-lg font-medium text-center p-6 rounded-lg bg-gray-50 shadow-xs">
+      <div className='flex justify-center items-center p-4'>
+        <p className="text-red-600 text-sm font-medium text-center p-6 rounded-xs bg-gray-50 shadow-xs">
           No business selected or available for dashboard.
           <br />Please select a business from the navigation or add a new one.
         </p>
@@ -299,14 +299,13 @@ export default function Dashboard() {
 
   if (dashboardDataError) {
     return (
-      <div className='flex justify-center items-center min-h-[calc(100dvh-169px)] p-4'>
-        <p className="text-red-600 text-lg font-medium text-center p-6 rounded-lg bg-red-50 shadow-xs">
-          {dashboardDataError.message}
-          <button onClick={loadAllDashboardData} className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">
-            Retry Loading Dashboard
-          </button>
-        </p>
-      </div>
+      <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)] text-red-600">
+       <PageLost404 
+        header={t("msg_wrong")}
+        message={dashboardDataError.message || "Dashboard data not available."}
+        reload={() => window.location.reload()}
+        />
+    </div>
     );
   }
 
@@ -315,10 +314,10 @@ export default function Dashboard() {
   // --- Main Dashboard Content (renders only if data is available) ---
   return (
     <section className="h-full overflow-hidden">
-      <div className="bg-white rounded-sm py-2 shadow-xs">
+      <div className="bg-white rounded-xs py-2 shadow-xs">
         <div
           className="overflow-y-auto overflow-x-hidden custom-scrollbar px-2"
-          style={{ height: "calc(100dvh - 127px)" }}
+          style={{ height: "calc(100dvh - 128px)" }}
         >
           {/* Mini cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 justify-between pb-4 md:pb-6 border-b border-gray-200">
@@ -336,7 +335,7 @@ export default function Dashboard() {
 
           {/* Bars and Radar charts */}
           <div className="grid grid-cols-1 md:[grid-template-columns:60%_40%] gap-2 pt-4 md:pt-6 pb-4 md:pb-6 border-b border-gray-200 w-full pr-2">
-            <div className="flex items-center min-h-[250px] md:min-h-[300px] justify-center bg-gray-50 rounded-lg p-2 pt-10 border-[0.5px] border-gray-100 shadow-xs relative">
+            <div className="flex items-center min-h-[250px] md:min-h-[300px] justify-center bg-gray-50 rounded-xs p-2 pt-10 border-[0.5px] border-gray-100 shadow-xs relative">
               {dashboardData.barset?.data.length && dashboardData.barset?.series.length ? (
                   <div className='w-full'>
                      <BarsDataset
@@ -354,7 +353,7 @@ export default function Dashboard() {
               )}
             </div>
             <div className="flex items-center justify-center min-h-[250px] md:min-h-[300px]
-                            p-2 rounded-lg bg-gray-50 pt-10 border-[0.5px] border-gray-100 shadow-xs relative">
+                            p-2 rounded-xs bg-gray-50 pt-10 border-[0.5px] border-gray-100 shadow-xs relative">
               {dashboardData.radar!==null ? (
                 <div className='w-full'>
                      <Radar
@@ -379,7 +378,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:[grid-template-columns:60%_40%] gap-2 px-3 lg:pr-4 pt-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div className="min-h-[200px] flex justify-center items-center bg-gray-50 
-                              rounded-lg border-[0.5px] border-gray-100 shadow-xs relative">
+                              rounded-xs border-[0.5px] border-gray-100 shadow-xs relative">
                 {dashboardData.storage ? (
                   <div className='w-full'>
                     <StoragePreview
@@ -397,7 +396,7 @@ export default function Dashboard() {
                 )}
               </div>
               <div className="flex items-center justify-center min-h-[250px] bg-gray-50 
-                              rounded-lg border-[0.5px] border-gray-100 shadow-xs relative">
+                              rounded-xs border-[0.5px] border-gray-100 shadow-xs relative">
                 {chartData.length > 0 ? (
                   <div className='w-full'>
                     <PieChart data={chartData} />
@@ -412,7 +411,7 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex items-center justify-center min-h-[300px] 
-                            rounded-lg w-full bg-gray-50
+                            rounded-xs w-full bg-gray-50
                             border-[0.5px] border-gray-100 shadow-xs relative">
 
             {/* Add a null check for dashboardData.line */}

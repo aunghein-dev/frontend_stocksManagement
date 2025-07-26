@@ -155,7 +155,7 @@ function SidebarComponent(props: {
       return (
         <li key={item.id}>
           <button
-            className={`group relative flex items-center justify-between w-full px-3 py-2 rounded-sm transition-all duration-200 text-sm font-medium 
+            className={`group relative flex items-center justify-between w-full px-3 py-2 rounded-xs transition-all duration-200 text-sm font-medium 
                         ${
                           item.isActive // Use item.isActive for styling this button
                             ? "bg-blue-100 text-blue-700"
@@ -165,14 +165,14 @@ function SidebarComponent(props: {
           >
             {/* Blue active bar */}
             <span
-              className={`absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r transition-transform duration-300  ${
+              className={`absolute left-0 top-0 bottom-0 w-1 bg-blue-600 rounded-r transition-transform duration-300  ${
                 item.isActive ? "scale-y-100" : "scale-y-0 group-hover:scale-y-100"
               }`}
             />
             {item.Icon && (
               <item.Icon
                 className={`w-5 h-5 mr-3 flex-shrink-0 ${
-                  item.isActive ? "text-blue-700" : "text-gray-400 group-hover:text-blue-500"
+                  item.isActive ? "text-blue-700" : "text-gray-400 group-hover:text-blue-600"
                 }`}
                 aria-hidden="true"
               />
@@ -200,7 +200,7 @@ function SidebarComponent(props: {
           <Link
             // Ensure href is always a string. Fallback to '#' if path is undefined (shouldn't happen for non-group items)
             href={item.path || "#"}
-            className={`group relative flex items-center px-3 py-2 rounded-sm transition-all duration-200 text-sm font-medium ${indentClass} 
+            className={`group relative flex items-center px-3 py-2 rounded-xs transition-all duration-200 text-sm font-medium ${indentClass} 
                         ${
                           item.isActive  // Use item.isActive for styling this link
                             ? "bg-blue-100 text-blue-700"
@@ -210,14 +210,14 @@ function SidebarComponent(props: {
           >
             {/* Blue active bar */}
             <span
-              className={`absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r transition-transform duration-300 ${
+              className={`absolute left-0 top-0 bottom-0 w-1 bg-blue-600 rounded-r transition-transform duration-300 ${
                 item.isActive ? "scale-y-100" : "scale-y-0 group-hover:scale-y-100"
               }`}
             />
             {item.Icon && (
               <item.Icon
                 className={`w-5 h-5 mr-3 flex-shrink-0 ${
-                  item.isActive ? "text-blue-700" : "text-gray-400 group-hover:text-blue-500"
+                  item.isActive ? "text-blue-700" : "text-gray-400 group-hover:text-blue-600"
                 }`}
                 aria-hidden="true"
               />
@@ -255,14 +255,14 @@ function SidebarComponent(props: {
         {isLoading ? (
           <div className="flex items-center justify-between w-full">
             <div className="w-12 h-12 bg-gray-400 rounded-full animate-pulse" />
-            <div className="w-22 h-5 bg-gray-400 rounded-sm animate-pulse relative">
-              <div className="absolute top-7 right-0 h-4.5 w-12 bg-gray-400 rounded-sm animate-pulse"></div>
+            <div className="w-22 h-5 bg-gray-400 rounded-xs animate-pulse relative">
+              <div className="absolute top-7 right-0 h-4.5 w-12 bg-gray-400 rounded-xs animate-pulse"></div>
             </div>
           </div>
         ) : (
           <div className="flex items-center w-full relative">
             <div
-              className={`w-12 h-12 flex items-center justify-center mr-0 rounded-sm overflow-hidden flex-shrink-0 transition-opacity duration-300 ease-in-out
+              className={`w-12 h-12 flex items-center justify-center mr-0 rounded-xs overflow-hidden flex-shrink-0 transition-opacity duration-300 ease-in-out
              ${imgLoaded ? "opacity-100" : "opacity-0"}`}
               style={{ willChange: "opacity" }}
             >
@@ -289,7 +289,7 @@ function SidebarComponent(props: {
             </div>
             <h1
               className={`text-xl font-bold
-                        bg-gradient-to-r from-blue-500 to-red-500 bg-clip-text text-transparent
+                        bg-gradient-to-r from-blue-600 to-red-500 bg-clip-text text-transparent
                         cursor-default
                         transition-opacity duration-300 ease-in-out ${
                           imgLoaded ? "opacity-100" : "opacity-0"
@@ -300,7 +300,7 @@ function SidebarComponent(props: {
             </h1>
             <div
               className={`absolute top-10 right-2 px-1 py-0.5 bg-blue-100
-                        text-blue-700 border-[0.5px] border-blue-500 rounded-xs text-[0.55rem]
+                        text-blue-700 border-[0.5px] border-blue-600 rounded-xs text-[0.55rem]
                         cursor-default ${imgLoaded ? "opacity-100" : "opacity-0"}`}
               style={{ willChange: "opacity" }}
             >
@@ -330,13 +330,13 @@ function SidebarComponent(props: {
           target="_blank"
         >
           {t("lbl_dvlpBy")}{" "}
-          <span className="text-blue-500 font-bold">Openware</span>
+          <span className="text-blue-600 font-bold">Openware</span>
         </a>
         <p className="mt-1 text-[11px] text-gray-400">
           © {new Date().getFullYear()} {t("allRightsReserved")}
         </p>
         <p className="mt-1 text-[11px] text-gray-400">
-          <a href="mailto:aunghein.mm@hotmail.com" className="text-blue-500 hover:underline">
+          <a href="mailto:aunghein.mm@hotmail.com" className="text-blue-600 hover:underline">
             openwaremyanmar@gmail.com
           </a>
         </p>

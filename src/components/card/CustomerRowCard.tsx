@@ -1,4 +1,4 @@
-import { Customer } from "./customerCard";
+import { Customer } from "../data-display/customerCard";
 import Image from "next/image";
 import { HiOutlinePhone } from "react-icons/hi";
 import { FaLocationDot } from "react-icons/fa6";
@@ -37,9 +37,9 @@ export const CustomerRowCard = (props: Customer) => {
     case "Wholesaler":
       return "bg-green-100 text-green-600 border-green-500";
     case "Retailer":
-      return "bg-blue-100 text-blue-600 border-blue-500";
+      return "bg-blue-100 text-blue-600 border-blue-600";
     default:
-      return "bg-gray-100 text-gray-600 border-gray-500";
+      return "bg-indigo-100 text-indigo-600 border-indigo-500";
   }
 };
 
@@ -60,21 +60,21 @@ export const CustomerRowCard = (props: Customer) => {
   }
 
   return (
-    <div className="flex h-[100px] w-full bg-white border border-gray-200 rounded-xl overflow-hidden
+    <div className="flex h-[100px] w-full bg-white border border-gray-200 rounded-xs overflow-hidden
                  relative shadow-xs
                  hover:shadow-md transition-all ease-in duration-100 flex-row items-center justify-between px-2
                  text-right text-gray-700">
 
-              <div className={`absolute top-0 left-0 rounded-tl-xl 
+              <div className={`absolute top-0 left-0 rounded-tl-xs 
                                text-xs font-semibold
-                               rounded-br-xl px-2 py-0.5 ${badgeStyle(props.customerDueAmt > 0)}`}>
+                               rounded-br-xs px-2 py-0.5 ${badgeStyle(props.customerDueAmt > 0)}`}>
                   {badgeText(props.customerDueAmt > 0)}
               </div>
               
               <div className="flex flex-row items-center justify-start text-left min-w-[190px]">
                  <Image src={props.imgUrl || "/man.png"}
                     width={50} height={50} 
-                    className="rounded-full"
+                    className="rounded-full ring-2 ring-blue-300"
                     alt={props.name} />
                   <div className="flex flex-col gap-1 ml-2">
                     <span
@@ -99,12 +99,12 @@ export const CustomerRowCard = (props: Customer) => {
 
               <span className="text-xs h-[60px] w-[60px] hidden sm:flex flex-col items-center justify-center
                               bg-red-50 rounded-full text-red-700 font-semibold
-                              border-[0.5px] border-red-100">
+                              border-[0.5px] border-red-100 ring-2 ring-red-100">
                 {props.customerDueAmt}
               </span>
 
 
-              <span className={`text-[0.7rem] ml-3 px-2 py-1 rounded-2xl border-[0.5px] hidden sm:block
+              <span className={`text-[0.7rem] ml-3 px-2 py-1 rounded-xs border-[0.5px] hidden sm:block
                               ${typeCustomerStyle(props.typeOfCustomer)}`}>{props.typeOfCustomer}</span>
 
                <a
@@ -113,7 +113,7 @@ export const CustomerRowCard = (props: Customer) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-row items-center gap-1 text-center" >
-                <FaLocationDot className="w-4 h-4 text-blue-400" />     
+                <FaLocationDot className="w-4 h-4 text-blue-600" />     
                 <span className="sm:text-sm text-xs">{props.city}</span>   
               </a>
 
@@ -124,7 +124,7 @@ export const CustomerRowCard = (props: Customer) => {
                               "bg-pink-100 text-pink-600 border-pink-500" : 
                               "bg-gray-100 text-gray-600 border-gray-500"}    
                                 text-xs cursor-pointer
-                                transition-colors duration-200 px-2 py-1 rounded-full`}
+                                transition-colors duration-200 px-2 py-1.5 rounded-xs`}
                     onClick={handleToggle}
                     aria-label="More options"
                   >

@@ -299,7 +299,7 @@ export default function Settings() {
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-600 transition-colors duration-200"
         >
           Reload Page
         </button>
@@ -308,16 +308,16 @@ export default function Settings() {
   }
 
   return (
-    <section className="w-full rounded-sm  overflow-hidden p-1 bg-white">
+    <section className="w-full rounded-xs  overflow-hidden p-1 bg-white">
       <div className='overflow-auto custom-scrollbar h-[calc(100dvh-118px)] 
                        p-3'>
         <form onSubmit={handleSubmit}>
           {/* General Settings */}
-          <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-sm shadow-sm">
+          <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-xs shadow-sm">
             <h3 className="text-xl font-bold text-gray-900 mb-5 border-b-[0.5px] border-gray-200 pb-3">{t("hd_bizInfo")}</h3>
             
             {/* --- Logo Upload Section --- */}
-            <div className="flex flex-col items-center justify-center p-6 rounded-lg border border-dashed border-gray-200 mb-6">
+            <div className="flex flex-col items-center justify-center p-6 rounded-xs border border-dashed border-gray-200 mb-6">
               <label htmlFor="logo-upload-input" className="cursor-pointer">
                 {displayLogoUrl ? (
                   <Image
@@ -325,11 +325,11 @@ export default function Settings() {
                     alt="Business Logo Preview"
                     width={96}
                     height={96}
-                    className="w-24 h-24 object-cover rounded-sm border border-gray-200 shadow-sm transition-all duration-200 ease-in-out hover:scale-105"
+                    className="w-24 h-24 object-cover rounded-xs border border-gray-200 shadow-sm transition-all duration-200 ease-in-out hover:scale-105"
                     priority
                   />
                 ) : (
-                  <div className="w-24 h-24 flex items-center justify-center bg-gray-200 rounded-sm text-gray-500 border border-dashed border-gray-400">
+                  <div className="w-24 h-24 flex items-center justify-center bg-gray-200 rounded-xs text-gray-500 border border-dashed border-gray-400">
                     <PhotoIcon className="w-10 h-10" />
                   </div>
                 )}
@@ -393,7 +393,7 @@ export default function Settings() {
                 <input
                   type="text"
                   id="businessName"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors duration-200"
                   placeholder=" Store Name"
                   value={settings.businessName}
                   onChange={handleChange}
@@ -407,7 +407,7 @@ export default function Settings() {
                 <input
                   type="text"
                   id="businessNameShortForm"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors duration-200"
                   placeholder="e.g., MoMo"
                   value={settings.businessNameShortForm}
                   onChange={handleChange}
@@ -419,7 +419,7 @@ export default function Settings() {
                 </label>
                 <select
                   id="defaultCurrency"
-                  className="w-full appearance-none px-4 py-3 pr-10 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                  className="w-full appearance-none px-4 py-3 pr-10 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors duration-200"
                   value={settings.defaultCurrency}
                   onChange={handleChange}
                 >
@@ -441,7 +441,7 @@ export default function Settings() {
                 <input
                   type="number"
                   id="taxRate"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors duration-200"
                   placeholder="0"
                   value={settings.taxRate}
                   onChange={handleChange}
@@ -465,7 +465,7 @@ export default function Settings() {
           </div>
 
           {/* Invoice Settings */}
-          <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-sm shadow-sm">
+          <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-xs shadow-sm">
             <h3 className="text-xl font-bold text-gray-900 mb-5 border-b-[0.5px] border-gray-200 pb-3">{t("hd_invRcptSettings")}</h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -475,7 +475,7 @@ export default function Settings() {
                 <input
                   type="checkbox"
                   id="showLogoOnInvoice"
-                  className="accent-blue-500 w-5 h-5 focus:ring-2 focus:ring-blue-500"
+                  className="accent-blue-600 w-5 h-5 focus:ring-2 focus:ring-blue-600"
                   checked={settings.showLogoOnInvoice}
                   onChange={handleChange}
                 />
@@ -487,7 +487,7 @@ export default function Settings() {
                 <input
                   type="checkbox"
                   id="autoPrintAfterCheckout"
-                  className="accent-blue-500 w-5 h-5 focus:ring-2 focus:ring-blue-500"
+                  className="accent-blue-600 w-5 h-5 focus:ring-2 focus:ring-blue-600"
                   checked={settings.autoPrintAfterCheckout}
                   onChange={handleChange}
                 />
@@ -499,7 +499,7 @@ export default function Settings() {
                 <input
                   type="text"
                   id="invoiceFooterMessage"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors duration-200"
                   placeholder="Thank you for shopping with us!"
                   value={settings.invoiceFooterMessage}
                   onChange={handleChange}
@@ -511,7 +511,7 @@ export default function Settings() {
           </div>
 
           {/* User Preferences */}
-          <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-sm shadow-sm">
+          <div className="p-4 mb-6 border-[0.5px] border-gray-100 rounded-xs shadow-sm">
             <h3 className="text-xl font-bold text-gray-900 mb-5 border-b-[0.5px] border-gray-200 pb-3">
               {t("hd_uxPrefer")}
             </h3>
@@ -525,7 +525,7 @@ export default function Settings() {
                 <input
                   type="checkbox"
                   id="enableDarkMode"
-                  className="accent-blue-500 w-5 h-5 cursor-not-allowed"
+                  className="accent-blue-600 w-5 h-5 cursor-not-allowed"
                   checked={false}
                   onChange={() => {}}
                   disabled
@@ -538,7 +538,7 @@ export default function Settings() {
                 <input
                   type="checkbox"
                   id="enableSoundEffects"
-                  className="accent-blue-500 w-5 h-5 cursor-not-allowed"
+                  className="accent-blue-600 w-5 h-5 cursor-not-allowed"
                   checked={false}
                   onChange={() => {}}
                   disabled
@@ -561,14 +561,14 @@ export default function Settings() {
             <button
               type="button"
               onClick={handleReset}
-              className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-2 rounded-sm text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
+              className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-2 rounded-xs text-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-colors duration-200"
               disabled={isSaving || !hasChanges}
             >
               {t("btnTxt_reset")}
             </button>
             <button
               type="submit"
-              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-sm text-sm flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xs text-sm flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors duration-200"
               disabled={isSaving || !hasChanges}
             >
               {isSaving ? (

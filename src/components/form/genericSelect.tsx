@@ -40,8 +40,8 @@ export default function GenericSelect<T>({
   renderOptionContent,
   // Default values for internal class names
   dropdownOpenStyle,
-  listboxClassName = `absolute left-0 bottom-12 mt-1 w-full rounded-sm bg-gray-50 z-60 p-0 border-[0.5px] border-gray-300 shadow-md focus:outline-none ease-in-out duration-200 ${dropdownOpenStyle || ''}`,
-  optionClassName = "cursor-pointer select-none rounded-[2px] px-4 py-2 flex items-center space-x-1 text-sm",
+  listboxClassName = `absolute left-0 bottom-12 mt-1 w-full rounded-xs bg-gray-50 z-60 p-0  shadow-lg ease-in-out duration-200 ${dropdownOpenStyle || ''} `,
+  optionClassName = "cursor-pointer select-none px-4 py-2 flex items-center space-x-1 text-sm",
   // Extracting className and defining default for other props
   dropdownStyle, // Extract className here
   containerClassName = `relative inline-block text-left w-full ${dropdownStyle || ''}`, // Combine with className
@@ -128,12 +128,12 @@ export default function GenericSelect<T>({
         aria-labelledby="generic-select-label"
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onButtonKeyDown}
-        className={buttonClassName}
+        className={`${buttonClassName} rounded-xs  focus:ring-2 ring-blue-300`} 
       >
         {renderButtonContent ? (
           renderButtonContent(selectedOption)
         ) : (
-          <div className="flex items-center">
+          <div className="flex items-center ">
             {selectedOption?.display && (
               <span className="mr-2 text-xl leading-none">
                 {selectedOption.display}
@@ -168,7 +168,7 @@ export default function GenericSelect<T>({
           role="listbox"
           tabIndex={-1}
           aria-activedescendant={selectedOption ? `option-${selectedOption.value}` : undefined}
-          className={listboxClassName}
+          className={`${listboxClassName} `}
         >
           {options.map((option, i) => {
             const active = option.value === selectedValue;
@@ -181,7 +181,7 @@ export default function GenericSelect<T>({
                 aria-selected={active}
                 onClick={() => handleSelect(option.value)}
                 onKeyDown={(e) => onOptionKeyDown(e, i, option.value)}
-                className={`${optionClassName} ${active ? "bg-blue-200 text-blue-600" : "text-gray-900"}`}
+                className={`${optionClassName} py-2.5 ${active ? "bg-blue-200 text-blue-600" : "text-gray-900"} ${i===0 ? "rounded-t-xs" : ""} ${i===options.length-1 ? "rounded-b-xs" : ""}`}
               >
                 {renderOptionContent ? (
                   renderOptionContent(option, active)

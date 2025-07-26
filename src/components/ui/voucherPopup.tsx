@@ -139,7 +139,7 @@ export default function PopupVoucher({
 
       <div
         ref={componentRef}
-        className="relative h-[90dvh] w-full sm:w-[600px] shadow-2xl flex flex-col animate-slide-up p-0.5 overflow-hidden bg-white rounded-xl
+        className="relative h-[95dvh] w-full sm:w-[600px] shadow-2xl flex flex-col animate-slide-up p-0.5 overflow-hidden bg-white rounded-xs
         print:h-auto print:overflow-visible print:shadow-none print:bg-transparent print:animate-none print:rounded-none"
       >
 
@@ -274,13 +274,13 @@ export default function PopupVoucher({
         <div className="absolute bottom-2 right-4 print:hidden grid grid-cols-2 gap-2">
           <button
             onClick={handleSavePhoto}
-            className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-medium rounded-sm text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
+            className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-medium rounded-xs text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
           >
             {t("bntTxt_savePhoto")}
           </button>
           <button
             onClick={handlePrint}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-sm text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xs text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
           >
             {t("btnTxt_print")}
           </button>

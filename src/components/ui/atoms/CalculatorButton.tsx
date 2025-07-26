@@ -14,7 +14,7 @@ const CalculatorButton: React.FC<CalculatorButtonProps> = ({ children, onClick, 
   return (
     <motion.button
       className={`
-        w-full rounded-xl text-gray-900 text-xl font-semibold
+        w-full rounded-xs text-gray-900 text-xl font-semibold
         flex items-center justify-center py-5 cursor-pointer
         transition-all duration-200 ease-in-out outline-none
         ${isBackspace ? 'bg-gray-50 hover:bg-gray-100 text-gray-700' :

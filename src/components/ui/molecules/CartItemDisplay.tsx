@@ -42,7 +42,7 @@ export default function CartItemDisplay({
   return (
     <li
       className="relative flex items-center justify-between gap-1 px-1 py-3
-                 rounded-xl border-[0.5px] border-gray-200 transition-all duration-300
+                 rounded-xs border-[0.5px] border-gray-200 transition-all duration-300
                  cursor-pointer"
       style={{
         background: `linear-gradient(to right, ${hexToRgba(item.colorHex, 0.2)}, rgba(0, 0, 0, 0.08))`,

@@ -1,3 +1,5 @@
+import { Stock } from "@/types/stock.types";
+
 export interface CartItem {
   itemId: number;
   itemImage: string;
@@ -13,20 +15,6 @@ export interface CartGroup {
   item: CartItem[];
 }
 
-export interface Stock {
-    groupId: number;
-    groupImage: string;
-    groupName: string;
-    groupUnitPrice: number;
-    releasedDate: string;
-    items: {
-        itemId: number;
-        itemImage: string;
-        itemColorHex: string;
-        itemQuantity: number; // Important for stock check
-        barcodeNo: string; // The barcode we're searching by
-    }[];
-}
 
 const CART_KEY = "cartkey-doorpos.mm.com";
 

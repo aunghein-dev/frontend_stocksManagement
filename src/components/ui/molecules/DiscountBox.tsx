@@ -44,9 +44,9 @@ export default function DiscountBox() {
   };
 
   return (
-    <div className="w-full border-[1px] border-gray-200 rounded-xl flex flex-col p-2 text-gray-700 justify-between">
+    <div className="w-full border-[1px] border-gray-200 rounded-xs flex flex-col p-2 text-gray-700 justify-between">
       <div className="flex flex-row items-center gap-0.5 text-center">
-        <FiGift className="w-7 h-7 text-blue-400 ring-1 ring-blue-100 rounded-full p-1" />
+        <FiGift className="w-7 h-7 text-blue-600 ring-1 ring-blue-100 rounded-full p-1" />
         <span className="text-md font-semibold ml-1">{t("hd_discount")}</span>
       </div>
 
@@ -60,14 +60,14 @@ export default function DiscountBox() {
             inputMode="decimal"
             value={localDiscountInput}
             onChange={handleInputChange}
-            className="w-full border-[1px] border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border-[1px] border-gray-200 rounded-xs px-3 py-2 text-sm"
             placeholder={t("lbl_enterAmount")}
           />
 
           <button
             onClick={handleApplyClick}
             disabled={localDiscountInput === ''}
-            className="bg-blue-500 hover:bg-blue-600 text-white border-[0.5px] border-blue-600 text-sm py-2 px-2 rounded-lg transition-all duration-200 cursor-pointer font-semibold h-full whitespace-nowrap"
+            className="bg-blue-600 hover:bg-blue-600 text-white border-[0.5px] border-blue-600 text-sm py-2 px-2 rounded-xs transition-all duration-200 cursor-pointer font-semibold h-full whitespace-nowrap"
           >
             {isApplied ? t("btnTxt_applied") : t("btnTxt_apply")}
           </button>

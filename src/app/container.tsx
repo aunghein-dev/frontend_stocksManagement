@@ -2,7 +2,7 @@
 
 import Sidebar from "@/components/navigation/sidebar";
 import Navbar from "@/components/navigation/navbar";
-import CartPopup from "@/components/ui/cartPopup";
+import CartPopup from "@/components/ui/modals/Cart";
 import { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import useOrderNo from "@/lib/stores/useOrderNo";

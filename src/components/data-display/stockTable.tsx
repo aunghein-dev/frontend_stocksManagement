@@ -10,7 +10,7 @@ import {
 import Tooltip from '@mui/material/Tooltip';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
-import type { Stock } from '@/data/table.data';
+import type { Stock } from '@/types/stock.types';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import ImageAvatar from '@/components/ui/imageAvatar';
@@ -206,8 +206,8 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
       headerAlign: 'left',
         renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
               <div
-                className={`text-blue-500 hover:text-blue-700 cursor-pointer
-                            font-semibold bg-gray-100 text-sm rounded-sm px-2 py-1
+                className={`text-blue-600 hover:text-blue-700 cursor-pointer
+                            font-semibold bg-gray-100 text-sm rounded-xs px-2 py-1
                             border-[0.5px] border-blue-700
                             `}
               >
@@ -225,7 +225,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
       renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
               <div
                 className={`flex justify-center items-center px-3 py-1 
-                            rounded-sm text-sm font-semibold border-[0.5px] 
+                            rounded-xs text-sm font-semibold border-[0.5px] 
                             ${params.row.itemQuantity === 0 ? 
                               'border-red-500 bg-red-100 text-red-700' : 
                               'border-green-500 bg-green-100 text-green-700'} 

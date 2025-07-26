@@ -4,13 +4,14 @@ import { ModalHeader } from "@/components/ui/molecules/ModalHeader";
 import Search from "@/components/form/search";
 import { useCustomer } from "@/hooks/useCustomer";
 import { Customer } from "@/components/data-display/customerCard";
-import { CustomerRowCard } from "@/components/data-display/customerRowCard";
 import { useState, useMemo } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { CustomerRowCard } from "@/components/card/CustomerRowCard";
+import Image from "next/image";
 
 export default function CustomerSelector(props: { handleCloseSelector: () => void }) {
 
-  const { customers: data } = useCustomer();
+  const { customers: data, isLoading } = useCustomer();
   const [searchQuery, setSearchQuery] = useState("");
   const {t} = useTranslation();
 
@@ -45,29 +46,59 @@ export default function CustomerSelector(props: { handleCloseSelector: () => voi
       return filteredCustomers;
     }, [filteredCustomers]);
 
-  const renderCustomers = () => {
-    return (
+  const renderCustomers = (
       <div className="flex flex-col gap-3">
         {customers?.map((customer: Customer) => (
           <CustomerRowCard key={customer.rowId} {...customer} />
         ))}
       </div>
-    )
-  }
+  )
+
+  const loadinSpinner = (
+    <div
+      className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-transparent bg-opacity-50 z-50"
+    >
+      <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+
+  const noResult = (
+        <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] w-[300px] h-[300px] flex items-center justify-center">
+          <Image
+            src="/noitemsfound.svg"
+            alt="No Customers Found"
+            fill
+            priority
+            className="object-contain"
+          />
+          <p className="text-gray-500 text-md font-bold absolute bottom-7 animate-pulse">
+            {t("noCustomersFound")}
+          </p>
+    </div>
+  )
 
   return (
     <div className="fixed inset-0 backdrop-blur-[1px] flex items-center justify-center px-2 z-60 overflow-hidden"
       style={{
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}>
-        <div className="relative h-[80dvh] w-full sm:w-[650px] rounded-xl shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white ">
+        <div className="relative h-[80dvh] w-full sm:w-[650px] rounded-xs shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white ">
            <ModalHeader title={t("hdSelectCustomer")} onClick={props.handleCloseSelector} haveExitButton={true}/>
-           <div className="flex flex-col flex-1 overflow-hidden pb-2">
-            <div className="min-h-[60px] flex flex-row items-center justify-end px-3 mb-2">
-              <Search placeholder={t("searchCustomer")} onChange={handleSearch} value="" />
+           <div className="flex flex-col flex-1 overflow-hidden">
+            <div className="min-h-[60px] flex flex-row items-center justify-end px-3">
+              <Search placeholder={t("searchCustomer")} 
+                      onChange={handleSearch} 
+                      value={searchQuery}
+                      className="border-[0.5px] border-gray-300" />
             </div>
-            <div className="flex-1 overflow-y-auto  w-full h-full custom-scrollbar px-2">
-              {renderCustomers()}
+            <div className="flex-1 overflow-y-auto  w-full h-full custom-scrollbar px-2 py-2 border-t-1 border-gray-200">
+              {isLoading ? (
+                  loadinSpinner
+                ) : filteredCustomers.length > 0 ? (
+                  renderCustomers
+                ) : (
+                  noResult
+               )}
             </div>
            </div>
         </div>

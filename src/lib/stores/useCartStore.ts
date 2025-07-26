@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import Cart, { CartGroup, CartItem, Stock } from '@/lib/classes/Cart';
+import Cart, { CartGroup, CartItem } from '@/lib/classes/Cart';
+import type { Stock } from '@/types/stock.types';
 
 interface CartState {
   cartInstance: Cart; // This holds the single instance of  Cart class

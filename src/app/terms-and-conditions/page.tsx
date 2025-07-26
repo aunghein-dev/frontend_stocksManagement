@@ -61,7 +61,7 @@ const TermsAndConditions: React.FC = () => {
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center h-full min-h-[300px] text-gray-600">
-        <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mr-3" />
+        <div className="w-7 h-7 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mr-3" />
         <p>Loading terms and conditions...</p>
       </div>
     );
@@ -69,14 +69,14 @@ const TermsAndConditions: React.FC = () => {
 
   if (fetchError) {
     return (
-      <div className="flex-1 flex items-center justify-center h-full min-h-[300px] text-red-600 font-semibold p-6 bg-red-50 border border-red-200 rounded-lg shadow-sm">
+      <div className="flex-1 flex items-center justify-center h-full min-h-[300px] text-red-600 font-semibold p-6 bg-red-50 border border-red-200 rounded-xs shadow-sm">
         <p>{fetchError}</p>
       </div>
     );
   }
 
  return (
-  <div className="py-4 px-2 sm:px:8 text-gray-800 leading-relaxed bg-white max-w-6xl mx-auto my-4 overflow-hidden rounded-sm">
+  <div className="py-4 px-2 sm:px:8 text-gray-800 leading-relaxed bg-white max-w-6xl mx-auto my-4 overflow-hidden rounded-xs">
     <div className="h-full max-h-[calc(100dvh-65px)] overflow-y-auto custom-scrollbar px-2 py-6 sm:px-10">
       {/* IMPORTANT: Remove prose classes and add  custom class */}
       <div className="markdown-content"> {/* <-- Added  class here */}

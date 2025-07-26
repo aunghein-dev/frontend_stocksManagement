@@ -80,7 +80,7 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<FlattenedBatchReportRow>) => (
               <div
-                className="flex justify-center items-center px-3 py-1 rounded-sm text-sm font-semibold border-[0.5px] border-green-600
+                className="flex justify-center items-center px-3 py-1 rounded-xs text-sm font-semibold border-[0.5px] border-green-600
                           bg-green-200 text-green-800 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
               >
                 {params.row.totalQty}
@@ -96,7 +96,7 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
       headerAlign: 'center',
         renderCell: (params: GridRenderCellParams<FlattenedBatchReportRow>) => (
               <div
-                className="flex justify-center items-center px-3 py-1 rounded-sm text-sm font-semibold border-[0.5px] border-indigo-500
+                className="flex justify-center items-center px-3 py-1 rounded-xs text-sm font-semibold border-[0.5px] border-indigo-500
                           bg-indigo-100 text-indigo-700 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
               >
                 {params.row.stkItemCnt}
@@ -112,8 +112,8 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
       headerAlign: 'left',
        renderCell: (params: GridRenderCellParams<FlattenedBatchReportRow>) => (
                           <div
-                            className={`text-blue-500 hover:text-blue-700 cursor-pointer
-                                        font-semibold bg-gray-100 text-sm rounded-sm px-2 py-1
+                            className={`text-blue-600 hover:text-blue-700 cursor-pointer
+                                        font-semibold bg-gray-100 text-sm rounded-xs px-2 py-1
                                         border-[0.5px] border-blue-700
                                         `}
                           >
@@ -151,7 +151,7 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
 
   return (
     <DataTable
-      className='sm:w-[calc(100vw-225px)] w-[calc(100vw-25px)]'
+      className='sm:w-[calc(100vw-224px)] w-[calc(100vw-24px)] '
       data={items}
       dataMapper={flattenBatchReport}
       columns={columns}

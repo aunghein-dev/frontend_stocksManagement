@@ -145,7 +145,7 @@ export default function VoucherContent() {
   if (isBusinessInfoLoading || isLoadingVoucher) {
     return (
       <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)]">
-        <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-7 h-7 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
         <p className="mt-4 text-gray-600 text-sm">
           {isBusinessInfoLoading ? "Loading business info..." : "Loading voucher data..."}
         </p>
@@ -198,12 +198,12 @@ export default function VoucherContent() {
   return (
     <div
       className="relative w-full flex flex-col animate-slide-up 
-                p-1 overflow-hidden rounded-sm bg-white h-[calc(100dvh-111px)]"
+                p-1 overflow-hidden rounded-xs bg-white h-[calc(100dvh-111px)]"
     >
       {/* ... ( existing JSX content for the voucher) ... */}
       <div className="min-h-[40px] w-[40px] absolute top-2 left-2 print:hidden">
         <button
-          className="cursor-pointer bg-blue-100 px-3 py-1 rounded-sm text-sm hover:bg-blue-200 text-blue-500 border-[0.5px] border-blue-500"
+          className="cursor-pointer bg-blue-100 px-3 py-1 rounded-xs text-sm hover:bg-blue-200 text-blue-600 border-[0.5px] border-blue-600"
           onClick={() => router.back()}
           aria-label="Close Voucher"
         >
@@ -335,13 +335,13 @@ export default function VoucherContent() {
      <div className="absolute bottom-2 right-4 print:hidden grid grid-cols-2 gap-2">
           <button
             onClick={handleSavePhoto}
-            className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-medium rounded-sm text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
+            className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-medium rounded-xs text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
           >
             {t("bntTxt_savePhoto")}
           </button>
           <button
             onClick={handlePrint}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-sm text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xs text-sm py-2 px-4 cursor-pointer transition-all duration-200 ease-in-out exclude-from-image"
           >
             {t("btnTxt_print")}
           </button>

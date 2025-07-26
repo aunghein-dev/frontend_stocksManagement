@@ -9,16 +9,16 @@ import { useCartStore } from "@/lib/stores/useCartStore";
 import { useStocks } from "@/hooks/useStocks";
 import { useTranslation } from "@/hooks/useTranslation";
 
-import PopupVouncher from "./voucherPopup"; // Assuming this is in the same directory or adjust path
-import CustomerSelector from "./modals/CustomerSelector"; // Assuming this is in './modals' or adjust path
-import PaymentSelector from "./modals/PaymentSelector"; // Assuming this is in './modals' or adjust path
+import PopupVouncher from "../voucherPopup"; // Assuming this is in the same directory or adjust path
+import CustomerSelector from "./CustomerSelector"; // Assuming this is in './modals' or adjust path
+import PaymentSelector from "./PaymentSelector"; // Assuming this is in './modals' or adjust path
 
-import { ModalHeader } from "./molecules/ModalHeader";
+import { ModalHeader } from "../molecules/ModalHeader";
 import CartCusSelected from '@/components/ui/molecules/CartCusSelected'; // Adjust path if different
-import DiscountBox from "./molecules/DiscountBox";
-import CheckoutBox from "./molecules/CheckoutBox";
-import CartItemDisplay from "./molecules/CartItemDisplay"; // New component for individual cart items
-import { Stock } from "@/data/table.data";
+import DiscountBox from "../molecules/DiscountBox";
+import CheckoutBox from "../molecules/CheckoutBox";
+import CartItemDisplay from "../molecules/CartItemDisplay"; // New component for individual cart items
+import { Stock } from "@/types/stock.types";
 import { useInfo } from "@/hooks/useInfo";
 import axios from "axios";
 import useCheckoutCustomer from "@/lib/stores/useCheckoutCustomer";
@@ -59,7 +59,7 @@ type SalesProps = {
 };
 
 // --- Main CartPopup Component ---
-export default function CartPopup({ handleToggle }: CartPopupProps) {
+export default function Cart({ handleToggle }: CartPopupProps) {
   const { cart, addItem, removeItem, deleteItem, clearCart, total, totalQty } = useCartStore();
 
   const grandTotalQty = totalQty;
@@ -253,7 +253,7 @@ export default function CartPopup({ handleToggle }: CartPopupProps) {
                          orderNo={orderNo.orderNo}
                   />
       ) : (
-        <div className="relative h-[95dvh] w-full sm:w-[700px] rounded-2xl shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white">
+        <div className="relative h-[95dvh] w-full sm:w-[700px] rounded-xs shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white">
           <ModalHeader title={t("hd_shoppingCart")} onClick={handleToggle} haveExitButton={true} />
           <CartCusSelected handleCustomerSwitch={handleCustomerSwitch} />
 
@@ -261,7 +261,7 @@ export default function CartPopup({ handleToggle }: CartPopupProps) {
             <div className="flex flex-col h-full w-full">
               {loading && (
                 <div className="absolute top-4 right-12">
-                  <div className="w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-7 h-7 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
 

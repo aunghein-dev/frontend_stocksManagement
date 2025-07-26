@@ -9,7 +9,7 @@ export default function SignupPage() {
        <div className="flex items-center justify-center px-4 md:px-1 max-w-3xl w-full"
             style={{ height: '95svh'}}>
         <Toaster position="top-center" reverseOrder={false} />
-        <div className="w-full h-full bg-white p-1 shadow-lg rounded-xl custom-scrollbar">
+        <div className="w-full h-full bg-white p-1 shadow-lg rounded-xs custom-scrollbar">
         <div className="w-full px-2 sm:px-6 py-6  
                         overflow-auto custom-scrollbar h-full">
             <h1 className="text-xl font-extrabold text-gray-900 mb-6 text-center flex items-center justify-center">

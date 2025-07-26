@@ -112,7 +112,7 @@ export default function CheckoutCalculator({ inputValue, setInputValue, disabled
       onKeyDown={handleGlobalKeyDown}
     >
       {/* Input Display */}
-      <div className=" bg-blue-50 border border-blue-200 rounded-xl">
+      <div className=" bg-blue-50 border border-blue-200 rounded-xs">
         <input
           type="text"
           value={inputValue === '' ? '' : inputValue}
@@ -132,7 +132,7 @@ export default function CheckoutCalculator({ inputValue, setInputValue, disabled
         {suggestionAmounts.map((amount, index) => (
           <motion.button
             key={index}
-            className="flex-shrink-0 bg-gray-50 px-4 py-2 rounded-xl text-md
+            className="flex-shrink-0 bg-gray-50 px-4 py-2 rounded-xs text-md
                        cursor-pointer hover:bg-gray-100 transition-all duration-200 ease-in-out font-medium
                        border border-gray-200"
             onClick={() => handleSuggestionClick(amount)}
@@ -167,7 +167,7 @@ export default function CheckoutCalculator({ inputValue, setInputValue, disabled
 
       {/* Pay Now Button */}
       <motion.button
-        className={`${loading? "bg-gray-300 ": "bg-blue-500 "}text-sm text-white rounded-xl py-3 px-4 w-full
+        className={`${loading? "bg-gray-300 ": "bg-blue-600 "}text-sm text-white rounded-xs py-3 px-4 w-full
                    cursor-pointer hover:bg-blue-600 transition-all duration-200 ease-in-out font-semibold`}
         onClick={handlePayNow}
         disabled={loading}

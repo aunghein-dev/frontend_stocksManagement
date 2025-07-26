@@ -1,10 +1,10 @@
 {
   "greeting": "Hello",
   "welcome": "Welcome to our site",
-  "selectColor": "SELECT COLOR",
-  "outOfStock": "OUT OF STOCK",
+  "selectColor": "SELECT",
+  "outOfStock": "OUT STOCK",
   "addToCart": "ADD TO CART",
-  "inStock": "In stock",
+  "inStock": "Stock",
   "newProduct": "New",
   "success": "Success",
   "warning": "Warning",

@@ -97,7 +97,7 @@ export default function CustomerCard({ customer, onClick, onEditClick, onDeleteC
 
   return (
     <div
-      className="flex h-[140px] w-full bg-white border border-gray-200 rounded-lg overflow-hidden
+      className="flex h-[140px] w-full bg-white border border-gray-200 rounded-xs overflow-hidden
                  text-gray-800 relative shadow-xs
                  hover:shadow-md transition-all ease-in duration-100 flex-col"
       // Only call onClick if the dropdown is not open, or specifically handle it differently
@@ -106,7 +106,7 @@ export default function CustomerCard({ customer, onClick, onEditClick, onDeleteC
       {/* Status Badge */}
       <div className={`absolute top-0 left-0 ${customerStatus.color}
                       text-white text-[0.8rem] px-2
-                      rounded-tl-lg rounded-br-xl  z-10`}>
+                      rounded-tl-xs rounded-br-xs  z-10`}>
         <span>{customerStatus.text}</span>
       </div>
 
@@ -114,14 +114,14 @@ export default function CustomerCard({ customer, onClick, onEditClick, onDeleteC
         {/* Image Section */}
         <div className='flex-shrink-0 ml-2 my-auto relative'>
           {!imageLoaded && (
-            <div className="w-16 h-16 bg-gray-200 rounded-md animate-pulse" />
+            <div className="w-16 h-16 bg-gray-200 rounded-full animate-pulse" />
           )}
           <Image
             src={imgSrc}
             alt={customer.name}
             width={64}
             height={64}
-            className={`rounded-md object-cover transition-opacity duration-300 ${
+            className={`rounded-full object-cover transition-opacity duration-300 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
             onLoad={() => setImageLoaded(true)}
@@ -182,13 +182,12 @@ export default function CustomerCard({ customer, onClick, onEditClick, onDeleteC
         {/* Dropdown Menu */}
         {isDropdownOpen && (
           <div
-            className='absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-md shadow-lg
-                       py-0.5 z-20' // Higher z-index to ensure it's on top
+            className='absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-xs shadow-lg z-20' // Higher z-index to ensure it's on top
             onClick={(e) => e.stopPropagation()} // Prevent card click when clicking inside dropdown
           >
             <button
               onClick={handleEdit}
-              className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+              className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-100'
             >
               {t("btnTxt_editCus")}
             </button>

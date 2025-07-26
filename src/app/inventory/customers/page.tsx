@@ -147,18 +147,17 @@ export default function Customers() {
     if (isLoading) {
       return (
         <div className="flex justify-center items-center min-h-[calc(100dvh-169px)]">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-blue-500"></div>
         </div>
       );
     }
 
     if (error) {
       return (
-
          <div className="flex flex-col items-center justify-center h-[calc(100dvh-108px)] text-red-600">
                    <PageLost404 
                   header={t("msg_wrong")}
-                  message={error.message}
+                  message={error?.message|| "Check your internet connection."}
                   reload={() => window.location.reload()}
                   />
           </div>
@@ -205,19 +204,20 @@ export default function Customers() {
   }
 
   return (
-    <section className="overflow-hidden h-full rounded-sm bg-white sm:w-[calc(100vw-224px)] w-[calc(100vw-25px)]">
+    <section className="overflow-hidden h-full rounded-xs bg-white sm:w-[calc(100vw-224px)] w-[calc(100vw-25px)]">
       <div className="overflow-auto custom-scrollbar pt-0 h-[calc(100dvh-109px)] custom-scrollbar relative">
         <div className="bg-white sticky top-0 left-4 right-0 min-h-[60px] flex items-center justify-start
-                        border-b border-gray-100 px-3">
+                        border-b border-gray-100 px-3 z-20">
           <Search
             placeholder={t("searchCustomer")}
              onChange={handleSearch}
              value={searchQuery}
+             className="border-[0.5px] border-gray-300"
           />
         </div>
         <div className="flex flex-col h-full">
            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 justify-between pb-4 md:pb-6 border-b border-gray-200 pt-4 px-3">
-            <MiniDataCard title={t("lbl_totCus")} value={dashData.totalCustomers.toString()} icon={<FaUsers className="text-blue-500" />} />
+            <MiniDataCard title={t("lbl_totCus")} value={dashData.totalCustomers.toString()} icon={<FaUsers className="text-blue-600" />} />
             <MiniDataCard title={t("lbl_retailers")} value={dashData.retailerCnt.toString()} icon={<FaStore className="text-purple-500" />} />
             <MiniDataCard title={t("lbl_wholesalers")} value={dashData.wholesalerCnt.toString()} icon={<FaBuilding className="text-orange-500" />} />
             <MiniDataCard title={t("lbl_receivables")} value={dashData.totalDue.toString()} icon={<FaMoneyBillWave className="text-red-500" />} />

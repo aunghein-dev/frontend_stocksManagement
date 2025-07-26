@@ -1,19 +1,4 @@
-export type Stock = {
-  groupId: number;
-  groupImage: string;
-  groupName: string;
-  groupUnitPrice: number;
-  releasedDate: string;
-  items: {
-    itemId: number;
-    itemImage: string;
-    itemColorHex: string;
-    itemQuantity: number;
-    barcodeNo: string;
-  }[];
-}
 
-export const stocks: Stock[] = [];
 
 // types/Sales.ts or @/types/sales.ts
 export type Sales = {

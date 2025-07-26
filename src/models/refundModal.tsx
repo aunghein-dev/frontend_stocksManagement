@@ -112,7 +112,7 @@ export default function RefundModal() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center animate-fade-in z-50"> {/* Added z-50 */}
-      <div className="bg-white rounded-xl shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in "> {/* Increased rounded corners, added border */}
+      <div className="bg-white rounded-xs shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in "> {/* Increased rounded corners, added border */}
         <div className="flex items-center gap-3 justify-between">
           <div className="flex gap-2 items-center"> {/* Adjusted gap and removed redundant justify-between */}
               <Save className="text-green-600 w-7 h-7" /> {/* Increased icon size */}
@@ -121,7 +121,7 @@ export default function RefundModal() {
               </h2>
           </div>
           {loading && (
-              <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />)} {/* Adjusted spinner size */}
+              <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />)} {/* Adjusted spinner size */}
         </div>
 
         {currentModalData ? (

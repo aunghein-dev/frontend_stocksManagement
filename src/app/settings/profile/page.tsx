@@ -129,13 +129,22 @@ const AccountProfileSettingsPage: React.FC = () => {
   const handleProfileImageFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+
+      const MAX_FILE_SIZE_MB = 3;
+     
+      
+      if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        setImageUploadError(`Image file is too large. Max allowed size is ${MAX_FILE_SIZE_MB}MB.`);
+        setSelectedProfileImageFile(null);
+        setDisplayProfileImageUrl(userProfile?.userImgUrl || '/man.png');
+        return;
+      }
+  
       setSelectedProfileImageFile(file);
       setImageUploadError(null);
       setImageUploadSuccess(false);
       setError(null);
       setSaving(false);
-
-      // --- ADD THIS LINE FOR IMMEDIATE PREVIEW ---
       setDisplayProfileImageUrl(URL.createObjectURL(file)); 
       setInstancePropic(URL.createObjectURL(file));
     } else {
@@ -185,6 +194,7 @@ const AccountProfileSettingsPage: React.FC = () => {
         withCredentials: true,
       });
 
+      
       const newImgUrl = response.data.userImgUrl;
 
       // Revoke the old object URL if it was a preview
@@ -299,13 +309,13 @@ const AccountProfileSettingsPage: React.FC = () => {
 
   return (
 
-    <div className="p-1 w-full bg-white rounded-sm h-[calc(100dvh-110px)] overflow-auto custom-scrollbar">
+    <div className="p-1 w-full bg-white rounded-xs h-[calc(100dvh-110px)] overflow-auto custom-scrollbar">
       <div className='overflow-auto h-full custom-scrollbar px-4 py-4'>
       <h1 className="text-xl font-bold text-gray-800 text-center mb-8">{t("hd_profileSettings")}</h1>
 
       <div className="space-y-6">
         {/* Profile Image Section */}
-        <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+        <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-xs border border-dashed border-gray-200">
           <label htmlFor="profile-image-upload-input" className="cursor-pointer mb-4 relative group">
             {displayProfileImageUrl ? (
               <Image
@@ -343,7 +353,7 @@ const AccountProfileSettingsPage: React.FC = () => {
               : t("lbl_changeProfilePics")}
           </p>
 
-          <p className="text-xs text-gray-500 mb-4 mt-2">PNG, JPG, JPEG, GIF up to 10MB</p>
+          <p className="text-xs text-gray-500 mb-4 mt-2">PNG, JPG, JPEG, GIF up to 3MB</p>
           
           <button
             type="button"
@@ -407,7 +417,7 @@ const AccountProfileSettingsPage: React.FC = () => {
               name="fullName"
               value={formFullName}
               onChange={handleFullNameChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-600 focus:border-blue-600"
               required
             />
           </div>
@@ -429,7 +439,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_bizNn")}</label>
                   <p className="text-sm text-gray-900 
                                 border-[0.5px] border-gray-300 
-                                rounded-sm py-2.5 pl-2 mt-3">
+                                rounded-xs py-2.5 pl-2 mt-3">
                    {userProfile.business.businessName}
                   </p>
                 </div>
@@ -437,7 +447,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_bizShortNn")}</label>
                   <p className="text-sm text-gray-900 
                                 border-[0.5px] border-gray-300 
-                                rounded-sm py-2.5 pl-2 mt-3">
+                                rounded-xs py-2.5 pl-2 mt-3">
                     {userProfile.business.businessNameShortForm}
                   </p>
                 </div>
@@ -445,7 +455,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_dfCurrency")}</label>
                   <p className="text-sm text-gray-900 
                                 border-[0.5px] border-gray-300 
-                                rounded-sm py-2.5 pl-2 mt-3">
+                                rounded-xs py-2.5 pl-2 mt-3">
                     {userProfile.business.defaultCurrency}
                   </p>
                 </div>
@@ -453,7 +463,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_taxRate")}</label>
                   <p className="text-sm text-gray-900 
                                 border-[0.5px] border-gray-300 
-                                rounded-sm py-2.5 pl-2 mt-3">
+                                rounded-xs py-2.5 pl-2 mt-3">
                     {userProfile.business.taxRate * 100}%
                   </p>
                 </div>
@@ -466,7 +476,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                       alt={`${userProfile.business.businessName} Logo`}
                       fill
                       sizes="80px"
-                      className="rounded-lg object-contain border border-gray-200 p-1"
+                      className="rounded-xs object-contain border border-gray-200 p-1"
                       // REMOVE priority prop: priority
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/man.png';
@@ -505,8 +515,8 @@ const AccountProfileSettingsPage: React.FC = () => {
               disabled={saving || !hasFormChanges || !API_BASE_URL}
               className={`w-full sm:w-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white transition-colors duration-200 ${
                 saving || !hasFormChanges || !API_BASE_URL
-                  ? 'bg-blue-400 text-white cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+                  ? 'bg-blue-600 text-white cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600'
               }`}
             >
               {saving ? (

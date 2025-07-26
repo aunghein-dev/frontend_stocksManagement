@@ -86,13 +86,12 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                     py-3 px-3 border-b-[1px] border-gray-200
                     ${props.sidebarOpen === true ? "z-40" : "z-50"}`}>
 
-      <div className="ml-[0px] sm:ml-[200px] h-14 py-8 px-3 bg-white shadow-xs rounded-sm flex items-center justify-between">
-
+      <div className="ml-[0px] sm:ml-[200px] h-14 py-8 px-3 rounded-xs flex items-center justify-between sm:pl-5 bg-white shadow-xs">
         <div className="flex items-center">
           <button
             aria-label="Toggle menu"
             className="text-xl mr-4 px-2 py-1
-                      rounded-sm cursor-pointer sm:hidden text-gray-500 hover:text-gray-600"
+                      rounded-xs cursor-pointer sm:hidden text-gray-500 hover:text-gray-600"
             onClick={() => props.handleSidebarOpen()}
           >
             <FiMenu />
@@ -127,19 +126,18 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
           <button
             ref={profileButtonRef}
             type="button"
-            className="flex text-sm bg-gray-800
-                       rounded-full focus:ring-2 focus:ring-blue-300
-                       mr-2
+            className="flex text-sm 
+                       rounded-full focus:ring-2 focus:ring-blue-300 mr-2
                        cursor-pointer
-                       outline-none ring-offset-1 ring-offset-white" 
+                       outline-none bg-red-300 border-[1px] border-gray-200" 
             onClick={handleToggle}
           >
             <span className="sr-only">Open user menu</span>
             {isLoading ? (
-              <div className="w-12 h-12 rounded-full bg-gray-100 animate-pulse"></div>
+              <div className="w-11 h-11 rounded-full bg-gray-100 animate-pulse"></div>
             ) : (
               <Image
-                className="rounded-full object-cover w-12 h-12"
+                className="rounded-full object-cover w-11 h-11"
                 height={48}
                 width={48}
                 src={data?.userImgUrl || "/man.png"}
@@ -153,22 +151,33 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
           {isOpen && (
             <div
               ref={dropdownRef}
-              className="z-50 my-4 text-sm text-gray-900 absolute -right-3 top-11 list-none bg-white divide-y divide-gray-100 rounded-sm shadow-xl pt-1"
+              className="z-50 my-4 text-sm text-gray-900 absolute -right-3 top-11 list-none bg-white divide-y divide-gray-100 rounded-xs shadow-lg "
             >
               <button onClick={() => router.push("/settings/profile")}>
-                <div className="px-4 py-3 cursor-pointer text-left hover:bg-blue-200">
+                <div className="px-4 py-3 cursor-pointer text-left hover:bg-blue-200
+                               rounded-t-xs transition-all duration-200">
                   <span className="block text-sm text-gray-900">{data?.fullName}</span>
                   <span className="block text-sm text-gray-500 truncate">{data?.username}</span>
                 </div>
               </button>
 
-              <ul className="py-1">
+              <ul>
+                <li>
+                  <button
+                    onClick={() => router.push("/settings/billing-&-invoicing")}
+                    className="block px-4 py-2.5 text-sm
+                             text-gray-700 hover:bg-blue-200
+                               cursor-pointer w-full text-left transition-all duration-200"
+                  >
+                    Billing and invoicing
+                  </button>
+                </li>
                 <li>
                   <button
                     onClick={() => router.push("/dashboard")}
-                    className="block px-4 py-2 text-sm
+                    className="block px-4 py-2.5 text-sm
                              text-gray-700 hover:bg-blue-200
-                               cursor-pointer w-full text-left"
+                               cursor-pointer w-full text-left transition-all duration-200"
                   >
                     {t("dashboard")}
                   </button>
@@ -176,9 +185,9 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                 <li>
                   <button
                     onClick={() => router.push("/settings")}
-                    className="block px-4 py-2 text-sm
+                    className="block px-4 py-2.5 text-sm
                              text-gray-700 hover:bg-blue-200
-                               cursor-pointer w-full text-left"
+                               cursor-pointer w-full text-left transition-all duration-200"
                   >
                     {t("settings")}
                   </button>
@@ -186,9 +195,9 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                 <li>
                   <a
                     onClick={handleLogout}
-                    className="block px-4 py-2 text-sm
+                    className="block px-4 py-2.5 text-sm
                              text-gray-700 hover:bg-blue-200
-                               cursor-pointer"
+                               cursor-pointer rounded-b-xs transition-all duration-200"
                   >
                     {t("btnTxt_signOut")}
                   </a>

@@ -28,7 +28,7 @@ export default function NotFound() {
 
   return (
     <section>
-      <div className="min-h-[calc(100dvh-110px)] bg-white w-full rounded-sm flex flex-col items-center justify-center">
+      <div className="min-h-[calc(100dvh-110px)] bg-white w-full rounded-xs flex flex-col items-center justify-center">
         
           {/* Main content container - added flex-col to stack items properly */}
           <div className="transition duration-200 ease-in-out p-1 flex flex-col items-center">

@@ -90,12 +90,11 @@ function DataTable<V, R extends { id: GridRowId }>({
         elevation={0}
         sx={{
           // Set a fixed height for the Paper. This is the container that will hold the scrollable DataGrid.
-          height: 'calc(100dvh - 110.5px)', // This calculates height relative to viewport
+          height: 'calc(100dvh - 112px)', // This calculates height relative to viewport
           width: '100%',
           display: 'flex',       // Make Paper a flex container
           flexDirection: 'column', // Stack children vertically
-          borderRadius: 1,
-          px: 1,
+          borderRadius: '2px',
           overflow: 'hidden',    // IMPORTANT: Prevents Paper itself from showing a scrollbar
                                  // and clips any overflow from its direct children if they
                                  // somehow exceed Paper's dimensions.
@@ -157,7 +156,7 @@ function DataTable<V, R extends { id: GridRowId }>({
             flexGrow: 1, // Allows DataGrid to fill remaining vertical space within its flex parent (Paper)
             width: '100%', // Ensure DataGrid takes 100% of its parent's width
             border: 0,
-            borderRadius: 1,
+            borderRadius: 0,
 
             // Ensure the main DataGrid background is transparent for the scrollbar track to show through
             '&.MuiDataGrid-root': {
@@ -191,7 +190,7 @@ function DataTable<V, R extends { id: GridRowId }>({
               fontSize: '0.9rem',
               '& input': {
                 fontSize: '0.9rem !important',
-                borderRadius: '10px',
+                borderRadius: '2px',
               },
               '& input::placeholder': {
                 fontSize: '0.9rem !important',
@@ -214,7 +213,7 @@ function DataTable<V, R extends { id: GridRowId }>({
               },
               '&::-webkit-scrollbar-thumb': {
                 backgroundColor: 'rgba(147, 197, 253, 0.3)', /* Very faint blue thumb */
-                borderRadius: '4px', /* Slightly more rounded */
+                borderRadius: '2px', /* Slightly more rounded */
                 border: '0.5px solid rgba(147, 197, 253, 0.05)', /* Barely visible border */
                 transition: 'background-color 0.2s ease-in-out, border-color 0.2s ease-in-out',
               },

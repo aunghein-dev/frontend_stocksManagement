@@ -139,7 +139,7 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: unknown;
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<FlattenedSalesRow>) => (
         <div
-          className="flex justify-center items-center px-3 py-1 rounded-sm text-sm font-semibold border-[0.5px] border-green-500
+          className="flex justify-center items-center px-3 py-1 rounded-xs text-sm font-semibold border-[0.5px] border-green-500
                     bg-green-100 text-green-700 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
         >
           {params.row.checkoutQty}
@@ -162,8 +162,8 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: unknown;
       headerAlign: 'left',
       renderCell: (params: GridRenderCellParams<FlattenedSalesRow>) => (
                     <div
-                      className={`text-blue-500 hover:text-blue-700 cursor-pointer
-                                  font-semibold bg-gray-100 text-sm rounded-sm px-2 py-1
+                      className={`text-blue-600 hover:text-blue-700 cursor-pointer
+                                  font-semibold bg-gray-100 text-sm rounded-xs px-2 py-1
                                   border-[0.5px] border-blue-700
                                   `}
                     >

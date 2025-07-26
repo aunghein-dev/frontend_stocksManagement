@@ -59,7 +59,7 @@ const {t} = useTranslation();
   }
   
   return (
-    <section className="h-full">
+    <section className="h-full w-full ">
      
       <BatchReportTable
         items={items ?? []} // Ensure items is always an array to prevent errors
