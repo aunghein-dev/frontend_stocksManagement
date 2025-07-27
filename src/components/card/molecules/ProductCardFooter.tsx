@@ -29,7 +29,7 @@ function ProductCardFooter({
 }: ProductCardFooterProps) {
   return (
     <>
-       <div className="flex items-center min-h-7 overflow-x-auto flex-nowrap scrollbar-hide custom-scrollbar px-1"> 
+       <div className="flex items-center min-h-7 overflow-x-auto flex-nowrap px-1 py-2 scrollbar-hide">
             <div className="flex gap-1">
               {colorSet.map((color, index) => (
                 <button

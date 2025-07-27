@@ -129,12 +129,12 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
             className="flex text-sm 
                        rounded-full focus:ring-2 focus:ring-blue-300 mr-2
                        cursor-pointer
-                       outline-none bg-red-300 border-[1px] border-gray-200" 
+                       outline-none bg-gray-300 border-[1px] border-gray-200" 
             onClick={handleToggle}
           >
             <span className="sr-only">Open user menu</span>
             {isLoading ? (
-              <div className="w-11 h-11 rounded-full bg-gray-100 animate-pulse"></div>
+              <div className="w-11 h-11 rounded-full bg-gray-400 animate-pulse"></div>
             ) : (
               <Image
                 className="rounded-full object-cover w-11 h-11"

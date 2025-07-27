@@ -161,10 +161,6 @@ export default function ProductCard(props: Stock) {
     setSelectedColor("");
   }
 
-  
- 
-
-
   return (
     <div
       className="max-w-[250px] text-gray-900 relativ sm:max-w-md

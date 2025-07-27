@@ -1,86 +1,205 @@
 "use client";
 
 import BillingCard from "@/components/card/BillingCard";
+import LicenseInfo from "@/components/card/LicenseInfo";
+import PaySlipEntry from "@/components/ui/modals/PaySlipEntry";
 import BillingInvoice from "@/components/ui/molecules/BillingInvoice";
 import BillingData from "@/data/billing.data";
-import BillingChangeConfirm from "@/models/BillingChangeConfirm";
-import React from "react";
+import { useBilling } from "@/hooks/useBilling";
+import BillingChangeConfirm, { BillingInfoProps } from "@/models/BillingChangeConfirm";
+import React, { useEffect, useMemo, useCallback } from "react"; 
+import dayjs from "dayjs";
+
+
+import { CodeToText, BillingBackend } from "@/components/utils/billingUtils"; 
+
+
+export interface SelectedPlan {
+  code: string;
+  action: string;
+}
+
+// Helper functions that depend on component scope should be memoized or defined outside if possible.
+// These are now defined outside or as useCallback where appropriate.
+
+// Helper function for cancel button text (can be outside if no external dependencies)
+const getCancelBtnText = (action: string) => {
+  return action === "Upgrade" ? "Cancel Upgrade" : "Cancel Downgrade";
+};
+
+// Helper function for confirm button text (can be outside if no external dependencies)
+const getConfirmBtnText = (action: string) => {
+  return action === "Upgrade" ? "Confirm and Pay" : "Confirm";
+};
 
 export default function BillingAndInvocingPage() {
-
+  const { billing, isLoading, error } = useBilling();
   const data = BillingData;
-  const planPriority = ["Free Plan","Basic Plan", "Pro Plan", "Business Plan"];
+  const planPriority = useMemo(() => ["Free Plan", "Basic Plan", "Pro Plan", "Business Plan"], []);
+
   const [openBillingChange, setOpenBillingChange] = React.useState(false);
-  const [selectedObj, setSelectedObj] = React.useState({
+  const [paySlipEntryOpen, setPaySlipEntryOpen] = React.useState(false);
+
+  const [selectedPlan, setSelectedPlan] = React.useState<SelectedPlan>({
     code: "",
     action: "",
   });
 
-  const handleSelect = (code: string, action: string) => {
-    setSelectedObj({
-      code: code,
-      action: action,
-    });
-  }
-  
-  function getPlanButtonLabel(planName: string, currentPlan: string) {
-    const currentIndex = planPriority.indexOf(currentPlan);
+  // Memoize getPlanButtonLabel as it depends on planPriority and currentPlanDisplayName
+  const getPlanButtonLabel = useCallback((planName: string, currentPlanName: string) => {
+    const currentIndex = planPriority.indexOf(currentPlanName);
     const planIndex = planPriority.indexOf(planName);
 
     if (planIndex === currentIndex) return "Current Plan";
     if (planIndex > currentIndex) return "Upgrade";
     return "Downgrade";
+  }, [planPriority]); // Depends on planPriority
+
+  // Memoize the info object for the modal
+  const info: BillingInfoProps = useMemo(() => {
+    if (!selectedPlan.code) {
+      return {
+        upgradeOrDowngrade: "",
+        subHeaderMess: "",
+        desirablePlan: "",
+        availablePayment: "",
+        receiverNumber: "",
+        billingAcc: "",
+        effectiveDate: "",
+        expiredDate: "",
+        remainingDay: "",
+        remainingDebit: "",
+        total: "",
+        cancelBtnText: "",
+        confirmBtnText: "",
+      };
+    }
+
+    return {
+      upgradeOrDowngrade: selectedPlan.action,
+      subHeaderMess: selectedPlan.action === "Upgrade" ? "Upgrade to" : "Downgrade to",
+      desirablePlan: CodeToText(selectedPlan.code),
+      availablePayment: "KPay-WavePay-AYAPay",
+      receiverNumber: "0987654321",
+      billingAcc: billing?.billingAcc || "N/A", // Use actual billingAcc if available
+      effectiveDate: dayjs().format("DD MMM YYYY"),
+      expiredDate: dayjs().add(1, 'month').format("DD MMM YYYY"),
+      remainingDay: "20 Days", // Mock - consider deriving this from dates
+      remainingDebit: "4,000 MMK", // Mock - consider deriving this from billing data
+      total: "12,000 MMK", // Mock - consider deriving this from billing data
+      cancelBtnText: getCancelBtnText(selectedPlan.action),
+      confirmBtnText: getConfirmBtnText(selectedPlan.action),
+    };
+  }, [selectedPlan, billing]); // Dependencies: selectedPlan and billing
+
+  // Effect to open the billing change modal when a plan is selected
+  useEffect(() => {
+    if (selectedPlan.code) {
+      setOpenBillingChange(true);
+    }
+  }, [selectedPlan]);
+
+  // Memoized event handlers
+  const handleToogleBillingConfirm = useCallback(() => {
+    setOpenBillingChange(false);
+  }, []);
+
+  const handleContinue = useCallback(() => {
+    setOpenBillingChange(false);
+    setPaySlipEntryOpen(true);
+  }, []);
+
+  const handleChangePlan = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setPaySlipEntryOpen(false);
+    // Add logic to submit the plan change
+  }, []);
+
+  // Derive currentPlanDisplayName directly from billing data
+  const currentPlanDisplayName = useMemo(() => CodeToText(billing?.currPlanCode), [billing]);
+
+  // --- Conditional Rendering for Loading/Error States ---
+  if (isLoading || !billing) {
+    return (
+      <div className="overflow-hidden h-[90dvh] rounded-xs bg-white p-1 py-8 flex items-center justify-center">
+         <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-blue-500"></div>
+         <span className="text-gray-400 ml-2 text-sm">Loading Billing Data...</span>
+      </div>
+    );
   }
 
-  const handleConfirmation = (index: number) => {
-    console.log("SELECTED PLAN INDEX:", index);
-    
-    setOpenBillingChange(true);
+  if (error) {
+    return (
+      <div className="overflow-hidden h-full rounded-xs bg-white p-1 py-8 flex items-center justify-center">
+        <p className="text-red-600">Error loading billing data: {error.message || "Unknown error"}</p>
+      </div>
+    );
   }
 
+ 
 
-  const currentPlan = "Pro Plan";
+  // --- Main Render ---
   return (
-     <div className="overflow-hidden h-full rounded-xs bg-white p-1 py-3">
-      <div className="overflow-y-auto custom-scrollbar h-[calc(100dvh-136px)] custom-scrollbar">
-        <div className="flex-1 w-full px-1">
-            <div className="grid 
+    <div className="overflow-hidden h-full rounded-xs bg-white p-1 py-8">
+      <div className="h-[calc(100dvh-176px)] overflow-y-auto custom-scrollbar">
+        <div className="flex-1 w-full px-1 custom-scrollbar">
+          <div className="grid
                         grid-cols-2
                         min-[580px]:grid-cols-2
                         min-[640px]:grid-cols-2
                         min-[700px]:grid-cols-2
                         min-[880px]:grid-cols-3
-                        min-[1120px]:grid-cols-4  
-                        gap-2.5 w-full  px-1">
-          {data.map((plan,index) => (
-            <BillingCard
-              key={plan.name}
+                        min-[1120px]:grid-cols-4
+                        gap-2 w-full md:px-6 px-1 md:gap-2.5">
+            {data.map((plan) => (
+              <BillingCard
+                key={plan.name}
+                className={``}
+                setSelectedPlan={setSelectedPlan}
+                plan={{
+                  ...plan,
+                  buttonText: getPlanButtonLabel(plan.name, currentPlanDisplayName)
+                }}
+              />
+            ))}
+          </div>
 
-              plan={{
-                ...plan,
-                buttonText: getPlanButtonLabel(plan.name, currentPlan)
-              }}
+          <div className="px-2 md:px-4 lg:px-6 flex flex-col mt-6">
+            <span className="text-md font-semibold text-gray-700
+                           pb-4 border-b-[0.5px] border-gray-200 mb-5">
+              Plan Information
+            </span>
+            {/* Pass the entire billing object to LicenseInfo */}
+            <LicenseInfo
+              billing={billing as BillingBackend} // Cast to ensure correct type is passed
             />
-          ))}
-        </div>
+          </div>
 
-        <div className="flex flex-col mt-6 px-2 md:px-4 lg:px-6">
-          <span className="text-md font-semibold text-gray-700 
+          <div className="flex flex-col mt-6 px-2 md:px-4 lg:px-6">
+            <span className="text-md font-semibold text-gray-700
                            border-b-[0.5px] border-gray-200 pb-4">
-            Billing History
-          </span>
-          <div>
-            <BillingInvoice/>
+              Billing History
+            </span>
+            <div>
+              <BillingInvoice/>
+            </div>
           </div>
         </div>
-        </div>
-
       </div>
 
-      {
-        openBillingChange && <BillingChangeConfirm
-                              
-                              />
+      {openBillingChange &&
+        <BillingChangeConfirm
+          info={info}
+          handleToogleBillingConfrim={handleToogleBillingConfirm}
+          handleContinue={handleContinue}
+        />
+      }
+
+      {paySlipEntryOpen &&
+        <PaySlipEntry
+          setPaySlipEntryOpen={setPaySlipEntryOpen}
+          handleChangePlan={handleChangePlan}
+        />
       }
     </div>
   );

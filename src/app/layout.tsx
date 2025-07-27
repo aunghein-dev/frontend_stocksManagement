@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Roboto } from "next/font/google"; // Import Inter and Roboto
 import "./globals.css";
 import Container from "@/app/container";
 import Modal from "@/components/Modal";
 import { LocaleProvider } from "../context/LocaleContext";
 
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Configure Inter font with Roboto as a fallback
+const inter = Inter({
+  variable: "--font-inter", // Define a CSS variable for Inter
   subsets: ["latin"],
+  display: "swap", // Optimize font loading
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const roboto = Roboto({
+  variable: "--font-roboto", // Define a CSS variable for Roboto
+  weight: ["400", "700"], // Specify weights you want to use for Roboto
   subsets: ["latin"],
+  display: "swap", // Optimize font loading
 });
 
 export const metadata: Metadata = {
@@ -28,7 +31,6 @@ export const viewport = {
   userScalable: false,
 };
 
-
 export default function RootLayout({
   children,
 }: {
@@ -36,7 +38,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="min-h-screen">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
+      {/* Apply the Inter font variable with Roboto as a fallback */}
+      <body className={`${inter.variable} ${roboto.variable} font-sans antialiased min-h-screen`}>
          <LocaleProvider>
             <Container>
               {children}
@@ -47,3 +50,4 @@ export default function RootLayout({
     </html>
   );
 }
+

@@ -19,7 +19,9 @@ export default function Radar(props: RadarProps) {
     return label.slice(0, maxLength) + '...';
   }
 
-  const truncatedMetrics = props.metrics.map(label => truncateLabel(label, 15));
+  const truncatedMetrics = props.metrics.map((label, index) =>
+    `${index+1}.${truncateLabel(label, 15)}`
+  );
 
   if (props.metrics.length === 0) {
     return (

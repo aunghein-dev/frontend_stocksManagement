@@ -276,7 +276,7 @@ export default function Cart({ handleToggle }: CartPopupProps) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
-                        className="relative p-1 border border-gray-200 rounded-2xl shadow-xs"
+                        className="relative p-1 border border-gray-200 rounded-xs shadow-xs"
                       >
                         <h3 className="text-md font-semibold text-gray-700 mb-3 mx-3 mt-1">
                           <span>#{index + 1}. {" "}{group.groupName}</span>

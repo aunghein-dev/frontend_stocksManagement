@@ -60,6 +60,14 @@ body {
 
 /* Custom Scrollbar for a Professional, Minimalist Blue-300 Theme (Even Lower Opacity) */
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 /* Apply to elements with the custom-scrollbar class */
 .custom-scrollbar {
   scrollbar-width: thin; /* Firefox */
