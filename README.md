@@ -1,249 +1,198 @@
----
 <p align="center">
   <img src="https://github.com/aunghein-dev/frontend_stocksManagement/blob/main/public/applogo.png?raw=true" alt="Openware Logo" width="100"/>
 </p>
 
-# Openware Stock Manager
+# Openware Inventory Management System
 
-Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) inspired web application designed to streamline inventory management for businesses. Built with a powerful **Next.js** frontend and a secure **Spring Boot** backend, it leverages **PostgreSQL** and **Supabase** for efficient and scalable data management, featuring a multi-tenant architecture with single-database tenancy.
-
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Architecture](#architecture)
-  - [Frontend (Next.js)](#frontend-nextjs)
-  - [Backend (Spring Boot)](#backend-spring-boot)
-  - [Database (PostgreSQL)](#database-postgresql)
-  - [Supabase](#supabase)
-  - [Tenant Isolation (Single DB Multi-Tenancy)](#tenant-isolation-single-db-multi-tenancy)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-    - [PostgreSQL Database](#postgresql-database)
-    - [Supabase](#supabase-1)
-    - [Environment Variables (General)](#environment-variables-general)
-  - [Running the Application](#running-the-application)
-- [Usage](#usage)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+> A production-ready multi-tenant POS-inspired inventory management web app, powered by **Next.js**, **Spring Boot**, and **PostgreSQL**, built for modern retail operations in Myanmar and beyond.
 
 ---
 
-### Application Preview
+## 🧰 Tech Stack
 
-#### 🖥️ Desktop Preview
+### 🖥️ Frontend
 
-![Desktop UI Preview](https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/desktopPreview.png)
-![Desktop UI Preview](https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/desktopPreview1.png)
-![Desktop UI Preview](https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/desktopPreview2.png)
+- **Next.js 15**
+- **React 18**
+- **Zustand** – Lightweight state management
+- **Tailwind CSS** – Utility-first responsive styling
+- **Supabase Auth & Storage** – Authentication and media hosting
+- **Lucide & ShadCN/UI** – Accessible, elegant UI components
 
-#### 📱 Mobile Preview
+### ⚙️ Backend
 
-<img src="https://github.com/aunghein-dev/frontend_stocksManagement/raw/main/public/mobilePreview.png" alt="Mobile UI Preview" width="300" />
-
----
-
-## Features
-
-- **Modern POS-style Interface:** Enjoy a clean, user-friendly design inspired by modern Point-of-Sale systems for efficient stock management.
-- **Real-time Inventory Tracking:** Keep tabs on stock levels, product movements, and inventory adjustments in real-time.
-- **Product Management:** Easily add, edit, and categorize products with detailed information.
-- **Order Management:** Create and manage sales orders, track order status, and process transactions seamlessly.
-- **User Authentication & Authorization:** Secure access with **JWT-based authentication** for various user roles.
-- **Multi-Tenant Architecture:** Benefit from single database tenancy with secure data isolation for each account via unique `account_id` and JWT claims.
-- **Search & Filtering:** Quickly find products and orders with powerful search and filtering capabilities.
-- **Responsive Design:** Optimized for various devices, from desktops to tablets, ensuring a consistent experience.
-- **Scalable Backend:** Rely on a robust **Spring Boot** backend designed for high performance and scalability.
-- **Supabase Integration:** Leverage **Supabase** for seamless database interactions and extended authentication features.
+- **Spring Boot (Java 17+)**
+- **Spring Security + JWT** – Authentication & role-based access
+- **Spring Data JPA + Hibernate** – ORM and efficient DB access
+- **PostgreSQL** (via **Aiven Free Tier**) – Scalable relational database
+- **Stored Procedures & SQL Functions** – For analytical reports and dashboards
+- **Database Triggers** – Auto-delete logic for stock items
+- **Supabase Object Storage** – For secure image & file uploads
 
 ---
 
-## Technologies Used
+## 📐 Architecture Overview
 
-**Frontend:**
+The Openware Stock Manager follows a clean, modular architecture:
 
-- **Next.js:** A powerful React framework for production, offering server-side rendering (SSR) and static site generation (SSG).
-- **React:** For building dynamic and responsive user interfaces.
-- **Tailwind CSS:** For rapid and consistent styling.
-- **React Query:** For efficient data fetching, caching, and synchronization.
-- **Formik/Yup:** For streamlined form management and validation.
-
-**Backend:**
-
-- **Spring Boot:** A robust framework for building stand-alone, production-grade Spring-based applications.
-- **Java:** The primary programming language.
-- **PostgreSQL:** A powerful open-source relational database.
-- **Supabase:** A Backend-as-a-Service providing authentication, real-time database, and more.
-- **Spring Data JPA:** For easy data access with relational databases.
-- **Spring Security:** For comprehensive authentication and authorization with JWT.
-- **Lombok:** To reduce boilerplate code.
+| Layer         | Technology                      | Purpose                              |
+|---------------|----------------------------------|--------------------------------------|
+| Frontend      | Next.js + Zustand               | UI, Routing, State                   |
+| Backend       | Spring Boot + Hibernate         | Business Logic, API                  |
+| Auth          | Supabase JWT                    | Multi-tenant security via `account_id` |
+| Database      | PostgreSQL (Aiven)              | Data storage                         |
+| Media Hosting | Supabase Storage                | Product and invoice images/files     |
+| Multi-Tenancy | Single-DB with row-level `account_id` | Secure tenant isolation             |
 
 ---
 
-## Architecture
+## ✨ Features
 
-The Openware Stock Manager employs a microservices-inspired architecture with a clear separation of concerns:
-
-- **Frontend (Next.js):** Manages the user interface, routing, and client-side logic. It communicates with the Spring Boot backend via RESTful APIs.
-- **Backend (Spring Boot):** Provides the core business logic, data persistence, and API endpoints. It interacts directly with the PostgreSQL database.
-- **Database (PostgreSQL):** Stores all application data.
-- **Supabase:** Primarily used for its **authentication capabilities**, acting as an identity provider, and potentially for real-time features if integrated. The `account_id` is a crucial element in the JWT, enabling the backend to filter data for the correct tenant within the single PostgreSQL database.
-
-**Tenant Isolation (Single DB Multi-Tenancy):**  
-Each customer account has a unique `account_id` embedded within the JWT upon successful authentication. All database queries made by the Spring Boot backend include a filter based on this `account_id`, ensuring strict data isolation between tenants within the same PostgreSQL database.
+- ✅ **POS-Style UI:** Fast and intuitive checkout, invoice, and product interfaces
+- ✅ **Multi-Tenant Architecture:** Each business operates in isolation via JWT `account_id`
+- ✅ **Inventory Rules:** Auto-deletion of zero-stock products older than 6 months via DB trigger
+- ✅ **Stock Management:** Create, update, and delete stock items with image support
+- ✅ **Sales and Orders:** Manage orders with discounts, change, and printable invoices
+- ✅ **Reports Dashboard:** SQL-powered analytics using PostgreSQL views & stored functions
+- ✅ **Authentication:** Role-based login via Supabase Auth
+- ✅ **Responsive Design:** Works beautifully on mobile, tablet, and desktop
+- ✅ **Secure File Uploads:** Supabase storage for product and billing assets
 
 ---
 
-## Getting Started
+## 📷 Application Preview
 
-Follow these instructions to get a copy of the project up and running on local machine for development and testing.
+### 🖥️ Desktop
+
+![v0-1](public/v0-1.png)
+![v0-2](public/v0-2.png)
+![v0-3](public/v0-3.png)
+![v0-4](public/v0-4.png)
+![v0-5](public/v0-5.png)
+![v0-6](public/v0-6.png)
+![v0-7](public/v0-7.png)
+
+### 📱 Mobile
+
+<p align="center">
+  <img src="public/mv0-1.png" width="250"/>
+  <img src="public/mv0-2.png" width="250"/>
+  <img src="public/mv0-3.png" width="250"/>
+</p>
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-Before you begin, make sure you have the following installed:
+- Node.js (LTS)
+- Java 17+
+- PostgreSQL (local or Aiven)
+- Supabase Account
 
-- **Node.js** (LTS version recommended)
-- **npm** or **Yarn**
-- **Java Development Kit (JDK)** (Version 17 or higher recommended)
-- **Maven** or **Gradle** (for Spring Boot backend)
-- **PostgreSQL** database instance
-- **Supabase Account** (for authentication and other services)
+---
 
-### Installation
-
-1. **Clone the repositories:**
+## 🛠️ Installation
 
 ```bash
+# 1. Clone both frontend and backend
 git clone https://github.com/aunghein-dev/frontend_stocksManagement.git
 git clone https://github.com/aunghein-dev/backend_stocksManagement.git
-```
 
-2. **Frontend Installation:**
-
-```bash
+# 2. Install frontend dependencies
 cd frontend_stocksManagement
-npm install # or yarn install
-```
+npm install
 
-3. **Backend Installation:**
-
-```bash
-cd backend_stocksManagement
-# If using Maven:
+# 3. Build backend
+cd ../backend_stocksManagement
 mvn clean install
-# If using Gradle:
-./gradlew clean build
 ```
 
-### Configuration
+---
 
-#### PostgreSQL Database
+## ⚙️ Configuration
 
-1. Create a new PostgreSQL database for Openware Stock Manager:
+### 🔐 Supabase
+
+- Enable Email/Password Auth
+- Get Project URL, Anon Key, and JWT Secret
+
+**`.env.local` (Frontend)**
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
+
+**`application.properties` (Backend)**
+
+```properties
+app.jwt.supabase-secret=...
+spring.datasource.url=jdbc:postgresql://localhost:5432/openware_stock_manager
+```
+
+### 🧮 PostgreSQL (Aiven Free or Local)
+
+- Create DB:
 
 ```sql
 CREATE DATABASE openware_stock_manager;
 ```
 
-2. Update the database connection details in the backend's `application.properties` (or `application.yml`):
+---
 
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/openware_stock_manager
-spring.datasource.username=_pg_username
-spring.datasource.password=_pg_password
-spring.jpa.hibernate.ddl-auto=update
-```
-
-#### Supabase
-
-1. Create a new project in Supabase.
-2. Configure authentication settings (e.g., enable email/password login).
-3. Get Supabase Project URL and Anon Key.
-4. Update the frontend `.env.local`:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=_SUPABASE_PROJECT_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY=_SUPABASE_ANON_KEY
-```
-
-5. Add Supabase JWT secret to backend config:
-
-```properties
-app.jwt.supabase-secret=_SUPABASE_JWT_SECRET
-```
-
-#### Environment Variables (General)
-
-Make sure to define all required variables in `.env` files for both frontend and backend.
-
-### Running the Application
-
-1. **Start the Backend:**
+## 🧪 Running the App
 
 ```bash
+# Backend
 cd backend_stocksManagement
-mvn spring-boot:run # or ./gradlew bootRun
+mvn spring-boot:run
+
+# Frontend
+cd frontend_stocksManagement
+npm run dev
 ```
 
-2. **Start the Frontend:**
+Visit: [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 📊 Reporting & Analytics
+
+- Pre-built PostgreSQL **views** and **stored functions** power the dashboard
+- Lightweight, real-time filtering by date ranges, sales metrics, and inventory value
+- Future: Time-series data with materialized views
+
+---
+
+## ☁️ Deployment
+
+| Layer       | Provider             |
+|-------------|----------------------|
+| Frontend    | Vercel / Netlify     |
+| Backend     | Railway / Render / Fly.io |
+| PostgreSQL  | Aiven / Supabase DB  |
+| Auth/Storage| Supabase             |
+
+---
+
+## 🤝 Contributing
 
 ```bash
-cd frontend_stocksManagement
-npm run dev # or yarn dev
+git checkout -b feature/your-feature
+# Make changes
+git commit -m "feat: add your feature"
+git push origin feature/your-feature
+# Open a PR
 ```
 
 ---
 
-## Usage
-
-Open `http://localhost:3000` in browser.
-
-- **Sign Up / Log In:** Auth via Supabase.
-- **Manage Products:** Create/edit products.
-- **Process Orders:** Use POS-like order flow.
-
----
-
-## Deployment
-
-- **Frontend:** Deploy via Vercel, Netlify, or server.
-- **Backend:** Deploy via Heroku, EC2, Cloud Run, etc.
-- **Database:** Use PostgreSQL managed service.
-- **Supabase:** Hosted automatically.
-
-**Production Tips:**
-
-- Set `ddl-auto=none` or `validate`
-- Configure CORS and secure env vars
-- Add logging and monitoring
-
----
-
-## Contributing
-
-1. Fork the repo
-2. Create a branch: `git checkout -b feature/-feature`
-3. Make and test changes
-4. Commit: `git commit -m "feat:  change"`
-5. Push: `git push origin feature/-feature`
-6. Open a Pull Request
-
----
-
-## License
-
-MIT License – see the [LICENSE](LICENSE) file
-
----
-
-## Contact
+## 📩 Contact
 
 - 📧 Email: [aunghein.mailer@gmail.com](mailto:aunghein.mailer@gmail.com)
 - 🌐 Website: [https://app.openwaremyanmar.site](https://app.openwaremyanmar.site)
-- 🐛 GitHub Issues: [Open an Issue](https://github.com/aunghein-dev/frontend_stocksManagement/issues)
+- 🐛 Issues: [Report here](https://github.com/aunghein-dev/frontend_stocksManagement/issues)
+
+---
