@@ -15,9 +15,11 @@
 - **Next.js 15**
 - **React 18**
 - **Zustand** – Lightweight state management
+- **SWR** – Data fetching, caching & revalidation for React
 - **Tailwind CSS** – Utility-first responsive styling
-- **Supabase Auth & Storage** – Authentication and media hosting
-- **Lucide & ShadCN/UI** – Accessible, elegant UI components
+- **Supabase Storage** – Media hosting
+- **Lucide & Material/UI** – Accessible, elegant UI components
+- **Avien - Postgres CloudDb**
 
 ### ⚙️ Backend
 
@@ -39,7 +41,7 @@ The Openware Stock Manager follows a clean, modular architecture:
 |---------------|----------------------------------|--------------------------------------|
 | Frontend      | Next.js + Zustand               | UI, Routing, State                   |
 | Backend       | Spring Boot + Hibernate         | Business Logic, API                  |
-| Auth          | Supabase JWT                    | Multi-tenant security via `account_id` |
+| Auth          | Spring JWT                    | Multi-tenant security via `account_id` |
 | Database      | PostgreSQL (Aiven)              | Data storage                         |
 | Media Hosting | Supabase Storage                | Product and invoice images/files     |
 | Multi-Tenancy | Single-DB with row-level `account_id` | Secure tenant isolation             |
@@ -54,7 +56,8 @@ The Openware Stock Manager follows a clean, modular architecture:
 - ✅ **Stock Management:** Create, update, and delete stock items with image support
 - ✅ **Sales and Orders:** Manage orders with discounts, change, and printable invoices
 - ✅ **Reports Dashboard:** SQL-powered analytics using PostgreSQL views & stored functions
-- ✅ **Authentication:** Role-based login via Supabase Auth
+- ✅ **Efficient Data Fetching:** Uses **SWR** for client-side fetching with caching, automatic revalidation, and stale-while-revalidate support to improve performance and user experience.
+- ✅ **Authentication:** Role-based login via JWT Auth
 - ✅ **Responsive Design:** Works beautifully on mobile, tablet, and desktop
 - ✅ **Secure File Uploads:** Supabase storage for product and billing assets
 
@@ -173,7 +176,7 @@ Visit: [http://localhost:3000](http://localhost:3000)
 | Frontend    | Vercel / Netlify     |
 | Backend     | Railway / Render / Fly.io |
 | PostgreSQL  | Aiven / Supabase DB  |
-| Auth/Storage| Supabase             |
+| Auth/Storage| SpringJWT/Supabase   |
 
 ---
 
