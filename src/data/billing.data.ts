@@ -1,4 +1,4 @@
-const BillingData = [
+export const BillingData = [
   {
     code: "free",
     name: "Free Plan",

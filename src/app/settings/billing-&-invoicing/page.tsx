@@ -9,7 +9,8 @@ import { useBilling } from "@/hooks/useBilling";
 import BillingChangeConfirm, { BillingInfoProps } from "@/models/BillingChangeConfirm";
 import React, { useEffect, useMemo, useCallback } from "react"; 
 import dayjs from "dayjs";
-
+import { BillingRule } from "@/data/billingRule.data";
+import { AmBillingReceive } from "@/data/AmBillingReceive.data";
 
 import { CodeToText, BillingBackend } from "@/components/utils/billingUtils"; 
 
@@ -45,6 +46,17 @@ export default function BillingAndInvocingPage() {
     action: "",
   });
 
+  const [processingLoading, setProcessingLoading] = React.useState(false);
+
+  const getNewPlanPrice = (code: string) => {
+    console.log("getNewPlanPrice called with code:", code);
+    
+    const newPlan = BillingRule.find((plan) => plan.code === code);
+    return newPlan ? newPlan.price : 0;
+  };
+
+
+
   // Memoize getPlanButtonLabel as it depends on planPriority and currentPlanDisplayName
   const getPlanButtonLabel = useCallback((planName: string, currentPlanName: string) => {
     const currentIndex = planPriority.indexOf(currentPlanName);
@@ -55,6 +67,23 @@ export default function BillingAndInvocingPage() {
     return "Downgrade";
   }, [planPriority]); // Depends on planPriority
 
+  const remainingDay = useMemo(() => {
+    if (billing?.currExpireDate) {
+      const remainingDays = dayjs(billing.currExpireDate).diff(dayjs(), "day");
+      return remainingDays > 0 ? remainingDays : 0;
+    }
+    return 0;
+  },[billing]);
+  const remainingCredit = useMemo(() => {
+    return Math.floor(remainingDay * (billing?.currIssueAmt / billing?.currIssueDay));
+  },[billing]);
+
+  const totalPriceNewCost = useMemo(() => {
+    return getNewPlanPrice(selectedPlan.code) - remainingCredit
+  },[billing, selectedPlan.code]);
+
+  
+  
   // Memoize the info object for the modal
   const info: BillingInfoProps = useMemo(() => {
     if (!selectedPlan.code) {
@@ -79,14 +108,16 @@ export default function BillingAndInvocingPage() {
       upgradeOrDowngrade: selectedPlan.action,
       subHeaderMess: selectedPlan.action === "Upgrade" ? "Upgrade to" : "Downgrade to",
       desirablePlan: CodeToText(selectedPlan.code),
-      availablePayment: "KPay-WavePay-AYAPay",
-      receiverNumber: "0987654321",
-      billingAcc: billing?.billingAcc || "N/A", // Use actual billingAcc if available
+      availablePayment: AmBillingReceive.amBillingReceivingProvider1+ "-" +
+                        AmBillingReceive.amBillingReceivingProvider2+ "-" +
+                        AmBillingReceive.amBillingReceivingProvider3,
+      receiverNumber: "09799103451",
+      billingAcc: billing?.billingAcc || "N/A", 
       effectiveDate: dayjs().format("DD MMM YYYY"),
       expiredDate: dayjs().add(1, 'month').format("DD MMM YYYY"),
-      remainingDay: "20 Days", // Mock - consider deriving this from dates
-      remainingDebit: "4,000 MMK", // Mock - consider deriving this from billing data
-      total: "12,000 MMK", // Mock - consider deriving this from billing data
+      remainingDay: `${remainingDay.toString()} days`, // Mock - consider deriving this from dates
+      remainingDebit: `${remainingCredit.toString()} MMK`, // Mock - consider deriving this from billing data
+      total: `${totalPriceNewCost} MMK`, // Mock - consider deriving this from billing data
       cancelBtnText: getCancelBtnText(selectedPlan.action),
       confirmBtnText: getConfirmBtnText(selectedPlan.action),
     };
@@ -112,11 +143,14 @@ export default function BillingAndInvocingPage() {
   const handleChangePlan = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPaySlipEntryOpen(false);
+    console.log(info);
+    
     // Add logic to submit the plan change
-  }, []);
+  }, [info]);
 
   // Derive currentPlanDisplayName directly from billing data
   const currentPlanDisplayName = useMemo(() => CodeToText(billing?.currPlanCode), [billing]);
+ 
 
   // --- Conditional Rendering for Loading/Error States ---
   if (isLoading || !billing) {
@@ -198,6 +232,7 @@ export default function BillingAndInvocingPage() {
       {paySlipEntryOpen &&
         <PaySlipEntry
           setPaySlipEntryOpen={setPaySlipEntryOpen}
+          processing={false}
           handleChangePlan={handleChangePlan}
         />
       }

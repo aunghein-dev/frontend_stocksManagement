@@ -4,15 +4,18 @@
 import React from "react";
 import { Button } from "../atoms/Button";
 import { ModalHeader } from "../molecules/ModalHeader";
+import { LoadingSpinner } from "../molecules/LoadingSpinner";
 
 interface PaySlipEntryProps {
   setPaySlipEntryOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleChangePlan: (e: React.FormEvent<HTMLFormElement>) => void;
+  processing: boolean;
 }
 
 export default function PaySlipEntry({
   setPaySlipEntryOpen,
   handleChangePlan,
+  processing
 }: PaySlipEntryProps) {
   const paySlipRef = React.useRef<HTMLInputElement>(null);
   const [paySlip, setPaySlip] = React.useState<string>("");
@@ -44,8 +47,17 @@ export default function PaySlipEntry({
             variant="primary"
             size="sm"
             type="submit"
+            className={`${processing ? "cursor-not-allowed" : ""}`}
+            disabled={processing}
           >
-            Change Plan
+            {processing ?
+            <div className="flex flex-row items-center gap-3 justify-center text-gray-300">
+              <div className="animate-spin rounded-full 
+                              h-5 w-5 border-t-2 border-gray-300"></div>
+              Processing
+            </div> 
+            
+            : 'Change Plan'}
           </Button>
           
         </form>
