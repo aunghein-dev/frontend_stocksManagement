@@ -3,7 +3,6 @@
 import BillingCard from "@/components/card/BillingCard";
 import LicenseInfo from "@/components/card/LicenseInfo";
 import PaySlipEntry from "@/components/ui/modals/PaySlipEntry";
-import BillingInvoice from "@/components/ui/molecules/BillingInvoice";
 import BillingData from "@/data/billing.data";
 import { useBilling } from "@/hooks/useBilling";
 import BillingChangeConfirm, { BillingInfoProps } from "@/models/BillingChangeConfirm";
@@ -13,6 +12,8 @@ import { BillingRule } from "@/data/billingRule.data";
 import { AmBillingReceive } from "@/data/AmBillingReceive.data";
 
 import { CodeToText, BillingBackend } from "@/components/utils/billingUtils"; 
+import BillingInvoiceList from "@/components/ui/cells/BillingInvoiceList";
+import { useInvoice } from "@/hooks/useInvoice";
 
 
 export interface SelectedPlan {
@@ -35,6 +36,7 @@ const getConfirmBtnText = (action: string) => {
 
 export default function BillingAndInvocingPage() {
   const { billing, isLoading, error } = useBilling();
+  const { invoices, isLoading: isLoadingInvoices } = useInvoice();
   const data = BillingData;
   const planPriority = useMemo(() => ["Free Plan", "Basic Plan", "Pro Plan", "Business Plan"], []);
 
@@ -46,7 +48,7 @@ export default function BillingAndInvocingPage() {
     action: "",
   });
 
-  const [processingLoading, setProcessingLoading] = React.useState(false);
+  const LOADING = isLoading || isLoadingInvoices;
 
   const getNewPlanPrice = (code: string) => {
     console.log("getNewPlanPrice called with code:", code);
@@ -76,11 +78,11 @@ export default function BillingAndInvocingPage() {
   },[billing]);
   const remainingCredit = useMemo(() => {
     return Math.floor(remainingDay * (billing?.currIssueAmt / billing?.currIssueDay));
-  },[billing]);
+  },[billing, remainingDay]);
 
   const totalPriceNewCost = useMemo(() => {
     return getNewPlanPrice(selectedPlan.code) - remainingCredit
-  },[billing, selectedPlan.code]);
+  },[ selectedPlan.code, remainingCredit]);
 
   
   
@@ -108,11 +110,11 @@ export default function BillingAndInvocingPage() {
       upgradeOrDowngrade: selectedPlan.action,
       subHeaderMess: selectedPlan.action === "Upgrade" ? "Upgrade to" : "Downgrade to",
       desirablePlan: CodeToText(selectedPlan.code),
-      availablePayment: AmBillingReceive.amBillingReceivingProvider1+ "-" +
-                        AmBillingReceive.amBillingReceivingProvider2+ "-" +
+      availablePayment: AmBillingReceive.amBillingReceivingProvider1+ "/" +
+                        AmBillingReceive.amBillingReceivingProvider2+ "/" +
                         AmBillingReceive.amBillingReceivingProvider3,
       receiverNumber: "09799103451",
-      billingAcc: billing?.billingAcc || "N/A", 
+      billingAcc: billing?.billingAcc.substring(0, 8)+"..." || "N/A", 
       effectiveDate: dayjs().format("DD MMM YYYY"),
       expiredDate: dayjs().add(1, 'month').format("DD MMM YYYY"),
       remainingDay: `${remainingDay.toString()} days`, // Mock - consider deriving this from dates
@@ -121,7 +123,7 @@ export default function BillingAndInvocingPage() {
       cancelBtnText: getCancelBtnText(selectedPlan.action),
       confirmBtnText: getConfirmBtnText(selectedPlan.action),
     };
-  }, [selectedPlan, billing]); // Dependencies: selectedPlan and billing
+  }, [selectedPlan, billing, remainingCredit, remainingDay, totalPriceNewCost]); // Dependencies: selectedPlan and billing
 
   // Effect to open the billing change modal when a plan is selected
   useEffect(() => {
@@ -144,7 +146,6 @@ export default function BillingAndInvocingPage() {
     e.preventDefault();
     setPaySlipEntryOpen(false);
     console.log(info);
-    
     // Add logic to submit the plan change
   }, [info]);
 
@@ -153,7 +154,7 @@ export default function BillingAndInvocingPage() {
  
 
   // --- Conditional Rendering for Loading/Error States ---
-  if (isLoading || !billing) {
+  if (LOADING || !billing) {
     return (
       <div className="overflow-hidden h-[90dvh] rounded-xs bg-white p-1 py-8 flex items-center justify-center">
          <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-blue-500"></div>
@@ -215,7 +216,10 @@ export default function BillingAndInvocingPage() {
               Billing History
             </span>
             <div>
-              <BillingInvoice/>
+              <BillingInvoiceList
+                loading={LOADING}
+                invoices={invoices}
+              />
             </div>
           </div>
         </div>

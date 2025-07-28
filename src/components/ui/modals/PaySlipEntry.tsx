@@ -4,7 +4,7 @@
 import React from "react";
 import { Button } from "../atoms/Button";
 import { ModalHeader } from "../molecules/ModalHeader";
-import { LoadingSpinner } from "../molecules/LoadingSpinner";
+
 
 interface PaySlipEntryProps {
   setPaySlipEntryOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +22,7 @@ export default function PaySlipEntry({
 
   return (
     <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-90">
-      <div className="relative flex flex-col gap-0 p-0 bg-white shadow-xl border border-gray-200 rounded-xs max-w-sm w-full">
+      <div className="relative flex flex-col gap-0 p-0 bg-white shadow-xl border border-gray-200 rounded-xs max-w-sm w-[90dvw]">
       
           <ModalHeader title="Pay Slip ID" 
                     haveExitButton
@@ -47,8 +47,8 @@ export default function PaySlipEntry({
             variant="primary"
             size="sm"
             type="submit"
-            className={`${processing ? "cursor-not-allowed" : ""}`}
-            disabled={processing}
+            className={`${processing || paySlip === "" ? "cursor-not-allowed" : ""}`}
+            disabled={processing || paySlip === ""}
           >
             {processing ?
             <div className="flex flex-row items-center gap-3 justify-center text-gray-300">

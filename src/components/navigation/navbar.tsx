@@ -164,7 +164,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
               <ul>
                 <li>
                   <button
-                    onClick={() => router.push("/settings/billing-&-invoicing")}
+                    onClick={() => router.push("/settings/billing-invoicing")}
                     className="block px-4 py-2.5 text-sm
                              text-gray-700 hover:bg-blue-200
                                cursor-pointer w-full text-left transition-all duration-200"

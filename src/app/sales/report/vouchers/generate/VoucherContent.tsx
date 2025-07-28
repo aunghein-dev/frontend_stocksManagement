@@ -100,30 +100,41 @@ export default function VoucherContent() {
   const node = componentRef.current;
   if (!node) return;
 
-  // 🔴 Hide elements you don’t want in the image
+  // Store original styles
+  const originalStyles = {
+    height: node.style.height,
+    overflow: node.style.overflow,
+  };
+
+  // Temporarily expand the container to show all content
+  node.style.height = 'auto';
+  node.style.overflow = 'visible';
+
+  // Hide elements you don't want in the image
   const buttons = node.querySelectorAll(".exclude-from-image");
   buttons.forEach(btn => (btn as HTMLElement).style.display = "none");
 
-  // ✅ Ensure all images in the node are fully loaded
-  const images = node.querySelectorAll("img");
-  await Promise.all(
-    Array.from(images).map((img) => {
-      if (img.complete) return Promise.resolve();
-      return new Promise<void>((resolve) => {
-        img.onload = () => resolve();
-        img.onerror = () => resolve(); // still resolve on error
-      });
-    })
-  );
-
   try {
+    // Wait for images to load
+    const images = node.querySelectorAll("img");
+    await Promise.all(
+      Array.from(images).map((img) => {
+        if (img.complete) return Promise.resolve();
+        return new Promise<void>((resolve) => {
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+        });
+      })
+    );
+
+    // Capture the full content
     const dataUrl = await toJpeg(node, {
       quality: 0.95,
       backgroundColor: "#ffffff",
       pixelRatio: 2,
     });
 
-    // ✅ Trigger download
+    // Trigger download
     const link = document.createElement("a");
     link.download = `voucher-${batchId}.jpg`;
     link.href = dataUrl;
@@ -131,7 +142,9 @@ export default function VoucherContent() {
   } catch (error) {
     console.error("Failed to generate image:", error);
   } finally {
-    // ✅ Show hidden buttons again
+    // Restore original styles
+    node.style.height = originalStyles.height;
+    node.style.overflow = originalStyles.overflow;
     buttons.forEach(btn => (btn as HTMLElement).style.display = "");
   }
 };

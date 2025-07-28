@@ -1,6 +1,6 @@
 "use client";
 
-import { SelectedPlan } from "@/app/settings/billing-&-invoicing/page";
+import { SelectedPlan } from "@/app/settings/billing-invoicing/page";
 import React from "react";
 import { HiCheck } from "react-icons/hi";
 

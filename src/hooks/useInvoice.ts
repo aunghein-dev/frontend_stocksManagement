@@ -2,12 +2,12 @@ import useSWR from 'swr';
 import { getter } from '@/lib/getter';
 import { useInfo } from '@/hooks/useInfo'; 
 
-export const useBilling = () => {
+export const useInvoice = () => {
   const { business } = useInfo(); 
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const shouldFetch = (API && business?.businessId)
-    ? `${API}/billing/biz/13`
+    ? `${API}/admin/invoices/13`
     : null;
 
   const { data, error, isLoading, mutate } = useSWR(shouldFetch, getter);
@@ -15,7 +15,7 @@ export const useBilling = () => {
   const refresh = () => mutate(true);
 
   return {
-    billing: data,
+    invoices: data,
     error,
     isLoading,
     refresh,
