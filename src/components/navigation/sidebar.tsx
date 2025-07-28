@@ -304,7 +304,7 @@ function SidebarComponent(props: {
                         cursor-default ${imgLoaded ? "opacity-100" : "opacity-0"}`}
               style={{ willChange: "opacity" }}
             >
-              version 0.2
+              version 0.2.1
             </div>
           </div>
         )}
