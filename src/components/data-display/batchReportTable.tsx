@@ -142,7 +142,7 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
       field: 'tranUserEmail',
       headerName: t("tb_user"),
       flex: 1,
-      minWidth: 180,
+      minWidth: 250,
       align: 'center',
       headerAlign: 'center',
     },
