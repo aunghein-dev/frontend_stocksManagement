@@ -43,5 +43,14 @@ next-env.d.ts
 # local development
 .vscode/
 
-# flowbite (if it's generated or not maintained by you)
+# flowbite 
 flowbite-react/
+
+# Ignore local dev settings
+.vscode/
+
+# Ignore Next.js build files
+.next/
+
+# Ignore custom or local library copy
+.flowbite-react/

@@ -17,7 +17,6 @@ import Image from 'next/image'; // For optimized image handling
 import { useModalStore } from "@/store/modalStore";
 import PageLost404 from '@/components/error/pageLost404';
 import { useUser } from '@/hooks/useUser';
-import { User } from 'lucide-react';
 import UserPasswordReset from '@/components/form/UserPasswordReset';
 
 
