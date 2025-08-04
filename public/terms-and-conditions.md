@@ -86,7 +86,7 @@ You also expressly agree not to:
 
 #### 3.3 Open Source Nature and Advertisement (Open Source သဘောသဘာဝနှင့် ကြော်ငြာများ)
 
-You acknowledge that the Service is provided as an open-source platform. Part of our revenue model involves the display of advertisements within the Service. By using the Service, you agree to the display of such advertisements, which may be personalized based on your usage data as outlined in our Privacy Policy.
+You acknowledge that the Service is provided as an individual standlone platform. Part of our revenue model involves the display of advertisements within the Service. By using the Service, you agree to the display of such advertisements, which may be personalized based on your usage data as outlined in our Privacy Policy.
 
 ---
 
@@ -111,7 +111,7 @@ You acknowledge that the Service is provided as an open-source platform. Part of
 
 #### 3.3 Open Source သဘောသဘာဝနှင့် ကြော်ငြာများ
 
-ဝန်ဆောင်မှုကို open-source platform အဖြစ် ပံ့ပိုးပေးထားကြောင်း သင်အသိအမှတ်ပြုပါသည်။ ကျွန်ုပ်တို့၏ ဝင်ငွေရရှိမှုပုံစံ၏ တစ်စိတ်တစ်ပိုင်းမှာ ဝန်ဆောင်မှုအတွင်း ကြော်ငြာများ ပြသခြင်းဖြစ်သည်။ ဝန်ဆောင်မှုကို အသုံးပြုခြင်းဖြင့်၊ သင်သည် ထိုကြော်ငြာများ ပြသခြင်းကို သဘောတူပြီး၊ ၎င်းကြော်ငြာများသည် ကျွန်ုပ်တို့၏ ကိုယ်ရေးကိုယ်တာမူဝါဒတွင် ဖော်ပြထားသည့်အတိုင်း သင်၏အသုံးပြုမှုဒေတာအပေါ် အခြေခံ၍ စိတ်ကြိုက်ပြင်ဆင်ထားခြင်း ဖြစ်နိုင်သည်။
+ဝန်ဆောင်မှုကို individual standlone platform အဖြစ် ပံ့ပိုးပေးထားကြောင်း သင်အသိအမှတ်ပြုပါသည်။ ကျွန်ုပ်တို့၏ ဝင်ငွေရရှိမှုပုံစံ၏ တစ်စိတ်တစ်ပိုင်းမှာ ဝန်ဆောင်မှုအတွင်း ကြော်ငြာများ ပြသခြင်းဖြစ်သည်။ ဝန်ဆောင်မှုကို အသုံးပြုခြင်းဖြင့်၊ သင်သည် ထိုကြော်ငြာများ ပြသခြင်းကို သဘောတူပြီး၊ ၎င်းကြော်ငြာများသည် ကျွန်ုပ်တို့၏ ကိုယ်ရေးကိုယ်တာမူဝါဒတွင် ဖော်ပြထားသည့်အတိုင်း သင်၏အသုံးပြုမှုဒေတာအပေါ် အခြေခံ၍ စိတ်ကြိုက်ပြင်ဆင်ထားခြင်း ဖြစ်နိုင်သည်။
 
 ---
 
@@ -119,13 +119,13 @@ You acknowledge that the Service is provided as an open-source platform. Part of
 
 The Service and its entire contents, features, and functionality (including but not limited to all information, software, code, algorithms, text, displays, images, video, and audio, and the design, selection, and arrangement thereof) are owned by **Openware Myanmar**, its licensors, or other providers of such material. These are protected by **Myanmar** and international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
 
-These Terms permit you to use the Service for your personal business operations, including stocks management and point-of-sale activities. You mustn't reproduce, distribute, modify, create derivative works of, publicly display, publicly perform, republish, download, store, or transmit any of the material on our Service, except as generally and ordinarily permitted through the Service's functionality or as expressly licensed under any open-source license applicable to specific components of the Service.
+These Terms permit you to use the Service for your personal business operations, including stocks management and point-of-sale activities. You mustn't reproduce, distribute, modify, create derivative works of, publicly display, publicly perform, republish, download, store, or transmit any of the material on our Service, except as generally and ordinarily permitted through the Service's functionality or as expressly licensed under any individual standlone license applicable to specific components of the Service.
 
 ---
 
 ဝန်ဆောင်မှုနှင့် ၎င်း၏ အကြောင်းအရာများ၊ လုပ်ဆောင်ချက်များနှင့် လုပ်ဆောင်နိုင်စွမ်းများအားလုံး (သတင်းအချက်အလက်၊ ဆော့ဖ်ဝဲလ်၊ ကုဒ်များ၊ algorithms များ၊ စာသားများ၊ ပြကွက်များ၊ ရုပ်ပုံများ၊ ဗီဒီယိုနှင့် အသံတို့အပြင် ၎င်းတို့၏ ဒီဇိုင်း၊ ရွေးချယ်မှုနှင့် စီစဉ်မှုများအပါအဝင်) သည် **Openware Myanmar**၊ ၎င်း၏ လိုင်စင်ရပုဂ္ဂိုလ်များ သို့မဟုတ် ထိုပစ္စည်းများ၏ အခြားပံ့ပိုးသူများ ပိုင်ဆိုင်ပါသည်။ ၎င်းတို့သည် **မြန်မာနိုင်ငံ** နှင့် နိုင်ငံတကာ မူပိုင်ခွင့်၊ ကုန်အမှတ်တံဆိပ်၊ မူပိုင်ခွင့်၊ ကုန်သွယ်မှုလျှို့ဝှက်ချက်နှင့် အခြားဉာဏပစ္စည်း သို့မဟုတ် ပိုင်ဆိုင်မှုဆိုင်ရာ ဥပဒေများဖြင့် ကာကွယ်ထားပါသည်။
 
-ဤစည်းမျဥ်းများသည် သင့်အား ဝန်ဆောင်မှုကို သင်၏ ကိုယ်ပိုင်စီးပွားရေးလုပ်ငန်းများအတွက်၊ ပစ္စည်းလက်ကျန်စတော့စီမံခန့်ခွဲမှုနှင့် ရောင်းချမှုလုပ်ငန်းများအပါအဝင် အသုံးပြုရန် ခွင့်ပြုပါသည်။ ဝန်ဆောင်မှု၏ လုပ်ဆောင်ချက်များမှတစ်ဆင့် ယေဘုယျအားဖြင့် ပုံမှန်ခွင့်ပြုထားသည့်အတိုင်း သို့မဟုတ် ဝန်ဆောင်မှု၏ သီးခြားအစိတ်အပိုင်းများနှင့် သက်ဆိုင်သော မည်သည့် open-source လိုင်စင်အောက်တွင်မဆို ရှင်းလင်းစွာ လိုင်စင်ချထားခြင်းမှလွဲ၍ ကျွန်ုပ်တို့၏ ဝန်ဆောင်မှုရှိ မည်သည့်ပစ္စည်းကိုမဆို ပုံတူကူးချခြင်း၊ ဖြန့်ဝေခြင်း၊ ပြုပြင်မွမ်းမံခြင်း၊ ဆင်းသက်လာသော အလုပ်များကို ဖန်တီးခြင်း၊ အများပြည်သူရှေ့တွင် ပြသခြင်း၊ အများပြည်သူရှေ့တွင် ဖျော်ဖြေခြင်း၊ ပြန်လည်ထုတ်ဝေခြင်း၊ ဒေါင်းလုဒ်လုပ်ခြင်း၊ သိမ်းဆည်းခြင်း သို့မဟုတ် ပေးပို့ခြင်း မပြုရပါ။
+ဤစည်းမျဥ်းများသည် သင့်အား ဝန်ဆောင်မှုကို သင်၏ ကိုယ်ပိုင်စီးပွားရေးလုပ်ငန်းများအတွက်၊ ပစ္စည်းလက်ကျန်စတော့စီမံခန့်ခွဲမှုနှင့် ရောင်းချမှုလုပ်ငန်းများအပါအဝင် အသုံးပြုရန် ခွင့်ပြုပါသည်။ ဝန်ဆောင်မှု၏ လုပ်ဆောင်ချက်များမှတစ်ဆင့် ယေဘုယျအားဖြင့် ပုံမှန်ခွင့်ပြုထားသည့်အတိုင်း သို့မဟုတ် ဝန်ဆောင်မှု၏ သီးခြားအစိတ်အပိုင်းများနှင့် သက်ဆိုင်သော မည်သည့် individual standlone လိုင်စင်အောက်တွင်မဆို ရှင်းလင်းစွာ လိုင်စင်ချထားခြင်းမှလွဲ၍ ကျွန်ုပ်တို့၏ ဝန်ဆောင်မှုရှိ မည်သည့်ပစ္စည်းကိုမဆို ပုံတူကူးချခြင်း၊ ဖြန့်ဝေခြင်း၊ ပြုပြင်မွမ်းမံခြင်း၊ ဆင်းသက်လာသော အလုပ်များကို ဖန်တီးခြင်း၊ အများပြည်သူရှေ့တွင် ပြသခြင်း၊ အများပြည်သူရှေ့တွင် ဖျော်ဖြေခြင်း၊ ပြန်လည်ထုတ်ဝေခြင်း၊ ဒေါင်းလုဒ်လုပ်ခြင်း၊ သိမ်းဆည်းခြင်း သို့မဟုတ် ပေးပို့ခြင်း မပြုရပါ။
 
 ---
 
@@ -133,7 +133,7 @@ These Terms permit you to use the Service for your personal business operations,
 
 #### 5.1 Free Storage Allocation (အခမဲ့သိုလှောင်မှုခွဲဝေမှု)
 
-Upon creating an Account, you will be allocated **1 GB of free storage** for your business data within the Service. You agree to utilize this storage in accordance with these Terms and our Privacy Policy. We reserve the right to offer additional storage tiers for a fee, subject to separate terms and conditions.
+Upon creating an Account, you will be allocated **500 MB of free storage** for your business data within the Service. You agree to utilize this storage in accordance with these Terms and our Privacy Policy. We reserve the right to offer additional storage tiers for a fee, subject to separate terms and conditions.
 
 #### 5.2 Data Deletion Policy (ဒေတာဖျက်သိမ်းမှုမူဝါဒ)
 

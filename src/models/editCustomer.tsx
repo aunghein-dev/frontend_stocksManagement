@@ -612,6 +612,7 @@ px-2'
                                         xs: 'calc(50% - 8px)',
                                         sm: `calc(50% - ${24 / 2}px)`
                                     },
+                                    minHeight: '40px',
                                     '& .MuiOutlinedInput-root': { borderRadius: '8px' }
                                 }}
                             />

@@ -72,10 +72,14 @@ export const CustomerRowCard = (props: Customer) => {
               </div>
               
               <div className="flex flex-row items-center justify-start text-left min-w-[190px]">
-                 <Image src={props.imgUrl || "/man.png"}
-                    width={50} height={50} 
-                    className="rounded-full ring-2 ring-blue-300"
-                    alt={props.name} />
+                <div className="relative w-[50px] h-[50px] rounded-full overflow-hidden ring-2 ring-blue-300">
+                  <Image
+                    src={props.imgUrl || "/man.png"}
+                    alt={props.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
                   <div className="flex flex-col gap-1 ml-2">
                     <span
                       className="text-xs sm:text-sm font-semibold max-w-[200px] cursor-pointer"

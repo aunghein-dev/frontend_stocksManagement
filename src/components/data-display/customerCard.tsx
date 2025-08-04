@@ -116,20 +116,21 @@ export default function CustomerCard({ customer, onClick, onEditClick, onDeleteC
           {!imageLoaded && (
             <div className="w-16 h-16 bg-gray-200 rounded-full animate-pulse" />
           )}
-          <Image
-            src={imgSrc}
-            alt={customer.name}
-            width={64}
-            height={64}
-            className={`rounded-full object-cover transition-opacity duration-300 ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-            onLoad={() => setImageLoaded(true)}
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = defaultImageUrl;
-              setImageLoaded(true);
-            }}
-          />
+          <div className="relative w-16 h-16 rounded-full overflow-hidden">
+            <Image
+              src={imgSrc}
+              alt={customer.name}
+              fill
+              className={`object-cover transition-opacity duration-300 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              onLoad={() => setImageLoaded(true)}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = defaultImageUrl;
+                setImageLoaded(true);
+              }}
+            />
+          </div>
         </div>
 
         {/* Details Section */}

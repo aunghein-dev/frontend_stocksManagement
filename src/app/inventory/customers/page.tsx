@@ -254,7 +254,7 @@ export default function Customers() {
     
       <button
         onClick={handleNewCustomer}
-        className="absolute bottom-10 right-10 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-full border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md "
+        className={`absolute bottom-10 right-10 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-full border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md`}
       >
         {t("btnTxt_newCus")}
       </button>

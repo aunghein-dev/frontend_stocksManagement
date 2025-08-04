@@ -14,6 +14,7 @@ import { AmBillingReceive } from "@/data/AmBillingReceive.data";
 import { CodeToText, BillingBackend } from "@/components/utils/billingUtils"; 
 import BillingInvoiceList from "@/components/ui/cells/BillingInvoiceList";
 import { useInvoice } from "@/hooks/useInvoice";
+import PageLost404 from "@/components/error/pageLost404";
 
 
 export interface SelectedPlan {
@@ -154,11 +155,23 @@ export default function BillingAndInvocingPage() {
  
 
   // --- Conditional Rendering for Loading/Error States ---
-  if (LOADING || !billing) {
+  if (LOADING) {
     return (
       <div className="overflow-hidden h-[90dvh] rounded-xs bg-white p-1 py-8 flex items-center justify-center">
          <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-blue-500"></div>
          <span className="text-gray-400 ml-2 text-sm">Loading Billing Data...</span>
+      </div>
+    );
+  }
+
+  if(!billing) {
+    return (
+      <div className="overflow-hidden h-[calc(100dvh-110px)] p-1 py-8 flex items-center justify-center">
+         <PageLost404 
+            header={"Billing Data Not Found"}
+            message={"Check your internet connection. If the problem persists, please contact support."}
+            reload={() => window.location.reload()}
+          />
       </div>
     );
   }

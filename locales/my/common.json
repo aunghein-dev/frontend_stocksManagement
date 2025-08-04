@@ -214,7 +214,14 @@
   "lbl_cartEmpty": "စျေးဝယ်စာရင်းမရှိပါ",
   "noItemsFound": "စာရင်းမရှိပါ",
   "noCusFound": "ဖောက်သည်မရှိပါ",
-   "msg_wrong": "အင်တာနက်လိုင်း တခုခုမှားယွင်းနေပါသည်။",
-   "msg_CusAdded": "စာရင်းသွင်းခြင်းအောင်မြင်ပါသည်"
+  "msg_wrong": "အင်တာနက်လိုင်း တခုခုမှားယွင်းနေပါသည်။",
+  "msg_CusAdded": "စာရင်းသွင်းခြင်းအောင်မြင်ပါသည်",
 
+  "hd_passwordSettings": "Password Settings",
+  "msg_passwordInstruction": "For security, please use strong passwords and confirm your changes.",
+  "ph_newPassword": "New Password",
+  "ph_confirmPassword": "Confirm Password",
+  "btn_resetPassword": "Reset Password",
+  "btn_updating": "Updating...",
+  "msg_passwordChanged": "Password updated successfully!"
 }

@@ -7,7 +7,7 @@ export const useBilling = () => {
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const shouldFetch = (API && business?.businessId)
-    ? `${API}/billing/biz/13`
+    ? `${API}/billing/biz/${business?.businessId}`
     : null;
 
   const { data, error, isLoading, mutate } = useSWR(shouldFetch, getter);

@@ -7,7 +7,7 @@ export const useInvoice = () => {
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   const shouldFetch = (API && business?.businessId)
-    ? `${API}/admin/invoices/13`
+    ? `${API}/admin/invoices/${business?.businessId}`
     : null;
 
   const { data, error, isLoading, mutate } = useSWR(shouldFetch, getter);

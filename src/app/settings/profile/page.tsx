@@ -17,6 +17,8 @@ import Image from 'next/image'; // For optimized image handling
 import { useModalStore } from "@/store/modalStore";
 import PageLost404 from '@/components/error/pageLost404';
 import { useUser } from '@/hooks/useUser';
+import { User } from 'lucide-react';
+import UserPasswordReset from '@/components/form/UserPasswordReset';
 
 
 // --- DTO for Business (nested within UserProfile) ---
@@ -35,7 +37,7 @@ interface Business {
 }
 
 // --- DTO for User Profile (matches  provided JSON structure) ---
-interface UserProfile {
+export interface UserProfile {
   id: number;
   username: string;
   password?: string;
@@ -495,17 +497,9 @@ const AccountProfileSettingsPage: React.FC = () => {
 
           {/* Password Reset Section */}
           <div className="border-t border-gray-200 pt-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Password Settings</h2>
-            <p className="text-sm text-gray-600 mb-4">
-              For security reasons, password changes are handled through a dedicated process.
-            </p>
-            <button
-              type="button"
-              className="px-3 py-2 bg-yellow-500 text-white rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 text-sm"
-    
-            >
-              Request to change Password
-            </button>
+           <UserPasswordReset 
+            userProfile={userProfile}
+           />
           </div>
 
           {/* Save Changes Button for formFullName */}
