@@ -1,17 +1,31 @@
 import { Toaster } from 'react-hot-toast';
 import { SignupForm } from '@/app/signup/_components/SignupForm';
 import Image from 'next/image';
+import dayjs from 'dayjs';
 
 export default function SignupPage() {
   return (
      <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center flex-col'> 
       
-       <div className="flex items-center justify-center px-4 md:px-1 max-w-3xl w-full"
-            style={{ height: '95svh'}}>
+       <div className="flex items-center justify-center px-0 md:px-1 max-w-4xl w-full
+                       h-[100dvh] sm:h-[96dvh]">
         <Toaster position="top-center" reverseOrder={false} />
-        <div className="w-full h-full bg-white p-1 shadow-lg rounded-xs custom-scrollbar">
-        <div className="w-full px-2 sm:px-6 py-6  
-                        overflow-auto custom-scrollbar h-full">
+        <div className="w-full h-full bg-white shadow-lg rounded-0 sm:rounded-lg custom-scrollbar">
+
+        <div className="w-full 
+                        h-full flex flex-row">
+            <div className='hidden sm:w-[400px] h-full rounded-l-lg border-r-[1px] border-gray-100
+            sm:flex flex-col items-center justify-between py-7 bg-[#111827]'>
+             
+             <div className='w-full text-left pl-8 pr-2 flex flex-col gap-1'>
+               <h1 className="text-2xl font-bold text-white">OPENWARE</h1>
+               <p className='text-gray-400'>Join us with your business.</p>
+             </div>
+            
+
+              <span className='text-[#6b7280] text-sm flex items-center justify-center'>@{dayjs().format('YYYY')} OPENWARE.</span>
+            </div>
+            <div className='overflow-auto custom-scrollbar px-2 sm:px-8 py-6 w-full my-3'>
             <h1 className="text-xl font-extrabold text-gray-900 mb-6 text-center flex items-center justify-center">
               <div className="w-10 h-10 mr-1">
                 <Image
@@ -26,6 +40,7 @@ export default function SignupPage() {
               <span className="text-blue-600 text-2xl">&#46;</span>
             </h1>
             <SignupForm />
+          </div>
           </div>
           </div>
           </div>

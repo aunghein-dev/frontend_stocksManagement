@@ -253,7 +253,7 @@ export default function Cart({ handleToggle }: CartPopupProps) {
                          orderNo={orderNo.orderNo}
                   />
       ) : (
-        <div className="relative h-[95dvh] w-full sm:w-[700px] rounded-xs shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white">
+        <div className="relative h-[95dvh] w-full sm:w-[700px] rounded-lg shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white">
           <ModalHeader title={t("hd_shoppingCart")} onClick={handleToggle} haveExitButton={true} />
           <CartCusSelected handleCustomerSwitch={handleCustomerSwitch} />
 
@@ -276,7 +276,7 @@ export default function Cart({ handleToggle }: CartPopupProps) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
-                        className="relative p-1 border border-gray-200 rounded-xs shadow-xs"
+                        className="relative p-1 border border-gray-200 rounded-sm shadow-xs"
                       >
                         <h3 className="text-md font-semibold text-gray-700 mb-3 mx-3 mt-1">
                           <span>#{index + 1}. {" "}{group.groupName}</span>

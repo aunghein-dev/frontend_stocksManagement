@@ -1,11 +1,17 @@
----
-<p align="center">
-  <img src="https://github.com/aunghein-dev/frontend_stocksManagement/blob/main/public/applogo.png?raw=true" alt="Openware Logo" width="100"/>
-</p>
+<img src="https://github.com/aunghein-dev/frontend_stocksManagement/blob/main/public/applogo.png?raw=true" alt="Openware Logo" width="144" align="right" hspace="0" />
 
-# Openware Stock Manager
+# Openware
 
-Openware Stock Manager is a modern, intuitive, and robust Point-of-Sale (POS) inspired web application designed to streamline inventory management for businesses. Built with a powerful **Next.js** frontend and a secure **Spring Boot** backend, it leverages **PostgreSQL** and **Supabase** for efficient and scalable data management, featuring a multi-tenant architecture with single-database tenancy.
+![Language](https://img.shields.io/badge/language-JavaScript-blue)
+![Framework](https://img.shields.io/badge/framework-Next.js-black)
+![UI](https://img.shields.io/badge/UI-TailwindCSS-06B6D4)
+![State Management](https://img.shields.io/badge/state-Zustand-FFDD00)
+![Validation](https://img.shields.io/badge/validation-Zod-orange)
+![Charts](https://img.shields.io/badge/charts-MUI%20X%20Charts-purple)
+![Database](https://img.shields.io/badge/backend-API%20Driven-lightgrey)
+![Project Status](https://img.shields.io/badge/status-active-brightgreen)
+
+Openware is a modern, intuitive, and robust Point-of-Sale (POS) inspired web application designed to streamline inventory management for businesses. Built with a powerful **Next.js** frontend and a secure **Spring Boot** backend, it leverages **PostgreSQL** and **Supabase** for efficient and scalable data management, featuring a multi-tenant architecture with single-database tenancy.
 
 ---
 
@@ -216,34 +222,3 @@ Open `http://localhost:3000` in browser.
 - **Backend:** Deploy via Heroku, EC2, Cloud Run, etc.
 - **Database:** Use PostgreSQL managed service.
 - **Supabase:** Hosted automatically.
-
-**Production Tips:**
-
-- Set `ddl-auto=none` or `validate`
-- Configure CORS and secure env vars
-- Add logging and monitoring
-
----
-
-## Contributing
-
-1. Fork the repo
-2. Create a branch: `git checkout -b feature/-feature`
-3. Make and test changes
-4. Commit: `git commit -m "feat:  change"`
-5. Push: `git push origin feature/-feature`
-6. Open a Pull Request
-
----
-
-## License
-
-MIT License – see the [LICENSE](LICENSE) file
-
----
-
-## Contact
-
-- 📧 Email: [aunghein.mailer@gmail.com](mailto:aunghein.mailer@gmail.com)
-- 🌐 Website: [https://app.openwaremyanmar.site](https://app.openwaremyanmar.site)
-- 🐛 GitHub Issues: [Open an Issue](https://github.com/aunghein-dev/frontend_stocksManagement/issues)

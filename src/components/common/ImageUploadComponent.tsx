@@ -74,7 +74,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
     <div className={`flex flex-col gap-2 ${className}`}>
       
       <div
-        className={`relative border-[0.5px] border-dashed rounded-xs p-4 text-center flex flex-col items-center justify-center min-h-[120px] transition-colors duration-200 sm:py-6
+        className={`relative border-[0.5px] border-dashed rounded-sm p-4 text-center flex flex-col items-center justify-center min-h-[120px] transition-colors duration-200 sm:py-6
           ${isDragOver ? 'border-blue-600 bg-blue-50' : 'border-gray-500 bg-white'}
           ${error ? 'border-red-500' : ''}`}
         onDragOver={handleDragOver}
@@ -86,14 +86,14 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
       </label>
         {/* Loading Overlay */}
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10 rounded-xs">
+          <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10 rounded-sm">
             <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
           </div>
         )}
 
         {/* Image Preview or Upload Prompt */}
         {currentImageUrl ? (
-          <div className="relative w-24 h-24 mb-1 rounded-xs overflow-hidden border border-gray-200 ">
+          <div className="relative w-24 h-24 mb-1 rounded-sm overflow-hidden border border-gray-200 ">
             <Image
               src={currentImageUrl}
               alt="Preview"
@@ -127,7 +127,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
         {/* File Input and Button */}
         <label
           htmlFor={id}
-          className="cursor-pointer inline-flex items-center px-4 py-2 mt-2 border border-blue-600 rounded-xs shadow-sm text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+          className="cursor-pointer inline-flex items-center px-4 py-2 mt-2 border border-blue-600 rounded-sm shadow-sm text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-200 focus:outline-none focus:ring-[1.5px] focus:ring-blue-600 focus:ring-offset-2"
         >
           <PhotoIcon className="w-4 h-4 mr-2" /> {t("lbl_selectImg")}
           <input

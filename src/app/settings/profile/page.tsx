@@ -310,13 +310,13 @@ const AccountProfileSettingsPage: React.FC = () => {
 
   return (
 
-    <div className="p-1 w-full bg-white rounded-xs h-[calc(100dvh-110px)] overflow-auto custom-scrollbar">
+    <div className="p-1 w-full bg-white rounded-lg h-[calc(100dvh-110px)] overflow-auto custom-scrollbar">
       <div className='overflow-auto h-full custom-scrollbar px-4 py-4'>
       <h1 className="text-xl font-bold text-gray-800 text-center mb-8">{t("hd_profileSettings")}</h1>
 
       <div className="space-y-6">
         {/* Profile Image Section */}
-        <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-xs border border-dashed border-gray-200">
+        <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-sm border border-dashed border-gray-200">
           <label htmlFor="profile-image-upload-input" className="cursor-pointer mb-4 relative group">
             {displayProfileImageUrl ? (
               <Image
@@ -360,7 +360,7 @@ const AccountProfileSettingsPage: React.FC = () => {
             type="button"
             onClick={handleProfileImageUpload}
             disabled={!selectedProfileImageFile || isUploadingImage || !API_BASE_URL}
-            className={`flex items-center px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
+            className={`flex items-center px-4 py-2 rounded-sm text-sm font-semibold transition-all duration-200 ${
               !selectedProfileImageFile || isUploadingImage || !API_BASE_URL
                 ? 'bg-blue-300 text-white cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md'
@@ -400,7 +400,7 @@ const AccountProfileSettingsPage: React.FC = () => {
               id="username"
               name="username"
               value={userProfile.username}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-gray-100 text-gray-500 cursor-not-allowed"
+              className="mt-1 block w-full border border-gray-300 rounded-sm shadow-sm py-2 px-3 bg-gray-100 text-gray-500 cursor-not-allowed"
               readOnly
               aria-describedby="username-help"
             />
@@ -418,7 +418,7 @@ const AccountProfileSettingsPage: React.FC = () => {
               name="fullName"
               value={formFullName}
               onChange={handleFullNameChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-600 focus:border-blue-600"
+              className="mt-1 block w-full border border-gray-300 rounded-sm shadow-sm py-2 px-3 focus:ring-blue-600 focus:border-blue-600"
               required
             />
           </div>
@@ -426,7 +426,7 @@ const AccountProfileSettingsPage: React.FC = () => {
           {/* Role (Display only) */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{t("lbl_role")}</label>
-            <p className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-gray-100 text-gray-500 cursor-not-allowed">
+            <p className="mt-1 block w-full border border-gray-300 rounded-sm shadow-sm py-2 px-3 bg-gray-100 text-gray-500 cursor-not-allowed">
               {userProfile.role}
             </p>
           </div>
@@ -440,7 +440,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_bizNn")}</label>
                   <p className="text-sm text-gray-900 
                                 border-[0.5px] border-gray-300 
-                                rounded-xs py-2.5 pl-2 mt-3">
+                                rounded-sm py-2.5 pl-2 mt-3">
                    {userProfile.business.businessName}
                   </p>
                 </div>
@@ -448,7 +448,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_bizShortNn")}</label>
                   <p className="text-sm text-gray-900 
                                 border-[0.5px] border-gray-300 
-                                rounded-xs py-2.5 pl-2 mt-3">
+                                rounded-sm py-2.5 pl-2 mt-3">
                     {userProfile.business.businessNameShortForm}
                   </p>
                 </div>
@@ -456,7 +456,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_dfCurrency")}</label>
                   <p className="text-sm text-gray-900 
                                 border-[0.5px] border-gray-300 
-                                rounded-xs py-2.5 pl-2 mt-3">
+                                rounded-sm py-2.5 pl-2 mt-3">
                     {userProfile.business.defaultCurrency}
                   </p>
                 </div>
@@ -464,7 +464,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-500 mb-1">{t("io_taxRate")}</label>
                   <p className="text-sm text-gray-900 
                                 border-[0.5px] border-gray-300 
-                                rounded-xs py-2.5 pl-2 mt-3">
+                                rounded-sm py-2.5 pl-2 mt-3">
                     {userProfile.business.taxRate * 100}%
                   </p>
                 </div>
@@ -477,7 +477,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                       alt={`${userProfile.business.businessName} Logo`}
                       fill
                       sizes="80px"
-                      className="rounded-xs object-contain border border-gray-200 p-1"
+                      className="rounded-sm object-contain border border-gray-200 p-1"
                       // REMOVE priority prop: priority
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/man.png';
@@ -506,10 +506,10 @@ const AccountProfileSettingsPage: React.FC = () => {
             <button
               type="submit"
               disabled={saving || !hasFormChanges || !API_BASE_URL}
-              className={`w-full sm:w-auto flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white transition-colors duration-200 ${
+              className={`w-full sm:w-auto flex justify-center py-2 px-4 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white transition-colors duration-200 ${
                 saving || !hasFormChanges || !API_BASE_URL
                   ? 'bg-blue-600 text-white cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600'
+                  : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-[1.5px] focus:ring-offset-2 focus:ring-blue-600'
               }`}
             >
               {saving ? (

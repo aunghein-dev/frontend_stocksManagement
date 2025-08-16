@@ -207,7 +207,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
         renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
               <div
                 className={`text-blue-600 hover:text-blue-700 cursor-pointer
-                            font-semibold bg-gray-100 text-sm rounded-xs px-2 py-1
+                            font-semibold bg-gray-100 text-sm rounded-sm px-2 py-1
                             border-[0.5px] border-blue-700
                             `}
               >
@@ -225,7 +225,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
       renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
               <div
                 className={`flex justify-center items-center px-3 py-1 
-                            rounded-xs text-sm font-semibold border-[0.5px] 
+                            rounded-sm text-sm font-semibold border-[0.5px] 
                             ${params.row.itemQuantity === 0 ? 
                               'border-red-500 bg-red-100 text-red-700' : 
                               'border-green-500 bg-green-100 text-green-700'} 
@@ -310,7 +310,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
     >
     <Link
       href="/inventory/stocks/new"
-      className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-full border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md "
+      className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-sm border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md "
     >
       + {t("btnTxt_newStk")}
     </Link>

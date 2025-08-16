@@ -82,14 +82,14 @@ export default function CustomerSelector(props: { handleCloseSelector: () => voi
       style={{
         backgroundColor: "rgba(0, 0, 0, 0.5)",
       }}>
-        <div className="relative h-[80dvh] w-full sm:w-[650px] rounded-xs shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white ">
+        <div className="relative h-[80dvh] w-full sm:w-[650px] rounded-lg shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white ">
            <ModalHeader title={t("hdSelectCustomer")} onClick={props.handleCloseSelector} haveExitButton={true}/>
            <div className="flex flex-col flex-1 overflow-hidden">
             <div className="min-h-[60px] flex flex-row items-center justify-end px-3">
               <Search placeholder={t("searchCustomer")} 
                       onChange={handleSearch} 
                       value={searchQuery}
-                      className="border-[0.5px] border-gray-300" />
+                      className="border-[0.5px] rounded-sm border-gray-300" />
             </div>
             <div className="flex-1 overflow-y-auto  w-full h-full custom-scrollbar px-2 py-2 border-t-1 border-gray-200">
               {isLoading ? (

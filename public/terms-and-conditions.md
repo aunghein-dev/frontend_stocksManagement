@@ -1,9 +1,11 @@
-<div style="display: flex; flex-direction: row; align-items: center; justify-content: center; margin-bottom: 20px;">
+<div style="display: flex; flex-direction: row; align-items: center; justify-content: center; margin-bottom: 0px; padding-bottom: 5px;">
   <img src="/onlylogo.png" alt="Openware" width="50" height="50" style="margin-right: 2px;">
-  <h2 style="margin: 0; font-size: 1.5em;">
+  <span style="margin: 0; font-size: 1.5em; font-weight: bold;">
     Terms and Conditions 
-  </h2>
+  </span>
 </div>
+
+---
 
 **Last Updated: June 24, 2025** (နောက်ဆုံးပြင်ဆင်သည့်ရက်စွဲ- ၂၀၂၅ ခုနှစ်၊ ဇွန်လ ၂၄ ရက်)
 

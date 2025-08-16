@@ -67,7 +67,7 @@ export default function BillingCard({ plan, className, setSelectedPlan }: Billin
     <div
       className={`relative select-none flex flex-col items-left justify-center min-h-[290px]
         sm:min-h-[300px] w-full ${borderClass} ${className}
-        rounded-md p-3 sm:px-6 sm:py-5 text-[0.8rem] sm:text-sm ${bgClass}
+        rounded-lg p-3 sm:px-6 sm:py-5 text-[0.8rem] sm:text-sm ${bgClass}
         hover:shadow-sm shadow-xs hover:bg-gray-50/20 hover:scale-[99.5%] transition-all duration-300`}
     >
       {
@@ -101,7 +101,7 @@ export default function BillingCard({ plan, className, setSelectedPlan }: Billin
 
       <button
         onClick={()=> handleSelect(plan.code, plan.buttonText)}
-        className={`mt-5 w-full ${buttonClass} py-2 rounded-md text-sm border-1 border-gray-200 ${currentDisabledButton()}`}
+        className={`mt-5 w-full ${buttonClass} py-2 rounded-sm text-sm border-1 border-gray-200 ${currentDisabledButton()}`}
       >
         {plan.buttonText}
       </button>

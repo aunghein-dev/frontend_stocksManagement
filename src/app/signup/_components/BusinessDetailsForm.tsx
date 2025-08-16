@@ -16,7 +16,7 @@ type Props = {
 export function BusinessDetailsForm({ register, errors, control }: Props) {
   return (
     <div className="p-4 border-[0.5px] border-gray-300 shadow-sm
-                   rounded-md space-y-2 flex flex-col gap-5">
+                   rounded-sm space-y-2 flex flex-col gap-5">
       <h2 className="text-lg font-bold text-gray-800">Business Details</h2>
       <TextField
         label="Business Name"

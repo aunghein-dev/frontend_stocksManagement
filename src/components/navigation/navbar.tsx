@@ -86,12 +86,12 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                     py-3 px-3 border-b-[1px] border-gray-200
                     ${props.sidebarOpen === true ? "z-40" : "z-50"}`}>
 
-      <div className="ml-[0px] sm:ml-[200px] h-14 py-8 px-3 rounded-xs flex items-center justify-between sm:pl-5 bg-white shadow-xs">
+      <div className="ml-[0px] sm:ml-[200px] h-14 py-8 px-3 rounded-lg flex items-center justify-between sm:pl-5 bg-white shadow-xs">
         <div className="flex items-center">
           <button
             aria-label="Toggle menu"
             className="text-xl mr-4 px-2 py-1
-                      rounded-xs cursor-pointer sm:hidden text-gray-500 hover:text-gray-600"
+                      rounded-sm cursor-pointer sm:hidden text-gray-500 hover:text-gray-600"
             onClick={() => props.handleSidebarOpen()}
           >
             <FiMenu />
@@ -127,7 +127,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
             ref={profileButtonRef}
             type="button"
             className="flex text-sm 
-                       rounded-full focus:ring-2 focus:ring-blue-300 mr-2
+                       rounded-full focus:ring-[1.5px] focus:ring-blue-600 mr-2
                        cursor-pointer
                        outline-none bg-gray-300 border-[1px] border-gray-200" 
             onClick={handleToggle}
@@ -151,11 +151,11 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
           {isOpen && (
             <div
               ref={dropdownRef}
-              className="z-50 my-4 text-sm text-gray-900 absolute -right-3 top-11 list-none bg-white divide-y divide-gray-100 rounded-xs shadow-lg "
+              className="z-50 my-4 text-sm text-gray-900 absolute -right-3 top-11 list-none bg-white divide-y divide-gray-100 rounded-sm shadow-lg "
             >
               <button onClick={() => router.push("/settings/profile")}>
                 <div className="px-4 py-3 cursor-pointer text-left hover:bg-blue-200
-                               rounded-t-xs transition-all duration-200">
+                               rounded-t-sm transition-all duration-200">
                   <span className="block text-sm text-gray-900">{data?.fullName}</span>
                   <span className="block text-sm text-gray-500 truncate">{data?.username}</span>
                 </div>
@@ -197,7 +197,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                     onClick={handleLogout}
                     className="block px-4 py-2.5 text-sm
                              text-gray-700 hover:bg-blue-200
-                               cursor-pointer rounded-b-xs transition-all duration-200"
+                               cursor-pointer rounded-b-sm transition-all duration-200"
                   >
                     {t("btnTxt_signOut")}
                   </a>

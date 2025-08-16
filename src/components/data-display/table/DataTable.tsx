@@ -94,7 +94,7 @@ function DataTable<V, R extends { id: GridRowId }>({
           width: '100%',
           display: 'flex',       // Make Paper a flex container
           flexDirection: 'column', // Stack children vertically
-          borderRadius: '2px',
+          borderRadius: '0.5rem',
           overflow: 'hidden',    // IMPORTANT: Prevents Paper itself from showing a scrollbar
                                  // and clips any overflow from its direct children if they
                                  // somehow exceed Paper's dimensions.
@@ -120,7 +120,7 @@ function DataTable<V, R extends { id: GridRowId }>({
                 </InputAdornment>
               ),
               sx: {
-                borderRadius: '10px',
+                borderRadius: '0.5rem',
                 fontSize: '0.9rem',
                 '& input': { fontSize: '0.9rem' },
                 '& input::placeholder': { fontSize: '0.9rem' },
@@ -190,7 +190,7 @@ function DataTable<V, R extends { id: GridRowId }>({
               fontSize: '0.9rem',
               '& input': {
                 fontSize: '0.9rem !important',
-                borderRadius: '2px',
+                borderRadius: '0.5rem',
               },
               '& input::placeholder': {
                 fontSize: '0.9rem !important',
@@ -213,7 +213,7 @@ function DataTable<V, R extends { id: GridRowId }>({
               },
               '&::-webkit-scrollbar-thumb': {
                 backgroundColor: 'rgba(147, 197, 253, 0.3)', /* Very faint blue thumb */
-                borderRadius: '2px', /* Slightly more rounded */
+                borderRadius: '0.5rem', /* Slightly more rounded */
                 border: '0.5px solid rgba(147, 197, 253, 0.05)', /* Barely visible border */
                 transition: 'background-color 0.2s ease-in-out, border-color 0.2s ease-in-out',
               },

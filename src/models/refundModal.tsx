@@ -112,7 +112,7 @@ export default function RefundModal() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center animate-fade-in z-50"> {/* Added z-50 */}
-      <div className="bg-white rounded-xs shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in "> {/* Increased rounded corners, added border */}
+      <div className="bg-white rounded-lg shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in "> {/* Increased rounded corners, added border */}
         <div className="flex items-center gap-3 justify-between">
           <div className="flex gap-2 items-center"> {/* Adjusted gap and removed redundant justify-between */}
               <Save className="text-green-600 w-7 h-7" /> {/* Increased icon size */}
@@ -149,7 +149,7 @@ export default function RefundModal() {
             max={currentModalData?.oldQty || 0} // Ensure max is set correctly
             value={form.oldQty === 0 ? "" : form.oldQty} // Display empty string for 0 to allow typing
             onChange={handleChange}
-            className="w-full p-2.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none transition-all duration-200 ease-in-out"
+            className="w-full p-2.5 text-sm border border-gray-300 rounded-sm focus:ring-[1.5px] focus:ring-green-400 focus:outline-none transition-all duration-200 ease-in-out"
             placeholder="Enter quantity"
           />
           {error && <p className="text-red-600 text-xs mt-1 font-medium">{error}</p>} {/* Added font-medium */}
@@ -159,7 +159,7 @@ export default function RefundModal() {
           <button
             onClick={closeModal}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 text-sm transition-all duration-200 ease-in-out shadow-sm hover:shadow-md" /* Added rounded-md, shadow */
+            className="flex items-center gap-2 px-4 py-2 rounded-sm bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 text-sm transition-all duration-200 ease-in-out shadow-sm hover:shadow-md" /* Added rounded-sm, shadow */
           >
             <ArrowLeftCircle className="w-4 h-4" />
             {t("btnTxt_cancel")}
@@ -173,7 +173,7 @@ export default function RefundModal() {
                 form.oldQty > currentModalData.oldQty ||
                 form.oldQty === currentModalData.oldQty // Disable if entered quantity is the same as original
             }
-            className="flex items-center gap-2 px-4 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white text-sm transition-all duration-200 ease-in-out shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" 
+            className="flex items-center gap-2 px-4 py-2 rounded-sm bg-green-500 hover:bg-green-600 text-white text-sm transition-all duration-200 ease-in-out shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" 
           >
             <Save className="w-4 h-4" />
             {loading ? t("btnTxt_saving") : t("btnTxt_conRefund")}

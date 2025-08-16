@@ -231,7 +231,7 @@ export default function NewCustomer( props: {
 
   return (
     <section
-      className='flex flex-col h-[95dvh] sm:h-[80dvh] w-full sm:w-[800px] rounded-xs shadow-xl border border-gray-200 bg-white animate-slide-up relative overflow-hidden'
+      className='flex flex-col h-[95dvh] sm:h-[80dvh] w-full sm:w-[800px] rounded-lg shadow-xl border border-gray-200 bg-white animate-slide-up relative overflow-hidden'
     >
       {/* Header */}
       <div className='flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0'>
@@ -269,7 +269,7 @@ export default function NewCustomer( props: {
             onImageSelected={handleUploadImageSelected}
             isLoading={false}
             error={uploadImageError}
-            className="rounded-xs mb-4 sm:mr-6 min-w-[220px]" // Adjusted margin-bottom for better spacing
+            className="rounded-sm mb-4 sm:mr-6 min-w-[220px]" // Adjusted margin-bottom for better spacing
           />
           {/* Main Flex container for all form fields */}
           <Box
@@ -297,7 +297,7 @@ export default function NewCustomer( props: {
                   xs: 'calc(50% - 8px)',
                   sm: `calc(50% - ${24 / 2}px)`
                 },
-                '& .MuiOutlinedInput-root': { borderRadius: '8px' },
+                '& .MuiOutlinedInput-root': { borderRadius: '4px' },
               }}
             />
 
@@ -319,7 +319,7 @@ export default function NewCustomer( props: {
                   xs: 'calc(50% - 8px)',
                   sm: `calc(50% - ${24 / 2}px)`
                 },
-                '& .MuiOutlinedInput-root': { borderRadius: '8px' },
+                '& .MuiOutlinedInput-root': { borderRadius: '4px' },
               }}
             >
               <MenuItem value="">
@@ -350,7 +350,7 @@ export default function NewCustomer( props: {
                   xs: 'calc(50% - 8px)',
                   sm: `calc(50% - ${24 / 2}px)`
                 },
-                '& .MuiOutlinedInput-root': { borderRadius: '8px' }
+                '& .MuiOutlinedInput-root': { borderRadius: '4px' }
               }}
             />
 
@@ -369,7 +369,7 @@ export default function NewCustomer( props: {
                   xs: 'calc(50% - 8px)',
                   sm: `calc(50% - ${24 / 2}px)`
                 },
-                '& .MuiOutlinedInput-root': { borderRadius: '8px' }
+                '& .MuiOutlinedInput-root': { borderRadius: '4px' }
               }}
             />
 
@@ -389,7 +389,7 @@ export default function NewCustomer( props: {
               }}
               sx={{
                 width: '100%',
-                '& .MuiOutlinedInput-root': { borderRadius: '8px' },
+                '& .MuiOutlinedInput-root': { borderRadius: '4px' },
               }}
             />
             {/* Township */}
@@ -406,7 +406,7 @@ export default function NewCustomer( props: {
                   xs: 'calc(50% - 8px)',
                   sm: `calc(50% - ${24 / 2}px)`
                 },
-                '& .MuiOutlinedInput-root': { borderRadius: '8px' }
+                '& .MuiOutlinedInput-root': { borderRadius: '4px' }
               }}
             />
 
@@ -424,7 +424,7 @@ export default function NewCustomer( props: {
                   xs: 'calc(50% - 8px)',
                   sm: `calc(50% - ${24 / 2}px)`
                 },
-                '& .MuiOutlinedInput-root': { borderRadius: '8px' }
+                '& .MuiOutlinedInput-root': { borderRadius: '4px' }
               }}
             />
           </Box>

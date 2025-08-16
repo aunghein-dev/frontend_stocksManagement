@@ -157,7 +157,7 @@ export default function BillingAndInvocingPage() {
   // --- Conditional Rendering for Loading/Error States ---
   if (LOADING) {
     return (
-      <div className="overflow-hidden h-[90dvh] rounded-xs bg-white p-1 py-8 flex items-center justify-center">
+      <div className="overflow-hidden h-[calc(100dvh-110px)] rounded-lg bg-white p-1 py-8 flex items-center justify-center">
          <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-blue-500"></div>
          <span className="text-gray-400 ml-2 text-sm">Loading Billing Data...</span>
       </div>
@@ -178,8 +178,8 @@ export default function BillingAndInvocingPage() {
 
   if (error) {
     return (
-      <div className="overflow-hidden h-full rounded-xs bg-white p-1 py-8 flex items-center justify-center">
-        <p className="text-red-600">Error loading billing data: {error.message || "Unknown error"}</p>
+      <div className="overflow-hidden h-full p-1 py-8 flex items-center justify-center">
+        <p className="text-red-600">Error loading billing data: {error?.message || "Unknown error"}</p>
       </div>
     );
   }
@@ -188,7 +188,7 @@ export default function BillingAndInvocingPage() {
 
   // --- Main Render ---
   return (
-    <div className="overflow-hidden h-full rounded-xs bg-white p-1 py-8">
+    <div className="overflow-hidden h-full rounded-lg bg-white p-1 py-8">
       <div className="h-[calc(100dvh-176px)] overflow-y-auto custom-scrollbar">
         <div className="flex-1 w-full px-1 custom-scrollbar">
           <div className="grid

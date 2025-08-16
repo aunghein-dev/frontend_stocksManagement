@@ -4,12 +4,13 @@
 import React, { useState, useEffect } from 'react';
 import { marked } from 'marked'; // Import the marked library
 import axios from 'axios'; // Using axios for fetching the markdown file
+import { LoadingSpinner } from '@/components/ui/molecules/LoadingSpinner';
 
 
 const TermsAndConditions: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [contentHtml, setContentHtml] = useState(''); // State to hold the parsed HTML content
-  const [fetchError, setFetchError] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchMarkdown = async () => {
@@ -49,7 +50,7 @@ const TermsAndConditions: React.FC = () => {
 
       } catch (error) {
         console.error('Error fetching or parsing markdown:', error);
-        setFetchError(`Failed to load content. Please ensure 'terms-and-conditions.md' is correctly placed in  public directory. Error: ${error instanceof Error ? error.message : String(error)}`);
+        setContentHtml('<p class="text-red-500">Failed to load content. Please try again later.</p>');
       } finally {
         setLoading(false);
       }
@@ -61,23 +62,16 @@ const TermsAndConditions: React.FC = () => {
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center h-full min-h-[300px] text-gray-600">
-        <div className="w-7 h-7 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mr-3" />
-        <p>Loading terms and conditions...</p>
+        <LoadingSpinner message='loading terms and conditions'/>
       </div>
     );
   }
 
-  if (fetchError) {
-    return (
-      <div className="flex-1 flex items-center justify-center h-full min-h-[300px] text-red-600 font-semibold p-6 bg-red-50 border border-red-200 rounded-xs shadow-sm">
-        <p>{fetchError}</p>
-      </div>
-    );
-  }
+
 
  return (
-  <div className="py-4 px-2 sm:px:8 text-gray-800 leading-relaxed bg-white max-w-6xl mx-auto my-4 overflow-hidden rounded-xs">
-    <div className="h-full max-h-[calc(100dvh-65px)] overflow-y-auto custom-scrollbar px-2 py-6 sm:px-10">
+  <div className="py-4 sm:px:8 text-gray-800 leading-relaxed bg-white max-w-4xl mx-auto sm:my-4 overflow-hidden sm:rounded-sm">
+    <div className="h-full sm:max-h-[calc(100dvh-60px)] overflow-y-auto custom-scrollbar px-10 py-6 sm:px-10">
       {/* IMPORTANT: Remove prose classes and add  custom class */}
       <div className="markdown-content"> {/* <-- Added  class here */}
         <div dangerouslySetInnerHTML={{ __html: contentHtml }} />

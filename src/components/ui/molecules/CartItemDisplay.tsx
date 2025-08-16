@@ -42,7 +42,7 @@ export default function CartItemDisplay({
   return (
     <li
       className="relative flex items-center justify-between gap-1 px-1 py-3
-                 rounded-xs border-[0.5px] border-gray-200 transition-all duration-300
+                 rounded-sm border-[0.5px] border-gray-200 transition-all duration-300
                  cursor-pointer"
       style={{
         background: `linear-gradient(to right, ${hexToRgba(item.colorHex, 0.2)}, rgba(0, 0, 0, 0.08))`,
@@ -81,7 +81,7 @@ export default function CartItemDisplay({
           width={80}
           height={80}
           unoptimized
-          className={`rounded-md border-[0.5px] border-gray-200 shadow-sm
+          className={`rounded-sm border-[0.5px] border-gray-200 shadow-sm
                       w-11 h-11 sm:w-16 sm:h-16
                       cursor-pointer hover:scale-104
                       object-cover transition-all duration-300 ease-in-out

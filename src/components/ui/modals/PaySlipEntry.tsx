@@ -22,7 +22,7 @@ export default function PaySlipEntry({
 
   return (
     <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-90">
-      <div className="relative flex flex-col gap-0 p-0 bg-white shadow-xl border border-gray-200 rounded-xs max-w-sm w-[90dvw]">
+      <div className="relative flex flex-col gap-0 p-0 bg-white shadow-xl border border-gray-200 rounded-sm max-w-sm w-[90dvw]">
       
           <ModalHeader title="Pay Slip ID" 
                     haveExitButton
@@ -39,7 +39,7 @@ export default function PaySlipEntry({
             value={paySlip}
             onChange={(e) => setPaySlip(e.target.value)}
             placeholder={"Enter Pay Slip ID"}
-            className="w-full py-2.5 px-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm focus:border-transparent
+            className="w-full py-2.5 px-4 border border-gray-300 rounded-sm focus:outline-none focus:ring-[1.5px] focus:ring-blue-500 text-sm focus:border-transparent
             transition-all ease-in-out duration-100"
             autoFocus
           />

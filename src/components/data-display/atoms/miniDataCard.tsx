@@ -9,7 +9,7 @@ const MiniDataCard = ({ title, value, icon }: { title: string; value: string; ic
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.3 }}
-      className="flex items-center h-[100px] w-full max-w-sm bg-white rounded-xs shadow-md hover:shadow-lg transition-shadow p-3"
+      className="flex items-center h-[100px] w-full max-w-sm bg-white rounded-sm shadow-md hover:shadow-lg transition-shadow p-3"
     >
       <div className="text-3xl text-blue-600 mr-4 shrink-0">
         {icon}

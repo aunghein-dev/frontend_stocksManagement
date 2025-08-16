@@ -30,7 +30,7 @@ export default function PageLost404(props: Props) {
             <button
               onClick={props.reload}
               className="bg-blue-600 hover:bg-blue-600 text-white border-[0.5px] border-blue-600 
-                          text-sm py-2 px-4 rounded-xs transition-all
+                          text-sm py-2 px-4 rounded-sm transition-all
                           duration-200 cursor-pointer" >
               Retry
           </button>

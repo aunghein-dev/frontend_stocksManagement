@@ -67,7 +67,7 @@ export default function DeleteStockConfirmation() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center animate-fade-in z-50"> {/* Added z-50 to ensure it's on top */}
-      <div className="bg-white rounded-xs shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in">
+      <div className="bg-white rounded-lg shadow-2xl w-[90%] max-w-md p-6 space-y-5 animate-fade-in">
         <div className="flex items-center justify-between"> {/* Adjusted for better alignment */}
             <div className="flex gap-2 items-center"> {/* Use gap for spacing */}
               <AlertTriangle className="text-yellow-500 w-6 h-6" />
@@ -108,7 +108,7 @@ export default function DeleteStockConfirmation() {
           <button
             onClick={closeModal}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 text-sm transition"
+            className="flex items-center gap-2 px-4 py-2 rounded-sm bg-gray-100 hover:bg-gray-200 border border-gray-300 text-gray-700 text-sm transition"
           >
             <XCircle className="w-4 h-4" />
             {t("btnTxt_goBack")}
@@ -116,7 +116,7 @@ export default function DeleteStockConfirmation() {
           <button
             onClick={handleSubmit}
             disabled={loading || !agreed} // Disable if loading or not agreed
-            className={`flex items-center gap-2 px-4 py-2 rounded-xs text-white text-sm transition shadow ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-sm text-white text-sm transition shadow ${
               loading || !agreed ? "bg-red-300 cursor-not-allowed" : "bg-red-500 hover:bg-red-600"
             }`}
           >

@@ -34,7 +34,7 @@ export default function LanguageSwitcher() {
       renderOptionContent={(option) => (
         <>
           {option.display && (
-            <span className="text-lg leading-none">{option.display}</span>
+            <span className="text-lg leading-none pr-1">{option.display}</span>
           )}
           <span>{option.label}</span>
         </>

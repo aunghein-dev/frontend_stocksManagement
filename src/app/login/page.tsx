@@ -108,7 +108,7 @@ export default function LoginPage() {
           
     <div className="flex items-center justify-center p-4 w-full">
       
-      <div className="bg-white shadow-lg rounded-xs max-w-md w-full p-8">
+      <div className="bg-white shadow-lg rounded-lg max-w-md w-full p-8">
        <h1 className="text-2xl font-extrabold mb-5 text-center flex flex-row items-center justify-center"> {/* Changed justify-self-center to justify-center */}
           <div className='w-10 h-10 mr-1'> {/* Removed mx-auto */}
             <Image  
@@ -213,14 +213,14 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-semibold rounded-4xl py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors text-sm sm:text-base duration-300 cursor-pointer"
+            className="w-full bg-blue-600 text-white font-semibold rounded-sm py-2 hover:bg-blue-700 focus:outline-none focus:ring-[1.5px] focus:ring-blue-600 transition-colors text-sm sm:text-base duration-300 cursor-pointer"
           >
             Sign In
           </button>
         </form>
 
         <p className="mt-6 text-center text-gray-500 text-sm">
-          <span className='mr-2'>{"Don't have an account?"}</span>
+          <span>{"Don't have an account?"}{' '}</span>
           <button onClick={() => router.push('/signup')} 
                   className="text-blue-600 hover:text-blue-800 font-medium
                             cursor-pointer transition-colors duration-300">

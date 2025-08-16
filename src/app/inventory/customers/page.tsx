@@ -204,7 +204,7 @@ export default function Customers() {
   }
 
   return (
-    <section className="overflow-hidden h-full rounded-xs bg-white sm:w-[calc(100vw-224px)] w-[calc(100vw-25px)]">
+    <section className="overflow-hidden h-full rounded-lg bg-white sm:w-[calc(100vw-224px)] w-[calc(100vw-25px)]">
       <div className="overflow-auto custom-scrollbar pt-0 h-[calc(100dvh-109px)] custom-scrollbar relative">
         <div className="bg-white sticky top-0 left-4 right-0 min-h-[60px] flex items-center justify-start
                         border-b border-gray-100 px-3 z-20">
@@ -212,7 +212,7 @@ export default function Customers() {
             placeholder={t("searchCustomer")}
              onChange={handleSearch}
              value={searchQuery}
-             className="border-[0.5px] border-gray-300"
+             className="border-[0.5px] border-gray-300 rounded-sm"
           />
         </div>
         <div className="flex flex-col h-full">
@@ -254,7 +254,7 @@ export default function Customers() {
     
       <button
         onClick={handleNewCustomer}
-        className={`absolute bottom-10 right-10 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-full border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md`}
+        className={`absolute bottom-10 right-10 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-sm border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md`}
       >
         {t("btnTxt_newCus")}
       </button>

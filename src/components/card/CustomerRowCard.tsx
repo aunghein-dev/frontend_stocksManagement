@@ -60,7 +60,7 @@ export const CustomerRowCard = (props: Customer) => {
   }
 
   return (
-    <div className="flex h-[100px] w-full bg-white border border-gray-200 rounded-xs overflow-hidden
+    <div className="flex h-[100px] w-full bg-white border border-gray-200 rounded-sm overflow-hidden
                  relative shadow-xs
                  hover:shadow-md transition-all ease-in duration-100 flex-row items-center justify-between px-2
                  text-right text-gray-700">
@@ -72,7 +72,7 @@ export const CustomerRowCard = (props: Customer) => {
               </div>
               
               <div className="flex flex-row items-center justify-start text-left min-w-[190px]">
-                <div className="relative w-[50px] h-[50px] rounded-full overflow-hidden ring-2 ring-blue-300">
+                <div className="relative w-[50px] h-[50px] rounded-full overflow-hidden ring-2 ring-blue-600">
                   <Image
                     src={props.imgUrl || "/man.png"}
                     alt={props.name}
@@ -108,7 +108,7 @@ export const CustomerRowCard = (props: Customer) => {
               </span>
 
 
-              <span className={`text-[0.7rem] ml-3 px-2 py-1 rounded-xs border-[0.5px] hidden sm:block
+              <span className={`text-[0.7rem] ml-3 px-2 py-1 rounded-sm border-[0.5px] hidden sm:block
                               ${typeCustomerStyle(props.typeOfCustomer)}`}>{props.typeOfCustomer}</span>
 
                <a
@@ -128,7 +128,7 @@ export const CustomerRowCard = (props: Customer) => {
                               "bg-pink-100 text-pink-600 border-pink-500" : 
                               "bg-gray-100 text-gray-600 border-gray-500"}    
                                 text-xs cursor-pointer
-                                transition-colors duration-200 px-2 py-1.5 rounded-xs`}
+                                transition-colors duration-200 px-2 py-1.5 rounded-sm`}
                     onClick={handleToggle}
                     aria-label="More options"
                   >

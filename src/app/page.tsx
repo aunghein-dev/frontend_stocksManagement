@@ -213,7 +213,7 @@ export default function Home() {
 
       {/* Product Grid */}
       {!isLoading && !loadingBarcode && currentItems.length > 0 && (
-        <div className="rounded-xs bg-white py-2">
+        <div className="rounded-lg bg-white py-2">
           <div
             className="flex-1 overflow-y-auto custom-scrollbar"
             style={{ height: "calc(100dvh - 188px)" }}

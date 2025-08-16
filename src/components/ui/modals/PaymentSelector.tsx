@@ -38,7 +38,7 @@ export default function PaymentSelector(props : PaymentSelectorProps) {
 
   return (
        
-        <div className="relative h-[95dvh] w-full sm:w-[700px] rounded-2xl shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white ">
+        <div className="relative h-[95dvh] w-full sm:w-[700px] rounded-sm shadow-xl flex flex-col border border-gray-200 animate-slide-up bg-white ">
             <ModalHeader title={t("hd_Payment")} onClick={props.handleCloseSelector} haveExitButton={true}/>
             <div className="h-full w-full sm:grid sm:grid-cols-[53%_47%] flex flex-wrap overflow-y-auto
                             custom-scrollbar">

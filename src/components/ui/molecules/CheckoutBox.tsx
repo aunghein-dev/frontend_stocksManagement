@@ -13,7 +13,7 @@ export default function CheckoutBox({ t, grandTotal, grandTotalQty, loading, han
    const {discountAmt} = useDiscountStore();
   
   return (
-    <div className="w-full border-[1px] border-gray-200 rounded-xs flex flex-col p-2 text-gray-700">
+    <div className="w-full border-[1px] border-gray-200 rounded-sm flex flex-col p-2 text-gray-700">
       <div className="flex justify-between items-center mb-1">
         <span className="text-sm font-semibold text-gray-500">{t("lbl_subTotal")}</span>
         <span className="text-sm font-bold text-gray-500">
@@ -47,7 +47,7 @@ export default function CheckoutBox({ t, grandTotal, grandTotalQty, loading, han
        <div className="flex justify-end mt-auto"> {/* mt-auto pushes it to the bottom if there's extra space */}
         <button
           className="py-2.5 px-4 bg-blue-600 hover:bg-blue-700 
-                     text-white text-sm font-semibold rounded-xs 
+                     text-white text-sm font-semibold rounded-sm 
                      transition duration-200 cursor-pointer"
           disabled={grandTotal === 0 || loading}
           onClick={() => handleCheckout()}

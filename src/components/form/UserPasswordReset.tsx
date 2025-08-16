@@ -77,7 +77,7 @@ export default function UserPasswordReset({ userProfile }: Props) {
                 setPasswordError(null);
                 setPasswordSuccess(false);
               }}
-              className="w-full text-sm p-2 pr-10 rounded-xs h-10 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+              className="w-full text-sm p-2 pr-10 rounded-sm h-10 border border-gray-300 focus:outline-none focus:ring-[1.5px] focus:ring-blue-600 transition"
             />
             <button
               type="button"
@@ -99,7 +99,7 @@ export default function UserPasswordReset({ userProfile }: Props) {
                 setPasswordError(null);
                 setPasswordSuccess(false);
               }}
-              className="w-full text-sm p-2 pr-10 rounded-xs h-10 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+              className="w-full text-sm p-2 pr-10 rounded-sm h-10 border border-gray-300 focus:outline-none focus:ring-[1.5px] focus:ring-blue-600 transition"
             />
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function UserPasswordReset({ userProfile }: Props) {
           type="button"
           onClick={handleReset}
           disabled={isResettingPassword || !newPassword || !confirmPassword}
-          className={`px-3 py-2 bg-yellow-500 text-white rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 text-sm ${
+          className={`px-3 py-2 bg-yellow-500 text-white rounded-sm shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-[1.5px] focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 text-sm ${
             isResettingPassword ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >

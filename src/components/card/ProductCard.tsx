@@ -165,10 +165,10 @@ export default function ProductCard(props: Stock) {
     <div
       className="max-w-[250px] text-gray-900 relativ sm:max-w-md
                  cursor-pointer transition duration-200 ease-in-out
-                 shadow-xs hover:shadow-xl rounded-xs border-[0.5px] border-gray-200 relative">
+                 shadow-xs hover:shadow-xl rounded-lg border-[0.5px] border-gray-200 relative">
           <div className="w-full h-[140px] relative">
             {!loaded && (
-              <div className="w-full h-full bg-gray-200 rounded-t-xs animate-pulse" />
+              <div className="w-full h-full bg-gray-200 rounded-t-lg animate-pulse" />
             )}
             <Image
               fill
@@ -178,7 +178,7 @@ export default function ProductCard(props: Stock) {
               onLoad={() => setLoaded(true)}
               className={`w-full max-h-[140px]
                           min-h-[140px] object-cover
-                          rounded-t-xs absolute top-0
+                          rounded-t-lg absolute top-0
                           left-0 transition-opacity duration-300 ${
                             loaded ? 'opacity-100' : 'opacity-0'
                           }`}
@@ -187,7 +187,7 @@ export default function ProductCard(props: Stock) {
               <div
                 className="absolute inset-0 bg-black/50 bg-opacity-50
                            flex items-center justify-center
-                           rounded-t-xs z-10"
+                           rounded-t-lg z-10"
               >
                 <span className="text-white text-xl font-bold uppercase tracking-wider select-none">
                   {t("outOfStock")}
@@ -198,14 +198,14 @@ export default function ProductCard(props: Stock) {
       {dayjs().diff(dayjs(props.releasedDate), 'day') <= 7 &&
        props.items.length > 1 &&
       (
-        <div className="absolute top-2 left-2 bg-green-600/60 text-white px-2 py-0.5 text-xs rounded-xs"> {/* Reduced padding and font size */}
+        <div className="absolute top-2 left-2 bg-green-600/60 text-white px-2 py-0.5 text-xs rounded-sm"> {/* Reduced padding and font size */}
           {t("newProduct")}
         </div>
       )}
 
       {/* Barcode Display */}
       {selectedColor && (
-        <div className="absolute top-2 right-2 bg-white/60 text-gray-800 px-2 py-0.5 text-xs rounded-xs"> {/* Reduced padding and font size */}
+        <div className="absolute top-2 right-2 bg-white/60 text-gray-800 px-2 py-0.5 text-xs rounded-sm"> {/* Reduced padding and font size */}
           {displayBarcode}
         </div>
       )}
@@ -218,7 +218,7 @@ export default function ProductCard(props: Stock) {
 
         <div className="flex items-center justify-between relative">
           <span className="text-sm text-gray-600">{formatMoney(props.groupUnitPrice)} </span>
-          <span className={`${props.items.length === 0 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'} font-semibold px-2 py-0.5 rounded-xs text-xs`}> {/* Reduced padding */}
+          <span className={`${props.items.length === 0 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'} font-semibold px-2 py-0.5 rounded-sm text-xs`}> {/* Reduced padding */}
             {t("inStock")}: {isColorSelected ? availableQtyDisplay : totalStockQty}
           </span>
 

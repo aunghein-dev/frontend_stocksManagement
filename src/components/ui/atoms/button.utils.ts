@@ -7,7 +7,7 @@ export const buttonVariants = ({
   variant: 'primary' | 'secondary' | 'danger' | 'ghost' | 'border';
   size: 'sm' | 'md' | 'lg';
 }) => {
-  const base = 'rounded-md px-4 min-h-[40px] max-h-[40px] font-medium transition-all ease-in-out duration-300';
+  const base = 'rounded-sm px-4 min-h-[40px] max-h-[40px] font-medium transition-all ease-in-out duration-300';
 
   const variantMap = {
     primary: 'bg-blue-600 text-white hover:bg-blue-500',

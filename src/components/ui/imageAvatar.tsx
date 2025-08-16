@@ -34,7 +34,7 @@ const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', s
         position: 'relative',
         width: `${size}px`,
         height: `${size}px`,
-        borderRadius: '5px',
+        borderRadius: '0.5rem',
         overflow: 'hidden',
         border: '1px solid #ddd',
         display: 'flex',

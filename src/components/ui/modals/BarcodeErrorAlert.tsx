@@ -12,7 +12,7 @@ const BarcodeErrorAlert = ({ barcodeScanError, setBarcodeScanError, t } : Barcod
   }
 
   return (
-   <div className="fixed bottom-[3%] right-[2.5%] text-red-600 px-4 py-3 flex items-center justify-center bg-opacity-50 z-50 bg-red-100 border-[0.5px] border-red-400 rounded-md" role="alert">
+   <div className="fixed bottom-[3%] right-[2.5%] text-red-600 px-4 py-3 flex items-center justify-center bg-opacity-50 z-50 bg-red-100 border-[0.5px] border-red-400 rounded-sm" role="alert">
     <div className='flex flex-row items-center justify-between gap-2 w-full'>
         <span className="block sm:inline mr-5">{barcodeScanError}</span>
         <span className="absolute -right-2 top-0 bottom-0 px-4 py-3">

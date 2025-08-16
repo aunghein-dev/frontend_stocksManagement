@@ -40,7 +40,7 @@ export default function GenericSelect<T>({
   renderOptionContent,
   // Default values for internal class names
   dropdownOpenStyle,
-  listboxClassName = `absolute left-0 bottom-12 mt-1 w-full rounded-xs bg-gray-50 z-60 p-0  shadow-lg ease-in-out duration-200 ${dropdownOpenStyle || ''} `,
+  listboxClassName = `absolute left-0 bottom-12 mt-1 w-full rounded-sm bg-gray-50 z-60 p-0  shadow-lg ease-in-out duration-200 ${dropdownOpenStyle || ''} `,
   optionClassName = "cursor-pointer select-none px-4 py-2 flex items-center space-x-1 text-sm",
   // Extracting className and defining default for other props
   dropdownStyle, // Extract className here
@@ -128,7 +128,7 @@ export default function GenericSelect<T>({
         aria-labelledby="generic-select-label"
         onClick={() => setOpen((o) => !o)}
         onKeyDown={onButtonKeyDown}
-        className={`${buttonClassName} rounded-xs  focus:ring-2 ring-blue-300`} 
+        className={`${buttonClassName} rounded-sm focus:ring-[1.5px] focus:ring-blue-600`} 
       >
         {renderButtonContent ? (
           renderButtonContent(selectedOption)
@@ -181,7 +181,7 @@ export default function GenericSelect<T>({
                 aria-selected={active}
                 onClick={() => handleSelect(option.value)}
                 onKeyDown={(e) => onOptionKeyDown(e, i, option.value)}
-                className={`${optionClassName} py-2.5 ${active ? "bg-blue-200 text-blue-600" : "text-gray-900"} ${i===0 ? "rounded-t-xs" : ""} ${i===options.length-1 ? "rounded-b-xs" : ""}`}
+                className={`${optionClassName} py-2.5 ${active ? "bg-blue-200 text-blue-700" : "text-gray-900"} ${i===0 ? "rounded-t-sm" : ""} ${i===options.length-1 ? "rounded-b-sm" : ""}`}
               >
                 {renderOptionContent ? (
                   renderOptionContent(option, active)

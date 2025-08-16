@@ -97,7 +97,7 @@ export default function CustomerCard({ customer, onClick, onEditClick, onDeleteC
 
   return (
     <div
-      className="flex h-[140px] w-full bg-white border border-gray-200 rounded-xs overflow-hidden
+      className="flex h-[140px] w-full bg-white border border-gray-200 rounded-sm overflow-hidden
                  text-gray-800 relative shadow-xs
                  hover:shadow-md transition-all ease-in duration-100 flex-col"
       // Only call onClick if the dropdown is not open, or specifically handle it differently
@@ -183,7 +183,7 @@ export default function CustomerCard({ customer, onClick, onEditClick, onDeleteC
         {/* Dropdown Menu */}
         {isDropdownOpen && (
           <div
-            className='absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-xs shadow-lg z-20' // Higher z-index to ensure it's on top
+            className='absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-sm shadow-lg z-20' // Higher z-index to ensure it's on top
             onClick={(e) => e.stopPropagation()} // Prevent card click when clicking inside dropdown
           >
             <button

@@ -131,11 +131,11 @@ export default function InvoiceDownloaderPage({ params }: InvoicePageProps) {
   }
 
   return (
-    <div className="relative flex flex-col overflow-hidden rounded-sm bg-white shadow-xs h-[calc(100dvh-110px)] w-[calc(100dvw-25px)] sm:w-[calc(100dvw-225px)]">
+    <div className="relative flex flex-col overflow-hidden rounded-lg bg-white shadow-xs h-[calc(100dvh-110px)] w-[calc(100dvw-25px)] sm:w-[calc(100dvw-225px)]">
       {/* Top Bar with Download Button */}
       <div className="flex flex-row items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
         <button
-          className="cursor-pointer bg-blue-100 px-3 py-1 rounded-xs text-sm hover:bg-blue-200 text-blue-600 border-[0.5px] border-blue-600"
+          className="cursor-pointer bg-blue-100 px-3 py-1 rounded-sm text-sm hover:bg-blue-200 text-blue-600 border-[0.5px] border-blue-600"
           onClick={() => router.back()}
           aria-label="Close Invoice"
         >
@@ -143,7 +143,7 @@ export default function InvoiceDownloaderPage({ params }: InvoicePageProps) {
         </button>
         <button
           onClick={handleSavePhoto}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-sm text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-[1.5px] focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
         >
           <FaDownload className="w-4 h-4" /> Save Photo
         </button>
@@ -192,7 +192,7 @@ export default function InvoiceDownloaderPage({ params }: InvoicePageProps) {
           </div>
           <div>
             <h3 className="text-xs text-gray-500 mb-1">To</h3>
-            <p className="font-medium text-gray-900">rounded-xsoup</p>
+            <p className="font-medium text-gray-900">rounded-smoup</p>
             <p className="text-gray-700">{invoice.tranProvider}</p>
             <p className="text-gray-700">{invoice.tranHistId}</p>
           </div>
@@ -247,7 +247,7 @@ export default function InvoiceDownloaderPage({ params }: InvoicePageProps) {
         </div>
 
         <div className="flex justify-center">
-          <p className="text-[0.80rem] text-gray-500 mb-4 px-2">Please make all checks payable to rounded-xsoup. Thank you for your business!</p>
+          <p className="text-[0.80rem] text-gray-500 mb-4 px-2">Please make all checks payable to rounded-smoup. Thank you for your business!</p>
         </div>
       </div>
     </div>

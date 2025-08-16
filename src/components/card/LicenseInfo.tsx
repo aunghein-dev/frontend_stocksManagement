@@ -15,7 +15,7 @@ export default function LicenseInfo({billing}: {billing: BillingBackend}) {
   };
 
   return (
-    <div className="border-1 border-gray-200 rounded-md max-w-md max-auto h-[180px]
+    <div className="border-1 border-gray-200 rounded-lg max-w-md max-auto h-[180px]
                     flex flex-col p-4 text-gray-600 shadow-xs">
         <span className="border-b-1 border-gray-200 pb-1.5 text-base
                          flex flex-row items-center gap-2">

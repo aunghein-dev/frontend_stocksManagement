@@ -14,7 +14,7 @@ export default function CustomerInfoSelected({imgUrl, name, orderNo} : CustomerI
         
         <div className="flex flex-row items-center gap-2">
           <Image src={imgUrl || "/man.png"} alt="User" width={50} height={50}
-              className="rounded-full ring-2 ring-blue-300"/>
+              className="rounded-full ring-2 ring-blue-600"/>
           <div className="flex flex-col text-left gap-1">
             <span className="font-semibold text-sm">{name}</span>
             <span className="text-xs text-gray-500">#{orderNo.toLocaleUpperCase().substring(0, 8)}</span>

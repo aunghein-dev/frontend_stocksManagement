@@ -14,10 +14,10 @@ export default function CartCusSelected(props: CartCusSelectedProps) {
 
   return (
      <div className="flex flex-row items-center justify-between min-h-[60px] mx-2 my-2
-                        border border-gray-200 rounded-xs px-2 py-1 shadow-xs text-gray-500">
+                        border border-gray-200 rounded-sm px-2 py-1 shadow-xs text-gray-500">
           <div className="flex flex-row items-center gap-2">
             <Image src={checkoutCustomer.imgUrl || "/man.png"} alt="Customer" width={50} height={50}
-                className="w-10 h-10 rounded-full ring-2 ring-blue-300"/>
+                className="w-10 h-10 rounded-full ring-2 ring-blue-600"/>
             <span className="text-sm font-semibold">{checkoutCustomer.name}</span>
           </div>
           <a href={`tel:${checkoutCustomer.phoneNo1}`}
