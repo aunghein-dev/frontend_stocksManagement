@@ -312,6 +312,7 @@ export default function Cart({ handleToggle }: CartPopupProps) {
                         aria-label="Empty Cart"
                         width={250}
                         height={250}
+                        unoptimized
                         className="mx-auto"
                       />
                       <motion.span

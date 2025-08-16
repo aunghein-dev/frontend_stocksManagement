@@ -143,6 +143,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                 src={data?.userImgUrl || "/man.png"}
                 alt="user photo"
                 priority
+                unoptimized
               />
 
             )}

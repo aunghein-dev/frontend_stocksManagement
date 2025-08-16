@@ -33,6 +33,7 @@ export default function SignupPage() {
                   alt="Openware"
                   width={40}
                   height={40}
+                  unoptimized
                 />
               </div>
               <span className="text-blue-600 mr-1">Register</span>

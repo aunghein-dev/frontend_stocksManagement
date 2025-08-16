@@ -202,6 +202,7 @@ export default function Home() {
               alt="No Items Found"
               fill
               priority
+              unoptimized
               className="object-contain"
             />
             <p className="text-gray-500 text-md font-bold absolute bottom-7 animate-pulse">

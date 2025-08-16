@@ -101,6 +101,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
               fill // Makes the image fill the parent div
               sizes="(max-width: 768px) 100vw, 96px" // Example sizes, adjust if necessary
               className="object-cover"
+              unoptimized
               onError={(e) => {
                 // Fallback for broken images. Ensure this placeholder exists in /public.
                 (e.target as HTMLImageElement).src = "/placeholder-image.png";

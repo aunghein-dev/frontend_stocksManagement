@@ -176,6 +176,7 @@ export default function ProductCard(props: Stock) {
               src={selectedImage}
               alt={props.groupName}
               onLoad={() => setLoaded(true)}
+              unoptimized
               className={`w-full max-h-[140px]
                           min-h-[140px] object-cover
                           rounded-t-lg absolute top-0

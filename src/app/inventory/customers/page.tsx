@@ -176,6 +176,7 @@ export default function Customers() {
               fill
               priority
               className="object-contain"
+              unoptimized
             />
             <p className="text-gray-500 text-md font-bold absolute bottom-7 animate-pulse">
               {t("noCusFound")}

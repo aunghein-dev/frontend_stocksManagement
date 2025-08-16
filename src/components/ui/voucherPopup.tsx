@@ -181,6 +181,7 @@ export default function PopupVoucher({
               src={business?.businessLogo? business.businessLogo : "/onlylogo.png"}
               alt={business?.businessName ? `${business.businessName} Logo` : "Business Logo"}
               draggable={false}
+              unoptimized
             />
             <h1 className="text-2xl font-bold mb-6 text-gray-700">{business?.businessName}</h1>
             <p className="text-xs -mt-5 mb-2 text-gray-700">{business?.streets}</p>

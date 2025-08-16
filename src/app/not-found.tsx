@@ -42,7 +42,8 @@ export default function NotFound() {
                   alt="Empty 404 Image"
                   aria-label="Invalid URL"
                   fill // Use 'fill' to make the image cover its parent 'div'
-                  className="object-contain" // This ensures the image maintains aspect ratio within the fill area
+                  className="object-contain" // This ensures the image maintains aspect ratio within the fill area     
+                  unoptimized
                 />
              </div>
               

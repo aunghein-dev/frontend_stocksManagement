@@ -62,6 +62,7 @@ const ImageAvatar: React.FC<ImageAvatarProps> = ({ src, alt = 'Product Image', s
           onError={handleError}
           priority={priority}
           style={{ objectFit: 'cover' }}
+          unoptimized
         />
       )}
     </div>

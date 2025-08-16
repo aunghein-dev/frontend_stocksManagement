@@ -327,6 +327,7 @@ export default function Settings() {
                     height={96}
                     className="w-24 h-24 object-cover rounded-sm border border-gray-200 shadow-sm transition-all duration-200 ease-in-out hover:scale-105"
                     priority
+                    unoptimized
                   />
                 ) : (
                   <div className="w-24 h-24 flex items-center justify-center bg-gray-200 rounded-sm text-gray-500 border border-dashed border-gray-400">

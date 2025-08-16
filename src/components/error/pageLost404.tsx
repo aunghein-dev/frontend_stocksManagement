@@ -19,6 +19,7 @@ export default function PageLost404(props: Props) {
             width={280}
             height={280}
             priority
+            unoptimized
           />
         </div>
 

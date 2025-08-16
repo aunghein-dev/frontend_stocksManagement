@@ -129,6 +129,7 @@ export default function CustomerCard({ customer, onClick, onEditClick, onDeleteC
                 (e.target as HTMLImageElement).src = defaultImageUrl;
                 setImageLoaded(true);
               }}
+              unoptimized
             />
           </div>
         </div>

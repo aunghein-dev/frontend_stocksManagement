@@ -78,6 +78,7 @@ export const CustomerRowCard = (props: Customer) => {
                     alt={props.name}
                     fill
                     className="object-cover"
+                    unoptimized
                   />
                 </div>
                   <div className="flex flex-col gap-1 ml-2">

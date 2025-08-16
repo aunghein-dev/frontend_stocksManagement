@@ -112,6 +112,7 @@ export default function LoginPage() {
        <h1 className="text-2xl font-extrabold mb-5 text-center flex flex-row items-center justify-center"> {/* Changed justify-self-center to justify-center */}
           <div className='w-10 h-10 mr-1'> {/* Removed mx-auto */}
             <Image  
+              unoptimized
               src="/onlylogo.png" alt="Openware Logo" 
               width={40} height={40} />
           </div>

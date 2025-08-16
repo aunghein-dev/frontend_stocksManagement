@@ -70,6 +70,7 @@ export default function CustomerSelector(props: { handleCloseSelector: () => voi
             fill
             priority
             className="object-contain"
+            unoptimized
           />
           <p className="text-gray-500 text-md font-bold absolute bottom-7 animate-pulse">
             {t("noCustomersFound")}

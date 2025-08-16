@@ -326,6 +326,7 @@ const AccountProfileSettingsPage: React.FC = () => {
                 height={128}
                 className="w-32 h-32 object-cover rounded-full border-4 border-white shadow-md transition-all duration-200 ease-in-out group-hover:scale-105"
                 priority
+                unoptimized
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/man.png'; 
                   (e.target as HTMLImageElement).alt = "Default User Image";

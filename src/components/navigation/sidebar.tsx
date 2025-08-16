@@ -278,6 +278,7 @@ function SidebarComponent(props: {
                   sizes="(max-width: 640px) 50px, 50px"
                   className="object-contain"
                   priority
+                  unoptimized
                   onLoad={() => setImgLoaded(true)}
                   onError={(e) => {
                     setImgLoaded(true);
