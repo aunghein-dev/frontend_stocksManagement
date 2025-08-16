@@ -35,9 +35,6 @@ Openware is a modern, intuitive, and robust Point-of-Sale (POS) inspired web app
   - [Running the Application](#running-the-application)
 - [Usage](#usage)
 - [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ---
 
