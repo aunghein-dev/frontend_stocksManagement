@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200px" height="700px" viewBox="0 0 1200 700" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="blueGradient">
+            <stop stop-color="#60A5FA" offset="0%"></stop>
+            <stop stop-color="#3B82F6" offset="50%"></stop>
+            <stop stop-color="#2563EB" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="purpleGradient">
+            <stop stop-color="#A78BFA" offset="0%"></stop>
+            <stop stop-color="#8B5CF6" offset="50%"></stop>
+            <stop stop-color="#7C3AED" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="0%" x2="0%" y2="100%" id="violetGradient">
+            <stop stop-color="#C4B5FD" offset="0%"></stop>
+            <stop stop-color="#A78BFA" offset="50%"></stop>
+            <stop stop-color="#8B5CF6" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="0%" x2="0%" y2="100%" id="indBlueGradient">
+            <stop stop-color="#60A5FA" offset="0%"></stop>
+            <stop stop-color="#3B82F6" offset="50%"></stop>
+            <stop stop-color="#2563EB" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="greenGradient">
+            <stop stop-color="#34D399" offset="0%"></stop>
+            <stop stop-color="#10B981" offset="50%"></stop>
+            <stop stop-color="#059669" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FAFAFA" x="0" y="0" width="1200" height="700"></rect>
+        
+        <!-- Abstract Background Shapes -->
+        <circle fill="#EEF2FF" cx="200" cy="650" r="300" opacity="0.7"></circle>
+        <circle fill="#F0FDFA" cx="1000" cy="150" r="250" opacity="0.7"></circle>
+        <circle fill="#EFF6FF" cx="600" cy="350" r="400" opacity="0.3"></circle>
+        
+        <!-- Small Floating Dots -->
+        <circle fill="#C7D2FE" cx="250" cy="150" r="8"></circle>
+        <circle fill="#C7D2FE" cx="290" cy="180" r="5"></circle>
+        <circle fill="#C7D2FE" cx="270" cy="210" r="3"></circle>
+        
+        <circle fill="#BFDBFE" cx="950" cy="550" r="8"></circle>
+        <circle fill="#BFDBFE" cx="980" cy="580" r="5"></circle>
+        <circle fill="#BFDBFE" cx="920" cy="600" r="3"></circle>
+        
+        <circle fill="#A7F3D0" cx="700" cy="100" r="8"></circle>
+        <circle fill="#A7F3D0" cx="730" cy="130" r="5"></circle>
+        <circle fill="#A7F3D0" cx="680" cy="150" r="3"></circle>
+        
+        <!-- Dashboard Illustration -->
+        <rect fill="#FFFFFF" x="450" y="150" width="600" height="400" rx="20" stroke="#E2E8F0" stroke-width="2"></rect>
+        
+        <!-- Top Bar -->
+        <rect fill="#F8FAFC" x="450" y="150" width="600" height="60" rx="20" stroke="#E2E8F0" stroke-width="2"></rect>
+        <circle fill="url(#blueGradient)" cx="500" cy="180" r="15"></circle>
+        <rect fill="#CBD5E1" x="540" y="170" width="120" height="20" rx="4"></rect>
+        <rect fill="#CBD5E1" x="680" y="170" width="100" height="20" rx="4"></rect>
+        <rect fill="#CBD5E1" x="800" y="170" width="100" height="20" rx="4"></rect>
+        <rect fill="url(#purpleGradient)" x="935" y="165" width="80" height="30" rx="15"></rect>
+        
+        <!-- Left Sidebar -->
+        <rect fill="#F8FAFC" x="450" y="210" width="160" height="340" rx="0" stroke="#E2E8F0" stroke-width="2"></rect>
+        <rect fill="#CBD5E1" x="480" y="240" width="100" height="20" rx="4"></rect>
+        <rect fill="#CBD5E1" x="480" y="280" width="100" height="20" rx="4"></rect>
+        <rect fill="#CBD5E1" x="480" y="320" width="100" height="20" rx="4"></rect>
+        <rect fill="#CBD5E1" x="480" y="360" width="100" height="20" rx="4"></rect>
+        <rect fill="#CBD5E1" x="480" y="400" width="100" height="20" rx="4"></rect>
+        <rect fill="url(#indBlueGradient)" x="480" y="440" width="100" height="20" rx="4"></rect>
+        
+        <!-- Main Content Area -->
+        <!-- Chart Section -->
+        <rect fill="#FFFFFF" x="630" y="230" width="400" height="140" rx="8" stroke="#E2E8F0" stroke-width="1"></rect>
+        <rect fill="#F1F5F9" x="650" y="250" width="360" height="100" rx="4"></rect>
+        <path d="M650,310 L700,290 L750,300 L800,270 L850,290 L900,260 L950,280 L1000,250" stroke="url(#blueGradient)" stroke-width="3" stroke-linecap="round"></path>
+        <circle fill="url(#blueGradient)" cx="700" cy="290" r="5"></circle>
+        <circle fill="url(#blueGradient)" cx="750" cy="300" r="5"></circle>
+        <circle fill="url(#blueGradient)" cx="800" cy="270" r="5"></circle>
+        <circle fill="url(#blueGradient)" cx="850" cy="290" r="5"></circle>
+        <circle fill="url(#blueGradient)" cx="900" cy="260" r="5"></circle>
+        <circle fill="url(#blueGradient)" cx="950" cy="280" r="5"></circle>
+        
+        <!-- Card Grid -->
+        <rect fill="#FFFFFF" x="630" y="390" width="190" height="120" rx="8" stroke="#E2E8F0" stroke-width="1"></rect>
+        <rect fill="url(#violetGradient)" x="650" y="410" width="40" height="40" rx="8"></rect>
+        <rect fill="#CBD5E1" x="700" y="415" width="100" height="10" rx="2"></rect>
+        <rect fill="#CBD5E1" x="700" y="435" width="70" height="10" rx="2"></rect>
+        <rect fill="#CBD5E1" x="650" y="470" width="150" height="20" rx="4"></rect>
+        
+        <rect fill="#FFFFFF" x="840" y="390" width="190" height="120" rx="8" stroke="#E2E8F0" stroke-width="1"></rect>
+        <rect fill="url(#greenGradient)" x="860" y="410" width="40" height="40" rx="8"></rect>
+        <rect fill="#CBD5E1" x="910" y="415" width="100" height="10" rx="2"></rect>
+        <rect fill="#CBD5E1" x="910" y="435" width="70" height="10" rx="2"></rect>
+        <rect fill="#CBD5E1" x="860" y="470" width="150" height="20" rx="4"></rect>
+        
+        <!-- Phone/Tablet Overlay -->
+        <rect fill="#FFFFFF" x="200" y="250" width="220" height="350" rx="20" stroke="#E2E8F0" stroke-width="4"></rect>
+        <rect fill="#F8FAFC" x="200" y="250" width="220" height="40" rx="20" stroke="#E2E8F0" stroke-width="1"></rect>
+        <circle fill="#10B981" cx="220" cy="270" r="10"></circle>
+        <rect fill="#CBD5E1" x="240" y="265" width="100" height="10" rx="2"></rect>
+        
+        <rect fill="#F1F5F9" x="220" y="310" width="180" height="50" rx="8"></rect>
+        <rect fill="#CBD5E1" x="240" y="325" width="140" height="20" rx="4"></rect>
+        
+        <rect fill="#F1F5F9" x="220" y="380" width="180" height="50" rx="8"></rect>
+        <rect fill="#CBD5E1" x="240" y="395" width="140" height="20" rx="4"></rect>
+        
+        <rect fill="#F1F5F9" x="220" y="450" width="180" height="50" rx="8"></rect>
+        <rect fill="#CBD5E1" x="240" y="465" width="140" height="20" rx="4"></rect>
+        
+        <rect fill="url(#blueGradient)" x="220" y="520" width="180" height="50" rx="8"></rect>
+        <rect fill="#FFFFFF" x="260" y="535" width="100" height="20" rx="4"></rect>
+        
+        <!-- Connecting Line between Devices -->
+        <path d="M420,350 C470,350 500,300 550,300" stroke="#CBD5E1" stroke-width="2" stroke-dasharray="6,3"></path>
+        <circle fill="#3B82F6" cx="420" cy="350" r="6"></circle>
+        <circle fill="#3B82F6" cx="550" cy="300" r="6"></circle>
+    </g>
+</svg>

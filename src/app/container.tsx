@@ -13,7 +13,7 @@ export default function Container({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
-  const noLayoutRoutes = useMemo(() => ["/login", "/signup", "/terms-and-conditions"], []);
+  const noLayoutRoutes = useMemo(() => ["/login", "/signup", "/terms-and-conditions", "/pos"], []);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { clearOrderNo } = useOrderNo();
   const { resetDiscount} = useDiscountStore();

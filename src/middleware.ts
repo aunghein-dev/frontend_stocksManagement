@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Allow public access only to /login and /signup
-  if (pathname === '/login' || pathname === '/signup' || pathname === '/terms-and-conditions') {
+  if (pathname === '/login' || pathname === '/signup' || pathname === '/terms-and-conditions' || pathname === '/pos') {
     // If logged in, redirect to /dashboard
     if (token) {
       // Corrected: Redirect to home ('/') or a specific dashboard, not just '/'.

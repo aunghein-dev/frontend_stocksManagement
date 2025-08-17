@@ -1,4 +1,4 @@
-<img src="https://github.com/aunghein-dev/frontend_stocksManagement/blob/main/public/applogo.png?raw=true" alt="Openware Logo" width="144" align="right" hspace="0" />
+<img src="https://github.com/aunghein-dev/frontend_stocksManagement/blob/main/public/onlylogo.png?raw=true" alt="Openware Logo" width="111" align="right" hspace="0" />
 
 # Openware
 
