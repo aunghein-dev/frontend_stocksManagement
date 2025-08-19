@@ -8,6 +8,7 @@ import { useModalStore } from "@/store/modalStore";
 import RememberLogin from '@/lib/classes/RememberLogin';
 import Image from 'next/image';
 import { Checkbox } from '@mui/material';
+import BackButton from '../pos/_components/_atoms/BackButton';
 
 // Instantiate RememberLogin outside the component to avoid re-creation on every render
 const rememberLoginInstance = new RememberLogin();
@@ -104,8 +105,9 @@ export default function LoginPage() {
 
   return (
     <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center flex-col'> 
-    
-          
+    <BackButton href="/pos" label="Back to POS" />
+
+
     <div className="flex items-center justify-center p-4 w-full">
       
       <div className="bg-white shadow-lg rounded-lg max-w-md w-full p-8">

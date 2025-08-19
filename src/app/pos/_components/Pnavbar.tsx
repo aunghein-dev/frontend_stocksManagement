@@ -3,6 +3,7 @@ import DesktopMenu from "./_atoms/DesktopMenu";
 import HamburgerSec from "./_atoms/HamburgerSec";
 import MobileMenu from "./_atoms/MobileMenu";
 
+
 interface PnavbarProps {
   handleLinkClick: () => void;
   menuOpen: boolean;

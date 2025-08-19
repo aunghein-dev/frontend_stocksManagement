@@ -1,5 +1,3 @@
-import GetStartedBtn from "../_particles/GetStartedBtn";
-
 interface HamburgerSecProps {
   menuOpen: boolean
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -11,7 +9,7 @@ export default function HamburgerSec(props : HamburgerSecProps) {
 
   return (
      <div className="flex items-center space-x-4">
-      <GetStartedBtn/>
+
       <button
         type="button"
         onClick={() => setMenuOpen(!menuOpen)}
