@@ -24,6 +24,7 @@ import {
   HiCurrencyDollar,
   HiChartBar
 } from "react-icons/hi";
+import { FaUserGroup } from "react-icons/fa6";
 import { AiOutlineClose } from "react-icons/ai";
 import { IconType } from "react-icons";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -41,7 +42,8 @@ const iconMap: { [key: string]: IconType } = {
   settings: HiCog,
   privacyPolicy: HiShieldCheck,
   sales: HiChartBar,
-  procurement: HiTruck
+  procurement: HiTruck,
+  users: FaUserGroup
 };
 
 // Define an enriched NavbarItem type for use within the component
@@ -300,12 +302,12 @@ function SidebarComponent(props: {
               {business?.businessId === 1 ? business?.businessNameShortForm : "Openware"}
             </h1>
             <div
-              className={`absolute top-10 right-2 px-1 py-0.5 bg-blue-100
-                        text-blue-700 border-[0.5px] border-blue-600 rounded-sm text-[0.55rem]
+              className={`absolute top-10 right-2 px-1 py-0.5 bg-red-100
+                        text-red-700 border-[0.5px] border-red-600 rounded-xs text-[0.6rem]
                         cursor-default ${imgLoaded ? "opacity-100" : "opacity-0"}`}
               style={{ willChange: "opacity" }}
             >
-              version 0.2.1
+              version 1.0.0
             </div>
           </div>
         )}

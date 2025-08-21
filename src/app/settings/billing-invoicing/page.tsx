@@ -49,16 +49,15 @@ export default function BillingAndInvocingPage() {
     action: "",
   });
 
+  
   const LOADING = isLoading || isLoadingInvoices;
 
-  const getNewPlanPrice = (code: string) => {
-    console.log("getNewPlanPrice called with code:", code);
-    
-    const newPlan = BillingRule.find((plan) => plan.code === code);
-    return newPlan ? newPlan.price : 0;
-  };
-
-
+  const getNewPlanPrice = useMemo(() => {
+    return (code: string) => {
+      const newPlan = BillingRule.find((plan) => plan.code === code);
+      return newPlan ? newPlan.price : 0;
+    };
+  }, []);
 
   // Memoize getPlanButtonLabel as it depends on planPriority and currentPlanDisplayName
   const getPlanButtonLabel = useCallback((planName: string, currentPlanName: string) => {
@@ -83,7 +82,7 @@ export default function BillingAndInvocingPage() {
 
   const totalPriceNewCost = useMemo(() => {
     return getNewPlanPrice(selectedPlan.code) - remainingCredit
-  },[ selectedPlan.code, remainingCredit]);
+  },[ selectedPlan.code, remainingCredit, getNewPlanPrice]);
 
   
   
@@ -152,7 +151,7 @@ export default function BillingAndInvocingPage() {
 
   // Derive currentPlanDisplayName directly from billing data
   const currentPlanDisplayName = useMemo(() => CodeToText(billing?.currPlanCode), [billing]);
- 
+  
 
   // --- Conditional Rendering for Loading/Error States ---
   if (LOADING) {

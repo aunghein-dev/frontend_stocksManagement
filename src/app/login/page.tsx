@@ -9,6 +9,9 @@ import RememberLogin from '@/lib/classes/RememberLogin';
 import Image from 'next/image';
 import { Checkbox } from '@mui/material';
 import BackButton from '../pos/_components/_atoms/BackButton';
+import useBusiness from '@/lib/stores/useBusiness';
+import useStorage from '@/lib/stores/useStorage';
+import useOp from '@/lib/stores/useOp';
 
 // Instantiate RememberLogin outside the component to avoid re-creation on every render
 const rememberLoginInstance = new RememberLogin();
@@ -17,6 +20,9 @@ export default function LoginPage() {
   const API = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const { openModal, closeModal } = useModalStore();
+  const { setBusiness, clearBusiness } = useBusiness();
+  const {  setStorage, clearStorage } = useStorage();
+  const { clearOp } = useOp();
 
   // Combine username, password, and rememberMe into a single state object
   const [loginForm, setLoginForm] = useState({
@@ -51,6 +57,7 @@ export default function LoginPage() {
     e.preventDefault();
     setErrorMsg('');
     openModal("loading");
+    clearBusiness();
 
     try {
       const response = await axios.post(
@@ -61,8 +68,12 @@ export default function LoginPage() {
           headers: { 'Content-Type': 'application/json' },
         }
       );
-
+     
       if (response.status === 200) {
+        setBusiness(response.data.business || null);
+        storedStorageUsage(response.data.business);
+      
+        clearOp();
         if (loginForm.rememberMe) {
           rememberLoginInstance.setRememberLogin({
             remember: 'true',
@@ -100,6 +111,21 @@ export default function LoginPage() {
       }
     } finally {
       closeModal();
+    }
+  };
+
+  const storedStorageUsage = async (bizId: number) => {
+    clearStorage();
+    try {
+      const response = await axios.get(`${API}/billing/storage/${bizId}`, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const storageUsage = response.data; 
+  
+      setStorage(storageUsage);
+    } catch (error) {
+      console.error('Error fetching storage usage:', error);
     }
   };
 
@@ -216,7 +242,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-semibold rounded-sm py-2 hover:bg-blue-700 focus:outline-none focus:ring-[1.5px] focus:ring-blue-600 transition-colors text-sm sm:text-base duration-300 cursor-pointer"
+            className="w-full bg-blue-600 text-white font-semibold rounded-lg py-3 hover:bg-blue-700 focus:outline-none focus:ring-[1.5px] focus:ring-blue-600 transition-colors text-sm sm:text-base duration-300 cursor-pointer"
           >
             Sign In
           </button>

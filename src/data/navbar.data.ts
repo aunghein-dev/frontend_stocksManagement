@@ -30,9 +30,9 @@ const navbarData: NavbarItem[] = [
       //{ id: 53, key: "suppliers", path: "/inventory/suppliers" }, 
     ],
   },
-
-  { id: 5, key: "settings", path: "/settings" },
-  { id: 6, key: "privacyPolicy", path: "/privacyPolicy" }, 
+  { id: 5, key: "users", path: "/users" },
+  { id: 6, key: "settings", path: "/settings" },
+  { id: 7, key: "privacyPolicy", path: "/privacyPolicy" }, 
 ];
 
 export default navbarData;

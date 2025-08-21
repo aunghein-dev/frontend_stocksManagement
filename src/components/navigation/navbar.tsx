@@ -1,7 +1,6 @@
 // components/Navbar.tsx
 "use client";
 
-import Image from "next/image";
 import dayjs from "dayjs";
 import { IoCartOutline } from "react-icons/io5";
 import { useCartStore } from "@/lib/stores/useCartStore";
@@ -13,6 +12,9 @@ import { useUser } from "@/hooks/useUser";
 import { useModalStore } from "@/store/modalStore";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "@/hooks/useTranslation";
+import NextAvatar from "../ui/NextAvatar";
+import useBusiness from "@/lib/stores/useBusiness";
+import useStorage from "@/lib/stores/useStorage";
 
 export default function Navbar(props: { handleToggle: () => void, handleSidebarOpen: () => void, sidebarOpen: boolean }) {
 
@@ -26,9 +28,10 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
   const { data, isLoading } = useUser();
 
   const itemCount = useCartStore((state) => state.totalQty);
-
+  const { clearBusiness } = useBusiness();
   const { openModal, closeModal } = useModalStore();
   const { t } = useTranslation();
+  const { clearStorage } = useStorage();
 
   useEffect(() => {
     setHasMounted(true);
@@ -45,6 +48,8 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
         withCredentials: true,
         headers: { 'Content-Type': 'application/json' }
       });
+      clearBusiness();
+      clearStorage();
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error('Logout error:', error.message);
@@ -136,16 +141,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
             {isLoading ? (
               <div className="w-11 h-11 rounded-full bg-gray-400 animate-pulse"></div>
             ) : (
-              <Image
-                className="rounded-full object-cover w-11 h-11"
-                height={48}
-                width={48}
-                src={data?.userImgUrl || "/man.png"}
-                alt="user photo"
-                priority
-                unoptimized
-              />
-
+             <NextAvatar url={data?.userImgUrl} />
             )}
           </button>
 
@@ -170,7 +166,7 @@ export default function Navbar(props: { handleToggle: () => void, handleSidebarO
                              text-gray-700 hover:bg-blue-200
                                cursor-pointer w-full text-left transition-all duration-200"
                   >
-                    Billing and invoicing
+                    {t('billAndInvoice')}
                   </button>
                 </li>
                 <li>

@@ -1,25 +1,23 @@
 import useSWR from 'swr';
 import { getter } from '@/lib/getter';
-
 import useBusiness from '@/lib/stores/useBusiness';
 
-export const useInvoice = () => {
+
+export const useTeller = () => {
   const { bizId } = useBusiness();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
-  const shouldFetch = (API && bizId)
-    ? `${API}/admin/invoices/${bizId}`
-    : null;
+  // Only fetch when businessId is available
+  const shouldFetch = bizId ? `${API}/teller/${bizId}` : null;
 
   const { data, error, isLoading, mutate } = useSWR(shouldFetch, getter);
 
-  const refresh = () => mutate(true);
+  const refresh = () => mutate(); // manually trigger refresh
 
   return {
-    invoices: data,
+    tellers: data,
     error,
     isLoading,
     refresh,
   };
 };
-

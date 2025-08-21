@@ -1,13 +1,13 @@
 import useSWR from 'swr';
 import { getter } from '@/lib/getter';
-import { useInfo } from '@/hooks/useInfo';
+import useBusiness from '@/lib/stores/useBusiness';
 
 export const useSupplier = () => {
-  const { business } = useInfo();
+  const { bizId } = useBusiness();
   const API = process.env.NEXT_PUBLIC_API_URL;
 
   // Only fetch when businessId is available
-  const shouldFetch = business?.businessId ? `${API}/supplier/biz/${business.businessId}` : null;
+  const shouldFetch = bizId ? `${API}/supplier/biz/${bizId}` : null;
 
   const { data, error, isLoading, mutate } = useSWR(shouldFetch, getter);
 

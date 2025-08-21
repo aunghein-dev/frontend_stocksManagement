@@ -101,7 +101,7 @@ export default function BillingCard({ plan, className, setSelectedPlan }: Billin
 
       <button
         onClick={()=> handleSelect(plan.code, plan.buttonText)}
-        className={`mt-5 w-full ${buttonClass} py-2 rounded-sm text-sm border-1 border-gray-200 ${currentDisabledButton()}`}
+        className={`mt-5 w-full ${buttonClass} py-2 rounded-lg text-sm border-1 border-gray-200 ${currentDisabledButton()}`}
       >
         {plan.buttonText}
       </button>

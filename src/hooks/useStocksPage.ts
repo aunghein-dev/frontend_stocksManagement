@@ -1,7 +1,7 @@
 // hooks/useStocksPage.ts
 import useSWR from 'swr';
 import { getter } from '@/lib/getter';
-import { useInfo } from '@/hooks/useInfo'; // Assuming this hook provides business info
+import useBusiness from '@/lib/stores/useBusiness';
 
 // Interface for the StkItem within StkGroup
 interface StkItem {
@@ -32,10 +32,10 @@ interface PagedStkGroupResponse {
 }
 
 export const useStocksPage = (page: number, pageSize: number) => {
-  const { business } = useInfo();
+  const { bizId } = useBusiness();
   const API = process.env.NEXT_PUBLIC_API_URL;
   const shouldFetch =
-    business?.businessId ? `${API}/stkG/biz/${business.businessId}/page?page=${page}&size=${pageSize}` : null;
+    bizId ? `${API}/stkG/biz/${bizId}/page?page=${page}&size=${pageSize}` : null;
 
   const { data, error, isLoading, mutate } = useSWR<PagedStkGroupResponse>(shouldFetch, getter);
 

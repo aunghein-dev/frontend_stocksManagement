@@ -49,9 +49,7 @@ export default function BillingChangeConfirm(
   return (
      <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-90">
       <div className="bg-white rounded-lg 
-                      h-[85dvh] 
-                      min-[1270px]:h-[86dvh]
-                      min-[1400px]:h-[74dvh]
+                      h-[90dvh] 
                       shadow-2xl w-[95dvw] max-w-lg 
                       px-4 py-6 space-y-5 animate-fade-in text-gray-700 overflow-y-auto custom-scrollbar">
         <div className="flex flex-col gap-3 min-h-[80px] px-1">
