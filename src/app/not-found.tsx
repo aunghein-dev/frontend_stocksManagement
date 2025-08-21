@@ -28,7 +28,7 @@ export default function NotFound() {
 
   return (
     <section>
-      <div className="min-h-[calc(100dvh-110px)] bg-white w-full rounded-sm flex flex-col items-center justify-center">
+      <div className="min-h-[calc(100dvh-110px)] bg-white w-full rounded-lg flex flex-col items-center justify-center">
         
           {/* Main content container - added flex-col to stack items properly */}
           <div className="transition duration-200 ease-in-out p-1 flex flex-col items-center">
@@ -58,7 +58,7 @@ export default function NotFound() {
                   
                   {/* Added Tailwind classes for button styling */}
                   <Link href="/">
-                      <button className="mt-4 px-6 py-2 
+                      <button className="mt-4 px-6 py-3
                                         bg-blue-600 text-white rounded-sm
                                         hover:bg-blue-700 transition-colors duration-200
                                         text-sm md:text-md cursor-pointer">

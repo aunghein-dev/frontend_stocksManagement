@@ -17,10 +17,8 @@ interface BillingInvoiceProps {
 }
 
 export default function BillingInvoice({ invoice }: BillingInvoiceProps) {
-
-
   const shortId = invoice.tranHistId?.slice(-4) ?? "0000";
-
+  
   return (
     <div className="min-h-[70px] flex justify-between items-center border-b border-gray-200 text-gray-600 gap-1">
       <div className="flex items-center gap-2">
@@ -28,7 +26,7 @@ export default function BillingInvoice({ invoice }: BillingInvoiceProps) {
         <span className="text-[0.82rem] md:text-base font-semibold">INV#{shortId}</span>
       </div>
 
-      <div className="flex items-center text-sm text-gray-500 gap-5 select-none">
+      <div className="flex items-center text-sm text-gray-500 gap-5 select-none px-3">
         <span className="hidden md:block">{dayjs(invoice.expireDate).format("MMM DD YYYY")}</span>
         <span>{invoice.planName}</span>
         <span>MMK {invoice.tranAmt}</span>

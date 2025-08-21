@@ -1,4 +1,5 @@
 {
+  "billAndInvoice": "ဘေလ်ဆောင်ခြင်းများ",
   "greeting": "မင်္ဂလာပါ",
   "welcome": "ဆိုက်သို့ကြိုဆိုပါသည်",
   "selectColor": "ကာလာရွေးရန်",
@@ -17,6 +18,7 @@
   "settings": "ဆက်တင်များ",
   "privacyPolicy": "သတိပေးချက်",
   "inventory": "စာရင်းအင်း",
+  "users": "အကောင့်များ",
   "suppliers": "ရောင်းချသူ",
   "customers": "ဖောက်သည်",
   "sales": "ကုန်ရောင်း",
@@ -54,6 +56,7 @@
   "btnTxt_addManually": "Manual သွင်းမည်",
   "btnTxt_newStk": "စတော့အသစ်",
   "btnTxt_newSale": "အရောင်းအသစ်",
+  "lbl_propics": "ပရိုဖိုင်",
   "lbl_summer": "နွေရာသီ",
   "lbl_rainning": "မိုးရာသီ",
   "lbl_winter": "ဆောင်းရာသီ",

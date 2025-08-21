@@ -1,4 +1,5 @@
 {
+  "billAndInvoice": "Billing and Invoicing",
   "greeting": "Hello",
   "welcome": "Welcome to our site",
   "selectColor": "SELECT",
@@ -18,6 +19,7 @@
   "settings": "Settings",
   "privacyPolicy": "Privacy Policy",
   "inventory": "Inventory",
+  "users": "Tellers",
   "suppliers": "Suppliers",
   "customers": "Customers",
   "sales": "Sales",
@@ -53,6 +55,7 @@
   "btnTxt_addManually": "Add Manually",
   "btnTxt_newStk": "New Stock",
   "btnTxt_newSale": "New Sale",
+  "lbl_propics": "Profile Picture",
   "lbl_summer": "Summer",
   "lbl_rainning": "Rainning",
   "lbl_winter": "Winter",

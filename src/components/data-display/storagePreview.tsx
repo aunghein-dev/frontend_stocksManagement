@@ -1,51 +1,65 @@
+"use client";
+
 import GuageArch from "@/components/data-display/atoms/guage";
 import { useTranslation } from "@/hooks/useTranslation";
-export default function StoragePreview(props: { number: number, storage: number }) {
+import useOp from "@/lib/stores/useOp";
+import useStorage from "@/lib/stores/useStorage";
+import { useEffect, useMemo } from "react";
 
+export default function StoragePreview(props: { number: number; storage: number }) {
+  const { storage } = useStorage(); // { limitStorageKb, limitStorageTxt }
+  const MAX_STORAGE_KB = storage?.limitStorageKb ?? 0;
+  const { t } = useTranslation();
 
-const MAX_STORAGE_GB = 1; // 1 GB
-const MAX_STORAGE_KB = MAX_STORAGE_GB * 1024 * 1024; // Convert 1 GB to KB
-const { t } = useTranslation();
+  // props.storage is MB -> convert to KB
+  const usedKb = useMemo(() => props.storage * 1024, [props.storage]);
 
-// Function to determine the dynamic message based on percentage
-const getStorageMessage = (kbUsed: number) => { // Renamed parameter to kbUsed for clarity
+  // percentage derived from usedKb + MAX_STORAGE_KB
+  const percentage = useMemo(() => {
+    if (!MAX_STORAGE_KB) return 0;
+    const p = (usedKb / MAX_STORAGE_KB) * 100;
+    return Math.max(0, Math.min(100, p)); // clamp
+  }, [usedKb, MAX_STORAGE_KB]);
 
-  // Calculate the percentage of storage used
-  const percentage = (kbUsed / MAX_STORAGE_KB) * 100;
+  // Compute message locally for UI (no need to store it)
+  const message = useMemo(() => {
+    if (!MAX_STORAGE_KB) return "";
+    if (percentage <= 50) return t("msg_stg_available") || "Plenty of space";
+    if (percentage < 80)  return t("msg_stg_moderate")  || "Moderate space";
+    if (percentage < 95)  return t("msg_stg_almostFull")|| "Almost full";
+    return t("msg_stg_full") || "Full";
+  }, [percentage, MAX_STORAGE_KB, t]);
 
-  if (percentage <= 50) {
-    return t("msg_stg_available");
-  } else if (percentage > 50 && percentage < 80) { // Changed >= to > to avoid overlap with previous condition
-    return t("msg_stg_moderate");
-  } else if (percentage >= 80 && percentage < 95) {
-    return t("msg_stg_almostFull");
-  } else { // percentage >= 95
-    return t("msg_stg_full");
-  }
-};
+  const setPercentage = useOp((s) => s.setPercentage);
 
+  useEffect(() => {
+    if (!MAX_STORAGE_KB) return;
+    setPercentage(percentage); // runs only when percentage changes (deps)
+   
+  }, [percentage, MAX_STORAGE_KB, setPercentage]);
 
   return (
-    <div className="w-full p-4 flex flex-col md:flex-row items-center justify-center gap-2 mb-4  pt-20 relative">
-          {/* Gauge Chart */}
-          <div className="flex justify-center items-center w-40 h-40"><GuageArch number={props.number} /></div>
+    <div className="w-full p-4 flex flex-col md:flex-row items-center justify-center gap-2 mb-4 pt-20 relative">
+      <div className="flex justify-center items-center w-40 h-40">
+        <GuageArch number={props.number} />
+      </div>
 
-            {/* Text Details */}
-          <div className="flex flex-col">
-            <div className="w-full max-w-sm p-4 bg-white rounded-sm shadow-sm">
-              <div className="flex flex-wrap items-center mb-2">
-                <p className="text-[0.7rem] font-semibold text-gray-600 mr-1.5">Storage</p>
-                <p className="text-sm font-medium text-gray-800">{Math.floor(props.storage)} MB / {MAX_STORAGE_GB} GB</p>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div className="bg-blue-600 h-3 rounded-full" style={{ width: '20%' }}></div>
-              </div>
-              <p className="text-xs text-gray-500 mt-2">
-                {getStorageMessage((props.storage / MAX_STORAGE_GB) * 100)}
-              </p>
-            </div>
+      <div className="flex flex-col">
+        <div className="w-full max-w-sm p-4 bg-white rounded-sm shadow-sm">
+          <div className="flex flex-wrap items-center mb-2">
+            <p className="text-[0.7rem] font-semibold text-gray-600 mr-1.5">Storage</p>
+            <p className="text-sm font-medium text-gray-800">
+              {Math.floor(props.storage)} MB / {storage?.limitStorageTxt ?? "-"}
+            </p>
           </div>
-           
+
+          <div className="w-full bg-gray-200 rounded-full h-3">
+            <div className="bg-blue-600 h-3 rounded-l-full" style={{ width: `${percentage}%` }} />
+          </div>
+
+          <p className="text-xs text-gray-500 mt-2">{message}</p>
+        </div>
+      </div>
     </div>
-  )
+  );
 }

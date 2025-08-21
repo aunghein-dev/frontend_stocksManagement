@@ -192,7 +192,7 @@ export default function InvoiceDownloaderPage({ params }: InvoicePageProps) {
           </div>
           <div>
             <h3 className="text-xs text-gray-500 mb-1">To</h3>
-            <p className="font-medium text-gray-900">rounded-smoup</p>
+            <p className="font-medium text-gray-900">OPENWARE.</p>
             <p className="text-gray-700">{invoice.tranProvider}</p>
             <p className="text-gray-700">{invoice.tranHistId}</p>
           </div>
@@ -247,7 +247,7 @@ export default function InvoiceDownloaderPage({ params }: InvoicePageProps) {
         </div>
 
         <div className="flex justify-center">
-          <p className="text-[0.80rem] text-gray-500 mb-4 px-2">Please make all checks payable to rounded-smoup. Thank you for your business!</p>
+          <p className="text-[0.80rem] text-gray-500 mb-4 px-2">Please make all checks payable to OPENWARE. Thank you for your business!</p>
         </div>
       </div>
     </div>
