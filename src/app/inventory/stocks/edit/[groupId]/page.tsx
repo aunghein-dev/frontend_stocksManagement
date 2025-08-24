@@ -517,7 +517,9 @@ export default function StockEditForm() {
           <button
               onClick={() => router.back()}
               type="button"
-              className="flex items-center text-sm border-[0.5px] rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200"
+              className="flex items-center text-sm border-[1px]
+                        rounded-sm px-2 py-1.5 space-x-2 text-blue-600 bg-blue-100
+                        hover:bg-blue-200 cursor-pointer transition duration-150"
             >
               <svg
                 className="w-4 h-4 text-blue-600"
@@ -604,19 +606,13 @@ export default function StockEditForm() {
         </div>
 
         {/* Color Variants */}
-        <div>
+        <div >
           <div className="flex justify-between items-center mb-1.5 mt-4">
             <h3 className="text-sm font-semibold text-gray-800">{t("lbl_colorvarients")}</h3>
-            <button
-              type="button"
-              onClick={addItem}
-              className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              {t("btnTxt_addvarient")}
-            </button>
+           
           </div>
 
-          <div className="space-y-2 p-2 rounded-sm border-[0.5px] border-gray-300 min-h-[78px]">
+          <div className="space-y-2 p-2 rounded-sm border-[0.5px] border-gray-300">
             {form.items.length > 0 ? (
               form.items.map((item, index) => (
                 <div
@@ -624,7 +620,7 @@ export default function StockEditForm() {
                   className="flex flex-col md:flex-row justify-between border-[0.5px]
                            border-gray-300 p-2 rounded-sm shadow-xs text-sm items-center gap-2"
                 >
-                  <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+                  <div className="flex flex-row sm:flex-row items-center gap-4 w-full">
                     {/* Item Image Upload with ImageUploadComponent */}
                     <div className="flex-grow">
                         <ImageUploadComponent
@@ -726,11 +722,18 @@ export default function StockEditForm() {
         </div>
 
         {/* Submit Button */}
-        <div className="pt-4 flex justify-end">
+        <div className="flex items-center justify-between gap-x-3 pt-4">
+           <button
+              type="button"
+              onClick={addItem}
+              className="flex items-center text-sm border-[1px] rounded-sm space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200 cursor-pointer transition duration-150 px-2 py-2"
+            >
+              {t("btnTxt_addvarient")}
+            </button>
           <button
             type="submit"
             disabled={submittingForm || isBusinessInfoLoading || !!fetchError || !!businessInfoError}
-            className={`px-4 py-2 text-sm rounded-sm ${
+            className={`px-3 py-2 text-sm rounded-sm ${
               (submittingForm || isBusinessInfoLoading || !!fetchError || !!businessInfoError)
                 ? "bg-gray-400 text-white cursor-not-allowed"
                 : "bg-blue-600 text-white hover:bg-blue-700"

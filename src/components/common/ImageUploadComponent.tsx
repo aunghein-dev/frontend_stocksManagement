@@ -128,7 +128,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
         {/* File Input and Button */}
         <label
           htmlFor={id}
-          className="cursor-pointer inline-flex items-center px-4 py-2 mt-2 border border-blue-600 rounded-sm shadow-sm text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-200 focus:outline-none focus:ring-[1.5px] focus:ring-blue-600 focus:ring-offset-2"
+          className="cursor-pointer inline-flex items-center px-2 py-2 mt-2 border border-blue-600 rounded-sm shadow-sm text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-200 focus:outline-none focus:ring-[1.5px] focus:ring-blue-600 focus:ring-offset-2"
         >
           <PhotoIcon className="w-4 h-4 mr-2" /> {t("lbl_selectImg")}
           <input

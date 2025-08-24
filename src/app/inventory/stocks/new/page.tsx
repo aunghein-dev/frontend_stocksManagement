@@ -248,8 +248,8 @@ export default function StockEntryForm() {
   const handleGroupImageSelected = useCallback((file: File | null) => {
     setGroupImageError(null);
     if (file) {
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit
-        setGroupImageError("Group image must be less than 10MB.");
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        setGroupImageError("Group image must be less than 5MB.");
         setSelectedGroupFile(null);
         setForm(prev => ({ ...prev, groupImage: null }));
         return;
@@ -531,8 +531,8 @@ export default function StockEntryForm() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex items-center text-sm border-[0.5px]
-                        rounded-sm px-2 py-1 space-x-2 text-blue-600 bg-blue-100
+              className="flex items-center text-sm border-[1px]
+                        rounded-sm px-2 py-1.5 space-x-2 text-blue-600 bg-blue-100
                         hover:bg-blue-200 cursor-pointer transition duration-150"
             >
               <svg
@@ -635,21 +635,7 @@ export default function StockEntryForm() {
                   e.target.value = "";
                 }}
               />
-              <button
-                type="button"
-                onClick={() => multipleUploadInputRef.current?.click()}
-                className="flex items-center text-sm border-[0.5px] rounded-sm space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200 cursor-pointer transition duration-150 px-4 py-2"
-              >
-                {t("btnTxt_addMultipleVariants")}
-              </button>
-
-              <button
-                type="button"
-                onClick={addItem}
-                className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                {t("btnTxt_addvarient")}
-              </button>
+              
             </div>
           </div>
 
@@ -675,14 +661,16 @@ export default function StockEntryForm() {
 
                     {/* Color, Quantity, and Barcode */}
                     <div className="flex flex-col gap-2 mt-2 sm:mt-0 flex-grow">
-                      <div className="max-w-[150px]">
-                        <label htmlFor={`itemColor-${item.tempId}`} className="block font-medium text-gray-700 mb-1">Color (Detected)</label>
+                      
+                        <label htmlFor={`itemColor-${item.tempId}`} 
+                               className="block font-medium text-gray-700 mb-1">Color (Detected)</label>
                         <input
                           id={`itemColor-${item.tempId}`}
                           type="color"
                           value={item.itemColorHex}
                           onChange={(e) => updateItem(index, "itemColorHex", e.target.value)}
-                          className="w-full h-10 border-[0.5px] border-gray-200 rounded-sm cursor-pointer"
+                          className="w-[80px] h-10 border-[0.5px] border-gray-200 
+                                     rounded-sm cursor-pointer"
                           title="Click to manually choose color"
                         />
                         {/* Display Detected Palette */}
@@ -703,9 +691,10 @@ export default function StockEntryForm() {
                             </div>
                           </div>
                         )}
-                      </div>
+
                       <div>
-                        <label htmlFor={`itemQuantity-${item.tempId}`} className="block font-medium text-gray-700 mb-1">Quantity</label>
+                        <label htmlFor={`itemQuantity-${item.tempId}`} 
+                               className="block font-medium text-gray-700 mb-1">Quantity</label>
                         <input
                           id={`itemQuantity-${item.tempId}`}
                           required
@@ -717,7 +706,9 @@ export default function StockEntryForm() {
                             const onlyDigits = e.target.value.replace(/\D/g, "");
                             updateItem(index, "itemQuantity", onlyDigits === "" ? 0 : parseInt(onlyDigits));
                           }}
-                          className="w-20 rounded-sm border-gray-300 focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px]"
+                          className="max-w-[80px] rounded-sm border-gray-300
+                                   focus:ring-blue-600 focus:border-blue-600 
+                                   py-2 px-3 border-[0.5px]"
                         />
                       </div>
                       {/* --- NEW: Barcode Input Field --- */}
@@ -737,7 +728,9 @@ export default function StockEntryForm() {
                   </div>
 
                   {/* Remove Button */}
-                  <div className="w-full flex justify-end md:w-auto md:ml-auto mt-2 md:mt-0">
+                  <div className="w-full flex justify-end 
+                                  md:w-auto md:ml-auto mt-2
+                                  md:mt-0">
                     <button
                       type="button"
                       onClick={() =>
@@ -746,7 +739,10 @@ export default function StockEntryForm() {
                           items: prev.items.filter((_, i) => i !== index),
                         }))
                       }
-                      className="text-red-500 hover:bg-red-100 rounded-full h-8 w-8 flex items-center justify-center text-semibold flex-shrink-0"
+                      className="text-red-500 hover:bg-red-200 
+                                  rounded-full h-8 w-8 flex items-center 
+                                  justify-center text-semibold flex-shrink-0
+                                  transition-colors duration-200 cursor-pointer"
                       title="Remove variant"
                     >
                       <XMarkIcon className="w-5 h-5" />
@@ -761,14 +757,33 @@ export default function StockEntryForm() {
         </div>
 
         {/* Submit Button and Loading Spinner */}
-        <div className="flex items-center justify-end gap-x-3 pt-4">
+        <div className="flex items-center justify-between gap-x-3 pt-4">
+          <div className="flex items-center gap-x-2">
+            <button
+              type="button"
+              onClick={() => multipleUploadInputRef.current?.click()}
+              className="flex items-center text-sm border-[1px] rounded-sm space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200 cursor-pointer transition duration-150 px-2 py-2"
+            >
+              {t("btnTxt_addMultipleVariants")}
+            </button>
+
+            <button
+              type="button"
+              onClick={addItem}
+              className="text-sm px-2 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              {t("btnTxt_addvarient")}
+            </button>
+          </div>
+          
+
           {submitting && (
             <div className="w-7 h-7 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
           )}
           <button
             type="submit"
             disabled={submitting || isBusinessInfoLoading || !!businessInfoError}
-            className={`py-2 px-4 rounded-sm text-sm text-white ${
+            className={`py-2 px-3 rounded-sm text-sm text-white ${
               (submitting || isBusinessInfoLoading || !!businessInfoError)
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700"

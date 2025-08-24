@@ -218,12 +218,20 @@
     "noCusFound": "No customers found",
     "msg_wrong": "Something went wrong. Please try again.",
     "msg_CusAdded": "Customer added successfully",
-
     "hd_passwordSettings": "Password Settings",
     "msg_passwordInstruction": "For security, please use strong passwords and confirm your changes.",
     "ph_newPassword": "New Password",
     "ph_confirmPassword": "Confirm Password",
     "btn_resetPassword": "Reset Password",
     "btn_updating": "Updating...",
-    "msg_passwordChanged": "Password updated successfully!"
+    "msg_passwordChanged": "Password updated successfully!",
+    "lbl_device": "Device",
+    "lbl_deviceType": "Device Type",
+    "lbl_city": "City",
+    "lbl_region": "Region",
+    "lbl_ipAdd": "IP Address",
+    "lbl_status": "Status",
+    "lbl_loginAt": "Login At",
+    "lbl_logoutAt": "Logout At",
+    "lbl_updateAt": "Updated At"
 }

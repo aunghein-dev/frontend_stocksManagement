@@ -219,12 +219,20 @@
   "noCusFound": "ဖောက်သည်မရှိပါ",
   "msg_wrong": "အင်တာနက်လိုင်း တခုခုမှားယွင်းနေပါသည်။",
   "msg_CusAdded": "စာရင်းသွင်းခြင်းအောင်မြင်ပါသည်",
-
-  "hd_passwordSettings": "Password Settings",
-  "msg_passwordInstruction": "For security, please use strong passwords and confirm your changes.",
-  "ph_newPassword": "New Password",
-  "ph_confirmPassword": "Confirm Password",
-  "btn_resetPassword": "Reset Password",
-  "btn_updating": "Updating...",
-  "msg_passwordChanged": "Password updated successfully!"
+  "hd_passwordSettings": "လျှို့ဝှက်စကားဝှက် ဆက်တင်များ",
+  "msg_passwordInstruction": "လုံခြုံရေးအတွက် အားကြီးသော စကားဝှက်များကို အသုံးပြုပြီး ပြောင်းလဲမှုများကို အတည်ပြုပါ။",
+  "ph_newPassword": "လျှို့ဝှက်စကားဝှက်အသစ်",
+  "ph_confirmPassword": "လျှို့ဝှက်စကားဝှက် အတည်ပြုရန်",
+  "btn_resetPassword": "လျှို့ဝှက်စကားဝှက်ပြန်လည်သတ်မှတ်ရန်",
+  "btn_updating": "နောက်ပြန်ပြင်နေသည်...",
+  "msg_passwordChanged": "လျှို့ဝှက်စကားဝှက်ကို အောင်မြင်စွာ ပြောင်းပြီးပါပြီ!",
+  "lbl_device": "စက်",
+  "lbl_deviceType": "စက်အမျိုးအစား",
+  "lbl_city": "မြို့",
+  "lbl_region": "တိုင်းဒေသကြီး/ပြည်နယ်",
+  "lbl_ipAdd": "IP လိပ်စာ",
+  "lbl_status": "အခြေအနေ",
+  "lbl_loginAt": "လော့ဂ်အင်ချိန်",
+  "lbl_logoutAt": "လော့ဂ်အောက်ချိန်",
+  "lbl_updateAt": "နောက်ဆုံးပြင်ဆင်ချိန်"
 }
