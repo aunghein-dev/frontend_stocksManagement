@@ -27,7 +27,7 @@ export default function Stocks() {
     } else {
       timer = setTimeout(() => {
         closeModal();
-      }, 100);
+      }, 1);
     }
 
     return () => {

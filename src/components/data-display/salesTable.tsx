@@ -306,7 +306,7 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: unknown;
       {/* Plus button for sales table, if applicable, otherwise remove */}
     <Link
         href="/"
-        className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-sm border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md"
+        className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-xl border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md"
       >
         + {t("btnTxt_newSale")}
     </Link>

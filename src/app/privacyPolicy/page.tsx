@@ -8,12 +8,8 @@ import { useModalStore } from "@/store/modalStore";
 const PrivacyPolicy: React.FC = () => {
 
   const [contentHtml, setContentHtml] = useState('');
-
-
   const { openModal, closeModal } = useModalStore(); 
     
-  
-
   useEffect(() => {
       const fetchMarkdown = async () => {
       openModal("loading");

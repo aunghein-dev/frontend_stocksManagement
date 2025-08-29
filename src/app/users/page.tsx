@@ -1,5 +1,6 @@
 "use client";
 
+import { useBilling } from '@/hooks/useBilling';
 import { useTeller } from '@/hooks/useTeller';
 import { useModalStore } from '@/store/modalStore';
 import dynamic from 'next/dynamic';
@@ -10,18 +11,20 @@ const UserTable = dynamic(() =>
   {
     ssr: false,  
 });
-const FETCH_MODAL_DELAY = 100;
+const FETCH_MODAL_DELAY = 1;
 
 export default function Users(){
 
-  const { tellers, isLoading, error, refresh } = useTeller();
-  const { openModal, closeModal } = useModalStore();
-  
+    const { tellers, isLoading, error, refresh } = useTeller();
+    const { openModal, closeModal } = useModalStore();
+    const { billing, isLoading: isLoadingBilling } = useBilling();  
+    const LOADING = isLoading || isLoadingBilling;
+
     // --- Unified Modal Control ---
     useEffect(() => {
       let timer: NodeJS.Timeout | null = null;
   
-      if (isLoading) {
+      if (LOADING) {
         // Open the loading modal when data fetching starts
         // You can pass a message if  LoadingModal supports it,
         // otherwise, it will just show its default loading state.
@@ -41,14 +44,16 @@ export default function Users(){
           clearTimeout(timer);
         }
       };
-    }, [isLoading, openModal, closeModal]); // Dependencies for the effect
+    }, [LOADING, openModal, closeModal]); // Dependencies for the effect
 
   return (
     <UserTable 
       users={tellers ?? []} 
-      isLoading={isLoading}
+      isLoading={LOADING}
       error={error}      
       refresh={refresh}  
+      expiredDate={billing?.currExpireDate ?? ""}
+      planCode={billing?.currPlanCode ?? ""}
     />
   )
 }

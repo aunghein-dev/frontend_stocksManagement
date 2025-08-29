@@ -68,7 +68,7 @@ const LineChart = dynamic(() => import('@/components/data-display/atoms/chart'),
 
 // --- Constants ---
 const MAX_RADAR_ITEMS = 6;
-const FETCH_MODAL_DELAY = 100; // Small delay to prevent modal flickering on very fast fetches
+const FETCH_MODAL_DELAY = 1; // Small delay to prevent modal flickering on very fast fetches
 
 export default function Dashboard() {
   const API = process.env.NEXT_PUBLIC_API_URL;

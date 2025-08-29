@@ -8,7 +8,7 @@ import PageLost404 from "@/components/error/pageLost404";
 import { useTranslation } from "@/hooks/useTranslation";
 
 // Constants for modal messages and delay
-const FETCH_MODAL_DELAY = 100; // Small delay to prevent modal flickering on very fast fetches
+const FETCH_MODAL_DELAY = 1; // Small delay to prevent modal flickering on very fast fetches
 
 // Dynamic import for SalesTable
 const SalesTable = dynamic(() => import('@/components/data-display/salesTable'), {

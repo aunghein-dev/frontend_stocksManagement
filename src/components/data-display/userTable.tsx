@@ -7,6 +7,7 @@ import Link from 'next/link';
 import DataTable from '@/components/data-display/table/DataTable';
 import { useTranslation } from '@/hooks/useTranslation';
 import NextAvatar from '../ui/NextAvatar';
+import { checkAvailableToCreate } from '../utils/checkBilling';
 
 interface User {
   id: number;
@@ -71,6 +72,8 @@ type UserTableProps = {
   users: User[];
   isLoading: boolean;
   error: unknown;
+  expiredDate: string;
+  planCode: string;
   refresh: () => void;
 };
 
@@ -96,7 +99,7 @@ const fmtDateTime = (iso?: string | null) => {
 };
 
 
-const UserTable: React.FC<UserTableProps> = ({ users, isLoading, error }) => {
+const UserTable: React.FC<UserTableProps> = ({ users, isLoading, error, expiredDate, planCode }) => {
   const { t } = useTranslation();
 
   const columns: GridColDef<FlattenedUserRow>[] = React.useMemo(
@@ -210,7 +213,15 @@ const UserTable: React.FC<UserTableProps> = ({ users, isLoading, error }) => {
       filterField="fullName"
       searchTextLabel={t('search_users_placeholder') ?? 'Search by name...'}
       rowHeight={72}
-    />
+    > 
+    {
+      checkAvailableToCreate(users.length, expiredDate, planCode) &&
+      <button
+        className="absolute bottom-20 right-5 bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2.5 flex justify-center items-center rounded-xl border-[0.5px] border-blue-600 ease-in-out duration-300 text-md font-semibold z-50 hover:scale-105 cursor-pointer flex-row shadow-sm hover:shadow-md">
+        + {t("lbl_newTeller")}
+      </button>
+      }
+    </DataTable>
   );
 };
 
