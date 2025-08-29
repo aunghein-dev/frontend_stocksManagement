@@ -18,7 +18,7 @@ import DataTable from '@/components/data-display/table/DataTable'; // <--- Impor
 import { useTranslation } from '@/hooks/useTranslation';
 // Type for the flattened Sales data
 interface FlattenedSalesRow {
-  id: number; // tranID
+  id: number;
   batchId: string;
   time: string;
   tranDate: string;
@@ -31,12 +31,16 @@ interface FlattenedSalesRow {
   tranUserEmail: string;
   bizId: number;
   barcodeNo: string;
+  groupOriginalPrice: number;
+  subOriginal: number;
+  profit: number; 
 }
+
 
 // Data Mapper for Sales
 const flattenSales = (sales: Sales[]) => {
   return sales.map((sale) => ({
-    id: sale.tranID,
+    id: sale.tranId,
     batchId: sale.batchId ? `#${sale.batchId.toLocaleUpperCase().substring(0, 8)}` : 'N/A',
 time: sale.tranDate ? dayjs(sale.tranDate).format('hh:mm:ss A') : 'Invalid Time',
     tranDate: dayjs(sale.tranDate).format('DD-MMM-YYYY'),
@@ -48,7 +52,10 @@ time: sale.tranDate ? dayjs(sale.tranDate).format('hh:mm:ss A') : 'Invalid Time'
     subCheckout: sale.subCheckout,
     tranUserEmail: sale.tranUserEmail,
     bizId: sale.bizId,
-    barcodeNo: sale.barcodeNo
+    barcodeNo: sale.barcodeNo,
+    groupOriginalPrice: sale.groupOriginalPrice,
+    subOriginal: sale.subOriginal,
+    profit: sale.subCheckout - sale.subOriginal,
   }));
 };
 
@@ -146,9 +153,26 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: unknown;
         </div>
       )
     },
+     {
+      field: 'groupOriginalPrice',
+      headerName: t("lbl_originalPrice"),
+      type: 'number',
+      width: 100,
+      align: 'left',
+      headerAlign: 'left',
+    },
+   
     {
       field: 'itemUnitPrice',
       headerName: t("tb_price"),
+      type: 'number',
+      width: 100,
+      align: 'left',
+      headerAlign: 'left',
+    },
+      {
+      field: 'subOriginal',
+      headerName: t("lbl_subOriginal"),
       type: 'number',
       width: 100,
       align: 'left',
@@ -171,7 +195,24 @@ const SalesTable: React.FC<{ sales: Sales[]; isLoading: boolean; error: unknown;
                     </div>
                   ),
     },
-  
+    {
+      field: 'profit',
+      headerName: t("lbl_profit"), // add translation key in i18n
+      width: 120,
+      align: 'left',
+      headerAlign: 'left',
+      renderCell: (params: GridRenderCellParams<FlattenedSalesRow>) => (
+        <div
+          className={`${
+            params.row.profit >= 0
+              ? "text-green-700 bg-green-100 border-green-500"
+              : "text-red-700 bg-red-100 border-red-500"
+          } font-semibold text-sm rounded-sm px-2 py-1 border-[0.5px]`}
+        >
+          {formatMoney(params.row.profit)}
+        </div>
+      ),
+    },
     {
       field: 'tranUserEmail',
       headerName: t("tb_teller"),

@@ -5,12 +5,14 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import axios from 'axios';
 import StoragePreview from "@/components/data-display/storagePreview";
 import { FaDollarSign, FaChartLine, FaShoppingCart, FaBoxOpen } from 'react-icons/fa';
+import { FaCoins } from "react-icons/fa";
 import MiniDataCard from "@/components/data-display/atoms/miniDataCard";
 import { useInfo } from "@/hooks/useInfo";
 import { useModalStore } from "@/store/modalStore";
 import Link from 'next/link';
 import { useTranslation } from "@/hooks/useTranslation";
 import PageLost404 from '@/components/error/pageLost404';
+import useStorage from '@/lib/stores/useStorage';
 
 // --- Type Definitions ---
 type PieChartData = {
@@ -51,6 +53,7 @@ type MiniCardDataType = {
   growth: number;
   orders: string;
   products: string;
+  profit: number;
 }
 
 type Storage = {
@@ -69,7 +72,8 @@ const FETCH_MODAL_DELAY = 100; // Small delay to prevent modal flickering on ver
 
 export default function Dashboard() {
   const API = process.env.NEXT_PUBLIC_API_URL;
-
+  const { storage } = useStorage(); // { limitStorageKb, limitStorageTxt }
+  
   // --- State for Dashboard Data ---
   const [dashboardData, setDashboardData] = useState<{
     barset: { series: BarsetSeriesItem[]; data: BarsetMonthlyData[] } | null;
@@ -202,7 +206,7 @@ export default function Dashboard() {
         pie: formattedPie,
         line: formattedLine,
       });
-
+      
     } catch (err: unknown) {
       console.error("Error loading dashboard data:", err);
 
@@ -324,6 +328,7 @@ export default function Dashboard() {
             {dashboardData.minicard ? (
               <>
                 <MiniDataCard title={t("dash_revenue")} value={`${dashboardData.minicard.revenue?.toLocaleString() ?? '0'}`} icon={<FaDollarSign />} />
+                <MiniDataCard title={t("lbl_profit")} value={`${dashboardData.minicard.profit?.toLocaleString() ?? '0'}`} icon={<FaCoins />} />
                 <MiniDataCard title={t("dash_growth")} value={`${dashboardData.minicard.growth ?? 0}%`} icon={<FaChartLine />} />
                 <MiniDataCard title={t("dash_orders")} value={dashboardData.minicard.orders ?? 0} icon={<FaShoppingCart />} />
                 <MiniDataCard title={t("dash_products")} value={dashboardData.minicard.products ?? 0} icon={<FaBoxOpen />} />
@@ -383,9 +388,8 @@ export default function Dashboard() {
                   <div className='w-full'>
                     <StoragePreview
                       number={Math.ceil(dashboardData.storage.usagePercentage ?? 0)}
-                      storage={parseFloat((((dashboardData.storage.usagePercentage ?? 0) / 100) * 1024).toFixed(2))}
+                      storage={Math.ceil((storage?.limitStorageKb ?? 0) / 1024 * (dashboardData.storage.usagePercentage ?? 0) / 100)} // proper MB
                     />
-                  
                     <Link href='/'
                         className='text-green-500 absolute right-2.5 top-2
                                   text-xs cursor-pointer hover:underline decoration-2

@@ -2,7 +2,7 @@
 
 // types/Sales.ts or @/types/sales.ts
 export type Sales = {
-  tranID: string;
+  tranId: number;
   batchId: string;
   tranDate: string;
   stkGroupId: string;
@@ -14,4 +14,6 @@ export type Sales = {
   tranUserEmail: string;
   bizId: string;
   barcodeNo: string;
+  groupOriginalPrice: number;
+  subOriginal: number;
 };

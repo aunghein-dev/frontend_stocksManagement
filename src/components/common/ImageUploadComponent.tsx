@@ -13,6 +13,7 @@ interface ImageUploadProps {
   error?: string | null;
   className?: string; // Optional for external styling
   priority?: boolean; 
+  disabled?: boolean;
 }
 
 const ImageUploadComponent: React.FC<ImageUploadProps> = ({
@@ -24,6 +25,7 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
   error = null,
   className = "",
   priority = false,
+  disabled = false
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -111,8 +113,11 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
             {/* Remove Button for Image */}
              <button
                 type="button"
+                disabled={isLoading}
                 onClick={handleRemoveImage}
-                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs opacity-80 hover:opacity-100 transition-opacity flex items-center justify-center"
+                className="absolute top-1 right-1 bg-red-500 text-white 
+                          rounded-full p-1 text-xs opacity-80 hover:opacity-100 
+                          transition-opacity flex items-center justify-center"
                 title="Remove image"
             >
                 <TrashIcon className="w-4 h-4" />
@@ -128,7 +133,14 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
         {/* File Input and Button */}
         <label
           htmlFor={id}
-          className="cursor-pointer inline-flex items-center px-2 py-2 mt-2 border border-blue-600 rounded-sm shadow-sm text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-200 focus:outline-none focus:ring-[1.5px] focus:ring-blue-600 focus:ring-offset-2"
+          aria-disabled={disabled}
+          onClick={(e) => disabled && e.preventDefault()} 
+          className={`cursor-pointer inline-flex items-center px-2 py-2 mt-2 border 
+                      border-blue-600 rounded-sm shadow-sm text-sm font-semibold text-blue-700 
+                      bg-blue-50 hover:bg-blue-200 focus:outline-none focus:ring-[1.5px] 
+                      focus:ring-blue-600 focus:ring-offset-2
+                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-50
+                      ${disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
         >
           <PhotoIcon className="w-4 h-4 mr-2" /> {t("lbl_selectImg")}
           <input
@@ -137,10 +149,11 @@ const ImageUploadComponent: React.FC<ImageUploadProps> = ({
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="sr-only" // Hidden visually, but accessible
-            disabled={isLoading} // Disable input when loading
+            className="sr-only"
+            disabled={disabled || isLoading}
           />
         </label>
+
         {/* File Type and Size Hint */}
         <p className="mt-2 text-[0.68rem] text-gray-500 hidden sm:block">PNG, JPG, JPEG, GIF up to 10MB</p>
         {/* Error Message */}

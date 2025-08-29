@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, memo, useState, useEffect } from "react";
-import navbarData, { NavbarItem } from "@/data/navbar.data"; // Import NavbarItem type
+import navbarData, { NavbarItem } from "@/data/navbar.data";
 import { useInfo } from "@/hooks/useInfo";
 import { useTranslation } from "@/hooks/useTranslation";
 import {
@@ -234,7 +234,8 @@ function SidebarComponent(props: {
   return (
     <aside
       className={`
-        fixed top-0 left-0 w-[200px] sm:w-[200px] bg-white shadow-lg border-r-[0.5px] border-gray-200
+        fixed top-0 left-0 w-[200px] sm:w-[200px] bg-white shadow-lg 
+        border-r-[0.5px] border-gray-200
         flex flex-col justify-between rounded-r-lg
         transition-opacity duration-100 ease-in-out 
         ${
@@ -307,7 +308,7 @@ function SidebarComponent(props: {
                         cursor-default ${imgLoaded ? "opacity-100" : "opacity-0"}`}
               style={{ willChange: "opacity" }}
             >
-              version 1.0.0
+              version 1.1
             </div>
           </div>
         )}
@@ -323,7 +324,7 @@ function SidebarComponent(props: {
         </ul>
       </nav>
 
-      <div className="flex items-center justify-left px-4.5 mb-2 md:hidden">
+      <div className="flex items-center justify-left px-4.5 my-2 md:hidden">
         <LanguageSwitcher />
       </div>
       <footer className="px-4 py-6 text-center text-xs border-t border-gray-100 text-gray-500">

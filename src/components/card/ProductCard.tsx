@@ -10,7 +10,7 @@ import formatMoney from "@/components/utils/formatMoney";
 import dayjs from "dayjs";
 import { useTranslation } from "@/hooks/useTranslation";
 import ProductCardFooter from "./molecules/ProductCardFooter";
-
+import ProductCardFooterColorless from "./molecules/ProductCardFooterColorless";
 
 
 export default function ProductCard(props: Stock) {
@@ -101,11 +101,12 @@ export default function ProductCard(props: Stock) {
 
     const cartItem = {
       itemId: selectedItem.itemId,
-      itemImage: selectedItem.itemImage,
+      itemImage: props.isColorless? props.groupImage : selectedItem.itemImage,
       colorHex: selectedItem.itemColorHex,
       unitPrice: props.groupUnitPrice,
       boughtQty: 1,
-      barcodeNo: selectedItem.barcodeNo
+      barcodeNo: selectedItem.barcodeNo,
+      isColorless: props.isColorless
     };
 
     addItem(props.groupId, props.groupName, cartItem);
@@ -241,18 +242,32 @@ export default function ProductCard(props: Stock) {
         </div>
 
         {/* Reduced button padding */}
-        <ProductCardFooter  
-          items={props.items}
-          isAddToCartDisabled={isAddToCartDisabled}
-          isColorSelected={isColorSelected}
-          clearColor={clearColor}
-          handleAddToCart={handleAddToCart}
-          buttonText={buttonText}
-          t={t}
-          colorSet={colorSet}
-          selectedColor={selectedColor}
-          setSelectedColor={setSelectedColor}
-        />
+        {
+          props.isColorless
+          ? (
+            <ProductCardFooterColorless
+              items={props.items}
+              handleAddToCart={handleAddToCart}
+              buttonText={buttonText}
+              setSelectedColor={setSelectedColor}
+              t={t}
+            />
+            )
+            : (
+              <ProductCardFooter  
+                items={props.items}
+                isAddToCartDisabled={isAddToCartDisabled}
+                isColorSelected={isColorSelected}
+                clearColor={clearColor}
+                handleAddToCart={handleAddToCart}
+                buttonText={buttonText}
+                t={t}
+                colorSet={colorSet}
+                selectedColor={selectedColor}
+                setSelectedColor={setSelectedColor}
+              />
+              )
+            }
       </div>
     </div>
   );

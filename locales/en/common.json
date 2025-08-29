@@ -233,5 +233,14 @@
     "lbl_status": "Status",
     "lbl_loginAt": "Login At",
     "lbl_logoutAt": "Logout At",
-    "lbl_updateAt": "Updated At"
+    "lbl_updateAt": "Updated At",
+    "lbl_isColorless": "Is colorless stock?",
+    "msg_noChanges": "No changes detected",
+    "tb_isColorless": "Colorless",
+    "lbl_yescolorless": "Colorless",
+    "lbl_nocolorless": "Non-colorless",
+    "lbl_originalPrice": "Original Price",
+    "lbl_originalPriceInput": "Enter original price",
+    "lbl_subOriginal": "Sub Original",
+    "lbl_profit": "Profit"
 }

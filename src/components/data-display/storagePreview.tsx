@@ -18,7 +18,7 @@ export default function StoragePreview(props: { number: number; storage: number 
   const percentage = useMemo(() => {
     if (!MAX_STORAGE_KB) return 0;
     const p = (usedKb / MAX_STORAGE_KB) * 100;
-    return Math.max(0, Math.min(100, p)); // clamp
+    return Math.max(0, Math.min(100, p)); // clamp to 0–100
   }, [usedKb, MAX_STORAGE_KB]);
 
   // Compute message locally for UI (no need to store it)
@@ -34,8 +34,7 @@ export default function StoragePreview(props: { number: number; storage: number 
 
   useEffect(() => {
     if (!MAX_STORAGE_KB) return;
-    setPercentage(percentage); // runs only when percentage changes (deps)
-   
+    setPercentage(percentage); // update whenever percentage changes
   }, [percentage, MAX_STORAGE_KB, setPercentage]);
 
   return (
@@ -54,7 +53,10 @@ export default function StoragePreview(props: { number: number; storage: number 
           </div>
 
           <div className="w-full bg-gray-200 rounded-full h-3">
-            <div className="bg-blue-600 h-3 rounded-l-full" style={{ width: `${percentage}%` }} />
+            <div
+              className="bg-blue-600 h-3 rounded-l-full"
+              style={{ width: `${percentage}%` }}
+            />
           </div>
 
           <p className="text-xs text-gray-500 mt-2">{message}</p>

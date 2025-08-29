@@ -68,10 +68,14 @@ export default function CartItemDisplay({
           <span className="text-xs text-gray-600 font-medium sm:text-sm">
             {item.itemId}
           </span>
-          <div
-            className="w-6 h-6 rounded-full border-[1px] border-gray-400"
-            style={{ backgroundColor: item.colorHex }}
-          />
+          {
+            !item.isColorless && 
+            <div
+              className="w-6 h-6 rounded-full border-[1px] border-gray-400"
+              style={{ backgroundColor: item.colorHex }}
+            />
+          }
+         
         </div>
 
         <Image

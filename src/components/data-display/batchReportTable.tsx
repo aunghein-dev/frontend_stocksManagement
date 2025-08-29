@@ -19,6 +19,7 @@ export interface Reports {
   tranDate: string; // Changed to string for dayjs to parse
   tranUserEmail: string;
   bizId: number;
+  profit: number;
 }
 
 // Type for the flattened BatchReport data
@@ -32,6 +33,7 @@ interface FlattenedBatchReportRow {
   tranDate: string;
   tranUserEmail: string;
   bizId: number;
+  profit: number;
 }
 
 // Data Mapper for BatchReport
@@ -45,7 +47,8 @@ const flattenBatchReport = (reports: Reports[]): FlattenedBatchReportRow[] => {
     tranTime: dayjs(report.tranDate).format('hh:mm:ss A'),
     tranDate: dayjs(report.tranDate).format('DD-MMM-YYYY'),
     tranUserEmail: report.tranUserEmail,
-    bizId: report.bizId
+    bizId: report.bizId,
+    profit: report.profit,
   }));
 };
 
@@ -118,6 +121,25 @@ const BatchReportTable: React.FC<{ items: Reports[]; isLoading: boolean; error: 
                                         `}
                           >
                             {formatMoney(params.row.checkoutTotal)}
+                          </div>
+                        ),
+
+    },
+     {
+      field: 'profit',
+      headerName: t("lbl_profit"),
+      flex: 1,
+      minWidth: 120,
+      align: 'left',
+      headerAlign: 'left',
+       renderCell: (params: GridRenderCellParams<FlattenedBatchReportRow>) => (
+                          <div
+                            className={`text-green-600 hover:text-green-700 cursor-pointer
+                                        font-semibold bg-gray-100 text-sm rounded-sm px-2 py-1
+                                        border-[0.5px] border-green-700
+                                        `}
+                          >
+                            {formatMoney(params.row.profit)}
                           </div>
                         ),
 

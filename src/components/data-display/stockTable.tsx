@@ -30,10 +30,12 @@ interface FlattenedStockRow {
   id: string; // 'groupId-itemId' for unique id
   groupId: number;
   groupName: string;
-  groupUnitPrice: number;
+  groupOriginalPrice: number;
   releasedDate: string;
   itemQuantity: number;
   barcodeNo: string;
+  isColorless: boolean;
+  groupUnitPrice: number;
 }
 
 // Data Mapper for Stocks
@@ -51,6 +53,8 @@ const flattenStocks = (stocks: Stock[]): FlattenedStockRow[] => {
       releasedDate: dayjs(stock.releasedDate).format('DD-MMM-YYYY'),
       itemQuantity: item.itemQuantity,
       barcodeNo: item.barcodeNo,
+      isColorless: stock.isColorless,
+      groupOriginalPrice: stock.groupOriginalPrice
     }))
   );
 };
@@ -102,7 +106,7 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
               </div>
             ),
     },
-        {
+    {
       field: 'barcodeNo',
       headerName: t("tb_barcodeNo"),
       width: 90,
@@ -117,6 +121,41 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
               </div>
             ),
     },
+
+    {
+      field: 'isColorless',
+      headerName: t("tb_isColorless"),
+      width: 120,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => {
+        const value = params.row.isColorless;
+
+        return (
+          <Box
+            component="span"
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "32px",
+              borderRadius: "12px",
+              px: 2,
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              color: value ? "#047857" : "#B91C1C", // green vs red
+              bgcolor: value ? "rgba(16,185,129,0.15)" : "rgba(239,68,68,0.15)",
+              border: `1px solid ${value ? "#10B981" : "#EF4444"}`,
+              minWidth: "70px",
+            }}
+          >
+            {value ? t("lbl_yescolorless") : t("lbl_nocolorless")}
+          </Box>
+        );
+      },
+    },
+
+    
     {
       field: 'releasedDate',
       headerName: t("lbl_releasedDate"),
@@ -130,21 +169,27 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
       width: 70,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
-        <Box
-          sx={{
-            width: 30,
-            height: 30,
-            borderRadius: '50%',
-            backgroundColor: params.value,
-            border: '1px solid #ddd',
-            mx: 'auto',
-          }}
-        />
-      ),
+      renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => {
+        // If the group is colorless, render nothing
+        if (params.row.isColorless) {
+          return null;
+        }
+
+        // Otherwise show the color circle
+        return (
+          <Box
+            sx={{
+              width: 30,
+              height: 30,
+              borderRadius: '50%',
+              backgroundColor: params.value,
+              border: '1px solid #ddd',
+              mx: 'auto',
+            }}
+          />
+        );
+      },
     },
-    
-   
      {
       field: 'groupName',
       headerName: t("lbl_groupNn"),
@@ -182,6 +227,9 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => {
+        if(params.row.isColorless){
+          return null;
+        }
         // --- FIX FOR MUI X-DATA-GRID V5 (or older) ---
         const sortedRowIds = params.api.getSortedRowIds();
         const visibleRowIndex = sortedRowIds.indexOf(params.id);
@@ -195,6 +243,25 @@ const StockTable: React.FC<{ items: Stock[]; isLoading: boolean; error: unknown;
           />
         );
       },
+    },
+    {
+      field: 'groupOriginalPrice',
+      headerName: t("lbl_originalPrice"),
+      type: 'number',
+      width: 100,
+      editable: false,
+      align: 'left',
+      headerAlign: 'left',
+        renderCell: (params: GridRenderCellParams<FlattenedStockRow>) => (
+              <div
+                className={`text-yellow-600 hover:text-yellow-700 cursor-pointer
+                            font-semibold bg-gray-100 text-sm rounded-sm px-2 py-1
+                            border-[0.5px] border-yellow-700
+                            `}
+              >
+                {formatMoney(params.row.groupOriginalPrice)}
+              </div>
+            ),
     },
     {
       field: 'groupUnitPrice',

@@ -14,6 +14,7 @@ import { useModalStore } from "@/store/modalStore";
 import ColorThief from 'colorthief';
 import { useTranslation } from "@/hooks/useTranslation";
 import PageLost404 from "@/components/error/pageLost404";
+import Checkbox from "@mui/material/Checkbox";
 
 // --- Type Definitions ---
 type NewStockItem = {
@@ -32,6 +33,8 @@ type NewStockGroup = {
   groupName: string;
   groupUnitPrice: number;
   releasedDate: string; // YYYY-MM-DD format
+  isColorless: boolean;
+  originalPrice: number;
   items: NewStockItem[];
 };
 
@@ -41,6 +44,8 @@ const getInitialFormState = (): NewStockGroup => ({
   groupName: "",
   groupUnitPrice: 0,
   releasedDate: dayjs(new Date()).format('YYYY-MM-DD'),
+  isColorless: false,
+  originalPrice: 0,
   items: [],
 });
 
@@ -127,7 +132,7 @@ export default function StockEntryForm() {
           itemImage: null,
           itemColorHex: "#000000",
           itemQuantity: 1,
-          barcodeNo: "", // <--- Initialize barcodeNo
+          barcodeNo: "", 
           _tempFile: null,
           _imageError: null,
           _detectedPalette: null,
@@ -407,19 +412,23 @@ export default function StockEntryForm() {
     }
 
     // Validate individual items
-    const invalidItem = form.items.find(item =>
-      !item._tempFile || item.itemQuantity <= 0 || item._imageError || !item.barcodeNo.trim()
-    );
+    const invalidItem = form.items.find(item => {
+      if (form.isColorless) {
+        return item.itemQuantity <= 0 || !item.barcodeNo.trim();
+      }
+      return !item._tempFile || item.itemQuantity <= 0 || item._imageError || !item.barcodeNo.trim();
+    });
+
     if (invalidItem) {
       setSubmitting(false);
       if (invalidItem._imageError) {
-          setSubmissionError(invalidItem._imageError);
-      } else if (!invalidItem._tempFile) {
-          setSubmissionError(t("lbl_limitImg"));
+        setSubmissionError(invalidItem._imageError);
+      } else if (!invalidItem._tempFile && !form.isColorless) {
+        setSubmissionError(t("lbl_limitImg"));
       } else if (invalidItem.itemQuantity <= 0) {
-          setSubmissionError(t("lbl_qtyGtZero")); // New translation key
+        setSubmissionError(t("lbl_qtyGtZero"));
       } else if (!invalidItem.barcodeNo.trim()) {
-          setSubmissionError(t("lbl_barcodeRequired")); // New translation key
+        setSubmissionError(t("lbl_barcodeRequired"));
       }
       return;
     }
@@ -442,18 +451,22 @@ export default function StockEntryForm() {
         };
       });
 
-      itemFiles.forEach(file => {
-        formData.append("itemImages", file);
-      });
-
+      if(!form.isColorless){
+          itemFiles.forEach(file => {
+          formData.append("itemImages", file);
+        });
+      }
+      
       const groupJson = {
         groupName: form.groupName,
         groupUnitPrice: form.groupUnitPrice,
         releasedDate: form.releasedDate,
+        isColorless: form.isColorless,
+        groupOriginalPrice: form.originalPrice,
         items: itemDataForJson,
       };
       formData.append("json", new Blob([JSON.stringify(groupJson)], { type: "application/json" }));
-
+      
       const response = await axios.post(`${API_BASE_URL}/stkG/biz/${bizId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
@@ -466,6 +479,7 @@ export default function StockEntryForm() {
         console.warn("Unexpected response status:", response.status, response.data);
         setSubmissionError(`${t("msg_submtErr")}: ${response.status}`);
       }
+        
     } catch (error) {
       console.error("Error submitting form:", error);
       if (axios.isAxiosError(error) && error.response) {
@@ -476,6 +490,7 @@ export default function StockEntryForm() {
     } finally {
       setSubmitting(false);
     }
+      
   }, [API_BASE_URL, business?.businessId, businessInfoError, isBusinessInfoLoading, form, resetForm, selectedGroupFile, groupImageError, t]);
 
 
@@ -570,9 +585,10 @@ export default function StockEntryForm() {
         />
 
         {/* Group Info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <label htmlFor="groupName" className="block font-medium text-gray-700 mb-1">{t("lbl_groupNn")}</label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div className="flex items-center space-x-2">
+            <label htmlFor="groupName" className="block font-medium 
+                          text-gray-700 mb-1 min-w-[120px]">{t("lbl_groupNn")}</label>
             <input
               id="groupName"
               type="text"
@@ -583,8 +599,9 @@ export default function StockEntryForm() {
               placeholder={t("lbl_groupNnInput")}
             />
           </div>
-          <div>
-            <label htmlFor="unitPrice" className="block font-medium text-gray-700 mb-1">{t("lbl_unitPrice")}</label>
+          <div className="flex items-center space-x-2">
+            <label htmlFor="unitPrice" className="block font-medium
+                   text-gray-700 mb-1  min-w-[120px]">{t("lbl_unitPrice")}</label>
             <input
               id="unitPrice"
               type="text"
@@ -606,8 +623,31 @@ export default function StockEntryForm() {
               className="w-full rounded-sm border-gray-300 focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px]"
             />
           </div>
-          <div>
-            <label htmlFor="releasedDate" className="block font-medium text-gray-700 mb-1">{t("lbl_releasedDate")}</label>
+          <div className="flex items-center space-x-2">
+            <label htmlFor="originalPrice" className="block font-medium text-gray-700 mb-1  min-w-[120px]">{t("lbl_originalPrice")}</label>
+            <input
+              id="originalPrice"
+              type="text"
+              inputMode="decimal"
+              pattern="^\d*\.?\d*$"
+              value={form.originalPrice === 0 && !String(form.originalPrice).includes('.') ? "" : form.originalPrice}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/[^\d.]/g, '');
+                const parts = raw.split('.');
+                if (parts.length > 2) return;
+
+                setForm({
+                  ...form,
+                  originalPrice: raw === '' ? 0 : parseFloat(raw),
+                });
+              }}
+              required
+              placeholder={t("lbl_originalPriceInput")}
+              className="w-full rounded-sm border-gray-300 focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px]"
+            />
+          </div>
+          <div className="flex items-center space-x-2">
+            <label htmlFor="releasedDate" className="block font-medium text-gray-700 mb-1  min-w-[120px]">{t("lbl_releasedDate")}</label>
             <input
               id="releasedDate"
               type="date"
@@ -617,11 +657,26 @@ export default function StockEntryForm() {
               className="w-full rounded-sm focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px] border-gray-300"
             />
           </div>
+          <div className="flex items-center space-x-2 -ml-3">
+            <label className="flex items-center space-x-1 text-gray-700">
+              <Checkbox
+                id="isColorless"
+                name="isColorless" 
+                checked={form.isColorless}
+                onChange={(e) => setForm({ ...form, isColorless: e.target.checked })}
+                disabled={form.items.length >= 2 || form.items.length === 0 
+                          || form.items.some((item) => item.itemImage )}
+                color="primary"
+                size="small"
+              /> 
+              <span className="select-none text-sm">{t("lbl_isColorless")}</span>
+            </label>
+          </div>
         </div>
 
         {/* Color Variants */}
         <div>
-          <div className="flex justify-between items-center mb-1.5 mt-4">
+          <div className="flex justify-between items-center mb-1.5 mt-4 select-none">
             <h3 className="text-sm font-semibold text-gray-800">{t("lbl_colorvarients")}</h3>
             <div className="flex gap-3">
               <input
@@ -639,7 +694,7 @@ export default function StockEntryForm() {
             </div>
           </div>
 
-          <div className="space-y-2 p-2 rounded-sm border-[0.5px] border-gray-300">
+          <div className="space-y-2 p-2 rounded-sm border-[0.5px] border-gray-300 select-none">
             {form.items.length > 0 ? (
               form.items.map((item, index) => (
                 <div
@@ -656,6 +711,7 @@ export default function StockEntryForm() {
                             onImageSelected={(file) => handleItemImageSelected(index, file)}
                             error={item._imageError}
                             className="p-1"
+                            disabled={form.isColorless}
                         />
                     </div>
 
@@ -663,15 +719,21 @@ export default function StockEntryForm() {
                     <div className="flex flex-col gap-2 mt-2 sm:mt-0 flex-grow">
                       
                         <label htmlFor={`itemColor-${item.tempId}`} 
-                               className="block font-medium text-gray-700 mb-1">Color (Detected)</label>
+                               aria-disabled={form.isColorless}
+                               onClick={(e) => form.isColorless && e.preventDefault()}
+                               className="block font-medium text-gray-700 mb-1">
+                                Color (Detected)
+                        </label>
                         <input
                           id={`itemColor-${item.tempId}`}
                           type="color"
                           value={item.itemColorHex}
                           onChange={(e) => updateItem(index, "itemColorHex", e.target.value)}
+                          disabled={form.isColorless}
                           className="w-[80px] h-10 border-[0.5px] border-gray-200 
-                                     rounded-sm cursor-pointer"
-                          title="Click to manually choose color"
+                                     rounded-sm cursor-pointer
+                                     disabled:opacity-50 disabled:cursor-not-allowed"
+                          title={form.isColorless ? "You've already chosen colorless option." : "Click to manually choose color"}
                         />
                         {/* Display Detected Palette */}
                         {item._detectedPalette && item._detectedPalette.length > 0 && (
@@ -682,7 +744,10 @@ export default function StockEntryForm() {
                                 <button
                                   key={pIdx}
                                   type="button"
-                                  className="w-6 h-6 border-[0.5px] border-gray-300 rounded-full cursor-pointer"
+                                  disabled={form.isColorless}
+                                  className="w-6 h-6 border-[0.5px] border-gray-300 
+                                            rounded-full cursor-pointer
+                                            disabled:opacity-50 disabled:cursor-not-allowed"
                                   style={{ backgroundColor: color }}
                                   onClick={() => updateItem(index, "itemColorHex", color)}
                                   title={`Select ${color}`}
@@ -733,6 +798,7 @@ export default function StockEntryForm() {
                                   md:mt-0">
                     <button
                       type="button"
+                      disabled={form.isColorless}
                       onClick={() =>
                         setForm((prev) => ({
                           ...prev,
@@ -742,7 +808,8 @@ export default function StockEntryForm() {
                       className="text-red-500 hover:bg-red-200 
                                   rounded-full h-8 w-8 flex items-center 
                                   justify-center text-semibold flex-shrink-0
-                                  transition-colors duration-200 cursor-pointer"
+                                  transition-colors duration-200 cursor-pointer
+                                  disabled:opacity-40 disabled:cursor-not-allowed"
                       title="Remove variant"
                     >
                       <XMarkIcon className="w-5 h-5" />
@@ -761,36 +828,45 @@ export default function StockEntryForm() {
           <div className="flex items-center gap-x-2">
             <button
               type="button"
+              disabled={form.isColorless}
               onClick={() => multipleUploadInputRef.current?.click()}
-              className="flex items-center text-sm border-[1px] rounded-sm space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200 cursor-pointer transition duration-150 px-2 py-2"
+              className="flex items-center text-sm border-[1px] rounded-sm space-x-2 
+                       text-blue-600 bg-blue-100 hover:bg-blue-200 cursor-pointer 
+                         transition duration-150 px-2 py-2
+                         disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {t("btnTxt_addMultipleVariants")}
             </button>
 
             <button
               type="button"
+              disabled={form.isColorless}
               onClick={addItem}
-              className="text-sm px-2 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="text-sm px-2 py-2 bg-blue-600 text-white rounded hover:bg-blue-700
+                         disabled:opacity-40 disabled:cursor-not-allowed transition duration-150"
             >
               {t("btnTxt_addvarient")}
             </button>
           </div>
           
 
-          {submitting && (
-            <div className="w-7 h-7 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-          )}
-          <button
-            type="submit"
-            disabled={submitting || isBusinessInfoLoading || !!businessInfoError}
-            className={`py-2 px-3 rounded-sm text-sm text-white ${
-              (submitting || isBusinessInfoLoading || !!businessInfoError)
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-            }`}
-          >
-            {submitting ? t("btnTxt_saving") : t("btnTxt_saveEntry")}
-          </button>
+          <div className="flex items-center gap-4">
+            {submitting && (
+              <div className="w-7 h-7 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            )}
+            <button
+              type="submit"
+              disabled={submitting || isBusinessInfoLoading || !!businessInfoError}
+              className={`py-2 px-3 rounded-sm text-sm text-white ${
+                (submitting || isBusinessInfoLoading || !!businessInfoError)
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
+            >
+              {submitting ? t("btnTxt_saving") : t("btnTxt_saveEntry")}
+            </button>
+          </div>
+          
         </div>
       </form>
     </div>

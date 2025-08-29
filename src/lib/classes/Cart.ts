@@ -7,6 +7,7 @@ export interface CartItem {
   boughtQty: number;
   unitPrice: number;
   barcodeNo: string;
+  isColorless: boolean
 }
 
 export interface CartGroup {
@@ -85,11 +86,12 @@ class Cart {
 
         foundItemForCart = {
           itemId: foundItem.itemId,
-          itemImage: foundItem.itemImage || "/Box.png",
+          itemImage: stockGroup.isColorless ? stockGroup.groupImage : foundItem.itemImage || "/Box.png",
           colorHex: foundItem.itemColorHex,
           unitPrice: stockGroup.groupUnitPrice,
           boughtQty: 1,
-          barcodeNo: foundItem.barcodeNo
+          barcodeNo: foundItem.barcodeNo,
+          isColorless: stockGroup.isColorless,
         };
         foundGroupName = stockGroup.groupName;
         foundGroupId = stockGroup.groupId;

@@ -18,6 +18,7 @@ const navbarData: NavbarItem[] = [
     children: [
       { id: 31, key: "salesTransactions", path: "/sales/transaction" },
       { id: 32, key: "salesReports", path: "/sales/report" },
+      //{ id: 33, key: "batch", path: "/sales/batch" },
     ],
   },
   {

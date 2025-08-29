@@ -18,48 +18,44 @@ export default function DeleteStockConfirmation() {
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { refresh } = useStocks();
+  const { refresh, removeStockItem } = useStocks();
 
 
   const handleSubmit = async () => {
-    // Check if the user has agreed (checkbox is checked)
-    if (!agreed) {
-      setError("You must confirm that you understand this action cannot be undone.");
-      return;
-    }
+  if (!agreed) {
+    setError("You must confirm that you understand this action cannot be undone.");
+    return;
+  }
 
-    setLoading(true);
-    if (modalData && 'groupId' in modalData) {
-      try {
+  setLoading(true);
+
+  if (modalData && "groupId" in modalData) {
+    try {
         const response = await axios.delete(
-          `${API}/delete/stkItem/${modalData.groupId}/${(modalData.itemId as string).replace('I-', '')}`,
-          {
-            withCredentials: true,
-            headers: { "Content-Type": "application/json" },
-          }
+          `${API}/delete/stkItem/${modalData.groupId}/${(modalData.itemId as string).replace("I-", "")}`,
+          { withCredentials: true }
         );
 
         if (response.status === 200 || response.status === 201) {
-          setError(null); // Clear any previous errors on success
-          refresh(); // Refresh stock data
+          setError(null);
+          // ✅ Optimistically update cache
+          removeStockItem(
+            modalData.groupId,
+            parseInt((modalData.itemId as string).replace("I-", ""))
+          );
+
+          // Optionally revalidate in background (silent refresh)
+          refresh();
         } else {
-            // Handle unexpected successful responses gracefully
-            setError("Deletion request sent, but received an unexpected server response.");
+          setError("Deletion request sent, but received an unexpected server response.");
         }
       } catch (err) {
-        console.error("Deletion error:", err); // Log the full error for debugging
-        if (axios.isAxiosError(err) && err.response) {
-            setError(err.response.data?.message || "Failed to delete item due to a server error.");
-        } else {
-            setError("An unknown error occurred during deletion.");
-        }
+        console.error("Deletion error:", err);
+        setError("An unknown error occurred during deletion.");
       } finally {
         setLoading(false);
-        closeModal(); // Close modal regardless of success or failure
+        closeModal();
       }
-    } else {
-        setLoading(false);
-        setError("Missing group or item ID for deletion.");
     }
   };
 

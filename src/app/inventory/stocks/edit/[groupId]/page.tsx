@@ -32,16 +32,10 @@ type Stock = {
   groupName: string;
   groupUnitPrice: number;
   releasedDate: string;
+  isColorless: boolean;
+  groupOriginalPrice: number;
   items: StockItem[];
 };
-
-// Form state type, with groupId added back to track fetched ID
-type FormState = Omit<Stock, "groupId"> & {
-  groupId: number | null; // To track the groupId of the currently loaded data
-  _groupTempFile: File | null;
-  _groupImageError: string | null;
-};
-
 
 
 const getInitialFormState = (): FormState => ({
@@ -50,6 +44,8 @@ const getInitialFormState = (): FormState => ({
   groupName: "",
   groupUnitPrice: 0,
   releasedDate: "",
+  isColorless: false,
+  groupOriginalPrice: 0,
   items: [],
   _groupTempFile: null,
   _groupImageError: null,
@@ -64,6 +60,13 @@ const rgbToHex = (r: number, g: number, b: number): string => {
   return "#" + toHex(r) + toHex(g) + toHex(b).toUpperCase();
 };
 
+type FormState = Omit<Stock, "groupId"> & {
+  groupId: number | null;
+  _groupTempFile: File | null;
+  _groupImageError: string | null;
+};
+
+
 // --- Main Component ---
 export default function StockEditForm() {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -74,6 +77,30 @@ export default function StockEditForm() {
 
   // --- State Management ---
   const [form, setForm] = useState<FormState>(getInitialFormState);
+  
+  // --- Snapshot type inferred from sanitizeForm ---
+  const sanitizeForm = (f: FormState) => ({
+    groupId: f.groupId,
+    groupImage: f.groupImage,
+    groupName: f.groupName,
+    groupUnitPrice: f.groupUnitPrice,
+    groupOriginalPrice: f.groupOriginalPrice,  
+    releasedDate: f.releasedDate,
+    isColorless: f.isColorless,
+    items: f.items.map(item => ({
+      itemId: item.itemId,
+      itemImage: item.itemImage,
+      itemColorHex: item.itemColorHex,
+      itemQuantity: item.itemQuantity,
+      barcodeNo: item.barcodeNo,
+    })),
+  });
+
+
+
+  // <-- use ReturnType here
+  const [initialForm, setInitialForm] = useState<ReturnType<typeof sanitizeForm> | null>(null);
+
   const [submittingForm, setSubmittingForm] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -85,6 +112,7 @@ export default function StockEditForm() {
 
   const { openModal, closeModal } = useModalStore();
   const { t } = useTranslation();
+
 
   // --- Initial Data Fetch Effect ---
   useEffect(() => {
@@ -107,33 +135,40 @@ export default function StockEditForm() {
       setSubmittingForm(false);
       setFetchError(null);
       if (form.groupId !== currentNumericGroupId || !hasFetchedInitialData) {
-         setForm(getInitialFormState());
+        setForm(getInitialFormState());
       }
 
       try {
-        const response = await axios.get<Stock>(`${API_BASE_URL}/biz/${bizId}/stkG/${groupIdParam}`, {
-          withCredentials: true,
-        });
+        const response = await axios.get<Stock>(
+          `${API_BASE_URL}/biz/${bizId}/stkG/${groupIdParam}`,
+          { withCredentials: true }
+        );
         const selectedGroupData = response.data;
 
         if (selectedGroupData && selectedGroupData.groupName) {
-          setForm((prevForm) => ({
-            ...prevForm,
+          const normalizedForm: FormState = {
             groupId: selectedGroupData.groupId,
             groupImage: selectedGroupData.groupImage || null,
             groupName: selectedGroupData.groupName || "",
             groupUnitPrice: selectedGroupData.groupUnitPrice || 0,
             releasedDate: selectedGroupData.releasedDate?.slice(0, 10) || "",
+            isColorless: selectedGroupData.isColorless || false,
+            groupOriginalPrice: selectedGroupData.groupOriginalPrice || 0,
             items: selectedGroupData.items.map(item => ({
               ...item,
               itemImage: item.itemImage || null,
-              barcodeNo: item.barcodeNo || "", // <--- Initialize barcodeNo from fetched data
+              barcodeNo: item.barcodeNo || "",
               _tempFile: null,
               _imageError: null,
               _isExistingImage: true,
               _detectedPalette: null,
             })),
-          }));
+            _groupTempFile: null,
+            _groupImageError: null,
+          };
+
+          setForm(normalizedForm);
+          setInitialForm(sanitizeForm(normalizedForm)); // <-- baseline snapshot
           setHasFetchedInitialData(true);
         } else {
           setFetchError("Stock group data is empty or invalid.");
@@ -151,6 +186,7 @@ export default function StockEditForm() {
         setHasFetchedInitialData(true);
       }
     };
+
 
     fetchGroupData();
   }, [groupIdParam, API_BASE_URL, bizId, router, fetchError, hasFetchedInitialData, form.groupId]);
@@ -365,9 +401,13 @@ export default function StockEditForm() {
     }
 
     // Validate individual items
-    const invalidItem = form.items.find(item =>
-        item.itemQuantity < 0 || item._imageError || (!item.itemImage && !item._tempFile) || !item.barcodeNo.trim()
-    );
+    const invalidItem = form.items.find(item => {
+      if (form.isColorless) {
+        return item.itemQuantity <= 0 || !item.barcodeNo.trim();
+      }
+      return !item._tempFile || item.itemQuantity <= 0 || item._imageError || !item.barcodeNo.trim();
+    });
+
     if (invalidItem) {
       setSubmittingForm(false);
       if (invalidItem._imageError) {
@@ -381,6 +421,17 @@ export default function StockEditForm() {
       }
       return;
     }
+
+   if (initialForm) {
+      const currentSanitized = sanitizeForm(form);
+      if (JSON.stringify(initialForm) === JSON.stringify(currentSanitized)) {
+        setSubmittingForm(false);
+        setSubmissionError(t("msg_noChanges"));
+        return;
+      }
+    }
+
+
 
     try {
       const formData = new FormData();
@@ -418,8 +469,11 @@ export default function StockEditForm() {
         groupName: form.groupName,
         groupUnitPrice: form.groupUnitPrice,
         releasedDate: form.releasedDate,
+        isColorless: form.isColorless,
+        groupOriginalPrice: form.groupOriginalPrice,
         items: itemsPayload,
       };
+
 
       formData.append(
         "json",
@@ -454,7 +508,7 @@ export default function StockEditForm() {
     } finally {
       setSubmittingForm(false);
     }
-  }, [API_BASE_URL, bizId, groupIdParam, form, t]); // Added t to dependencies
+  }, [API_BASE_URL, bizId, groupIdParam, form, t, initialForm]); // Added t to dependencies
 
   // --- Modal Visibility Effect ---
   useEffect(() => {
@@ -556,9 +610,9 @@ export default function StockEditForm() {
         />
 
         {/* Group Info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <label htmlFor="groupName" className="block font-medium text-gray-700 mb-1">{t("lbl_groupNn")}</label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div className="flex items-center space-x-2">
+            <label htmlFor="groupName" className="block font-medium text-gray-700 mb-1 min-w-[120px]">{t("lbl_groupNn")}</label>
             <input
               id="groupName"
               type="text"
@@ -569,8 +623,10 @@ export default function StockEditForm() {
               placeholder={t("lbl_groupNnInput")}
             />
           </div>
-          <div>
-            <label htmlFor="unitPrice" className="block font-medium text-gray-700 mb-1">{t("lbl_unitPrice")}</label>
+          <div className="flex items-center space-x-2">
+            <label htmlFor="unitPrice" className="block font-medium text-gray-700 mb-1 min-w-[120px]">
+              {t("lbl_unitPrice")}
+            </label>
             <input
               id="unitPrice"
               type="text"
@@ -591,8 +647,34 @@ export default function StockEditForm() {
               className="w-full rounded-sm border-gray-300 focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px]"
             />
           </div>
-          <div>
-            <label htmlFor="releasedDate" className="block font-medium text-gray-700 mb-1">{t("lbl_releasedDate")}</label>
+
+          <div className="flex items-center space-x-2">
+            <label htmlFor="originalPrice" className="block font-medium text-gray-700 mb-1 min-w-[120px]">
+              {t("lbl_originalPrice")}
+            </label>
+            <input
+              id="originalPrice"
+              type="text"
+              inputMode="decimal"
+              pattern="^\d*\.?\d*$"
+              value={form.groupOriginalPrice}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/[^\d.]/g, '');
+                const parts = raw.split('.');
+                if (parts.length > 2) return;
+                setForm({
+                  ...form,
+                  groupOriginalPrice: raw === '' ? 0 : parseFloat(raw),
+                });
+              }}
+              required
+              placeholder={t("lbl_originalPriceInput")}
+              className="w-full rounded-sm border-gray-300 focus:ring-blue-600 focus:border-blue-600 py-2 px-3 border-[0.5px]"
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <label htmlFor="releasedDate" className="block font-medium text-gray-700 mb-1 min-w-[120px]">{t("lbl_releasedDate")}</label>
             
             <input
               id="releasedDate"
@@ -631,20 +713,28 @@ export default function StockEditForm() {
                             error={item._imageError}
                             className="p-1"
                             priority={true}
+                            disabled={form.isColorless}
                         />
                     </div>
 
                     {/* Color, Quantity, and Barcode */}
                     <div className="flex flex-col gap-2 mt-2 sm:mt-0 flex-grow"> {/* Adjusted to flex-col */}
                       <div>
-                        <label htmlFor={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`} className="block font-medium text-gray-700 mb-1">{t("lbl_color")}</label>
+                        <label htmlFor={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`} 
+                               className="block font-medium text-gray-700 mb-1"
+                               aria-disabled={form.isColorless}>
+                          {t("lbl_color")}</label>
                         <input
                           id={`itemColor-${item.itemId === null ? `new-${index}` : item.itemId}`}
+                          disabled={form.isColorless}
                           type="color"
                           value={item.itemColorHex}
                           onChange={(e) => updateItem(index, "itemColorHex", e.target.value)}
-                          className="w-full h-10 border-[0.5px] border-gray-200 rounded-sm cursor-pointer"
-                          title="Click to manually choose color"
+                          className="w-full h-10 border-[0.5px] border-gray-200 rounded-sm cursor-pointer
+                                    hover:border-gray-300 transition-all duration-300 ease-in-out
+                                     disabled:opacity-40 disabled:cursor-not-allowed"
+                          title={form.isColorless ? "You've already marked this item as colorless" : 
+                                "Click to manually choose color"}
                         />
                         {/* Display Detected Palette */}
                         {item._detectedPalette && item._detectedPalette.length > 0 && (
@@ -726,7 +816,11 @@ export default function StockEditForm() {
            <button
               type="button"
               onClick={addItem}
-              className="flex items-center text-sm border-[1px] rounded-sm space-x-2 text-blue-600 bg-blue-100 hover:bg-blue-200 cursor-pointer transition duration-150 px-2 py-2"
+              disabled={form.isColorless}
+              className="flex items-center text-sm border-[1px] 
+                          rounded-sm space-x-2 text-blue-600 bg-blue-100 
+                          hover:bg-blue-200 cursor-pointer transition duration-150 px-2 py-2
+                          disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {t("btnTxt_addvarient")}
             </button>
