@@ -401,12 +401,15 @@ export default function StockEditForm() {
     }
 
     // Validate individual items
-    const invalidItem = form.items.find(item => {
+   const invalidItem = form.items.find(item => {
       if (form.isColorless) {
         return item.itemQuantity <= 0 || !item.barcodeNo.trim();
       }
-      return !item._tempFile || item.itemQuantity <= 0 || item._imageError || !item.barcodeNo.trim();
+      // allow either a new file or an existing image
+      const hasImage = item._tempFile || (item._isExistingImage && item.itemImage);
+      return !hasImage || item.itemQuantity <= 0 || item._imageError || !item.barcodeNo.trim();
     });
+
 
     if (invalidItem) {
       setSubmittingForm(false);
